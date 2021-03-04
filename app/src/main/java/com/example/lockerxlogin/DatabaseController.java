@@ -20,14 +20,28 @@ public class DatabaseController {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public LocalDate retrieveBookingDate(String email, int lockerID, int lockerStructureID){
+    public LocalDate retrieveBookingStartDate(String email, int lockerID, int lockerStructureID){
         //database query to retrieve the date of booking
         LocalDate date = LocalDate.now(); //dummy value
         return date;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public LocalTime retrieveBookingTime(String email, int lockerID, int lockerStructureID){
+    public LocalTime retrieveBookingStartTime(String email, int lockerID, int lockerStructureID){
+        //database query to retrieve the time of booking
+        LocalTime time = LocalTime.now(); //dummy value
+        return time;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public LocalDate retrieveBookingEndDate(String email, int lockerID, int lockerStructureID){
+        //database query to retrieve the date of booking
+        LocalDate date = LocalDate.now(); //dummy value
+        return date;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public LocalTime retrieveBookingEndTime(String email, int lockerID, int lockerStructureID){
         //database query to retrieve the time of booking
         LocalTime time = LocalTime.now(); //dummy value
         return time;
