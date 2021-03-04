@@ -24,6 +24,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.regex.Pattern;
+
 public class Register extends AppCompatActivity {
     EditText mEmail, mPassword, mName, mMobile;
     TextView mLoginBtn,alreadyRegisterButton;
@@ -139,29 +141,22 @@ public class Register extends AppCompatActivity {
                         }
                     }
                 });
-
-
-
             }
-
         });
-
-
-
-
-
     }
     public boolean checkPasswordRule(String password){
         //return less 8
-       /* if (password == null || password.length() <8 ) return false;
+        if (password == null || password.length() <8 ) return false;
+        Pattern upper = Pattern.compile("[a-z]");
+        Pattern lower = Pattern.compile("[A-Z]");
+        Pattern digit = Pattern.compile("[0-9]");
+        Pattern special = Pattern.compile ("[!@#$%&*()_+=|<>?{}\\[\\]~-]");
         int i = 0;
-        if (password.matches(REG_NUMBER)) i++;
-        if (password.matches(REG_LOWERCASE))i++;
-        if (password.matches(REG_UPPERCASE)) i++;
-        if (password.matches(REG_SYMBOL)) i++;
-
+        if (digit.matcher(password).find()) i++;
+        if (upper.matcher(password).find())i++;
+        if (lower.matcher(password).find()) i++;
+        if (special.matcher(password).find()) i++;
         if (i  < 4 )  return false;
-        */
         return true;
     }
 
