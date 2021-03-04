@@ -1,5 +1,9 @@
 package com.example.lockerxlogin;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.google.firebase.database.DatabaseReference;
 
 import java.time.LocalDate;
@@ -16,13 +20,15 @@ public class UserController {
     }
 
     //method to create booking using the booking controller
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void makeBooking(DatabaseController dc, BookingController bc, int lockerStructureID,
                             int lockerID, LocalDate startDate, LocalTime startTime,
                             LocalDate endDate, LocalTime endTime){
 
         bc.makeBooking(dc,currentUser.getEmail(),lockerStructureID,lockerID,startDate,startTime,endDate,endTime);
         //creates a new booking object and stores it in database using database controller
-        makePayment(dc,0);
+        float rentalFees = bc.calculateRentalFees(dc,this.currentUser.getEmail(),lockerStructureID,lockerID);
+        makePayment(dc, rentalFees);
     }
     public boolean makePayment(DatabaseController dc, float paymentAmount){
         float walletBalance = this.currentUser.getWalletBalance();

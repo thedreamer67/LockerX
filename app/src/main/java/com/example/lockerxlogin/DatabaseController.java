@@ -52,6 +52,11 @@ public class DatabaseController {
         return time;
     }
 
+    public char retrieveLockerSize(int lockerStructureID, int lockerID){
+        //database query to retrieve locker size
+        return 'S'; //dummy value
+    }
+
     //method to update wallet balance
    public void updateWalletBalance(String email, float newBalance) {
 //        reff = FirebaseDatabase.getInstance().getReference().child("User").

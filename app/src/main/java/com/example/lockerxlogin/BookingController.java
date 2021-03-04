@@ -5,7 +5,12 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BookingController {
 
@@ -44,8 +49,34 @@ public class BookingController {
             return -1; //compulsory statement by program, will not reach this case
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public float calculateRentalFees(DatabaseController dc, String email, int lockerID,
                                      int lockerStructureID){
-        return 0;
+        char sizeArray[] = new char[]{'S','M','L'};
+        float rentalArray[] = new float[]{1,2,3};
+        LocalDate startDate = dc.retrieveBookingStartDate(email, lockerID, lockerStructureID);
+        LocalTime startTime = dc.retrieveBookingStartTime(email, lockerID, lockerStructureID);
+        LocalDate endDate = dc.retrieveBookingEndDate(email, lockerID, lockerStructureID);
+        LocalTime endTime = dc.retrieveBookingEndTime(email, lockerID, lockerStructureID);
+        char lockerSize = dc.retrieveLockerSize(lockerStructureID,lockerID);
+
+        //finding rental rate based on locker size
+        int index=-1;
+        for(int i=0;i<rentalArray.length;i++){
+            if (lockerSize == rentalArray[i]){
+                index=i;
+                break;
+            }
+        }
+        float rentalRate = rentalArray[index]; //rental rate per hour
+
+        //merging date and time to datetime format
+        LocalDateTime startDateTime = LocalDateTime.of(startDate,startTime);
+        LocalDateTime endDateTime = LocalDateTime.of(endDate,endTime);
+
+        //calculating difference between start and end in minutes
+        long differenceInMinutes = ChronoUnit.MINUTES.between(startDateTime,endDateTime);
+
+        return (rentalRate/60)*differenceInMinutes;
     }
 }
