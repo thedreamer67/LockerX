@@ -11,12 +11,11 @@ public class BookingController {
 
     public BookingController(){}
 
-    public Booking makeBooking(DatabaseController dc, String email, String lockerStructureID,
+    public void makeBooking(DatabaseController dc, String email, String lockerStructureID,
                                String lockerID, LocalDate startDate, LocalTime startTime,
                                LocalDate endDate, LocalTime endTime){
         Booking booking = new Booking(startDate, startTime,endDate,endTime);
         dc.createBooking(email,lockerStructureID,lockerID,startDate,startTime,endDate,endTime);
-        return booking;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -33,6 +32,7 @@ public class BookingController {
             }
             else{
                 //if(time.compareTo(LocalTime.now()))
+                return true;
             }
         }
     }
