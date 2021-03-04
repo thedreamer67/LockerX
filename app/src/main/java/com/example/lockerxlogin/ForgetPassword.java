@@ -72,6 +72,7 @@ public class ForgetPassword extends AppCompatActivity {
                     } else {
                         Toast.makeText(ForgetPassword.this, "Try again!", Toast.LENGTH_LONG);
                     }
+                    RProgressBar.setVisibility(View.GONE);
                 }
             });
 
