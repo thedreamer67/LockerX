@@ -5,7 +5,7 @@ public class Locker extends LockerStructure {
     private int lockerID;
     private char size;
     private boolean status; // False = Unlocked, True = Locked
-    private ArrayList<Booking> booking;
+    //private ArrayList<Booking> booking;
 
     public Locker(){} //empty constructor
 
@@ -15,7 +15,7 @@ public class Locker extends LockerStructure {
         super.location = location;
         this.lockerID = lockerID;
         this.size = size;
-        this.booking = new ArrayList<Booking>();
+        //this.booking = new ArrayList<Booking>();
         this.status = false;
     }
 
@@ -33,9 +33,9 @@ public class Locker extends LockerStructure {
         return this.size;
     }
 
-    public ArrayList<Booking> getBooking() {
-        return booking;
-    }
+//    public ArrayList<Booking> getBooking() {
+//        return booking;
+//    }
 
     public void setStatus(){
         if(this.status==false)
