@@ -41,7 +41,7 @@ public class Register extends AppCompatActivity {
         mprogressBar = findViewById(R.id.LprogressBar);
         fAuth = FirebaseAuth.getInstance();
         mRegisterBtn = findViewById(R.id.RRegisterBtn);
-        reff = FirebaseDatabase.getInstance().getReference().child("User");
+        reff = FirebaseDatabase.getInstance().getReference().child("User"); //reference to the "User" table of the db
 
         if(fAuth.getCurrentUser() != null){
             startActivity(new Intent(getApplicationContext(),MainActivity.class));
@@ -84,8 +84,8 @@ public class Register extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            User user = new User(name, email, password, mobile, 0);
-                            reff.push().setValue(user);
+                            User user = new User(name, email, mobile, 0);
+                            reff.push().setValue(user); //push user to db
                             Toast.makeText(Register.this, "User created.", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(), Login.class));
                         }else{
