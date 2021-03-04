@@ -51,7 +51,9 @@ public class Register extends AppCompatActivity {
         mprogressBar = findViewById(R.id.LprogressBar);
         fAuth = FirebaseAuth.getInstance();
         mRegisterBtn = findViewById(R.id.RRegisterBtn);
-        reff = FirebaseDatabase.getInstance().getReference().child("User"); //reference to the "User" table of the db
+        String dest = mMobile.getText().toString().trim();
+        // try to change the reference such that "user1"/"user2" is the mobile of the user instead
+        reff = FirebaseDatabase.getInstance().getReference().child("User").child("user2"); //reference to the "User" table of the db
 
         if(fAuth.getCurrentUser() != null){
             startActivity(new Intent(getApplicationContext(),MainActivity.class));
@@ -105,8 +107,9 @@ public class Register extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
+                            // use dbcontroller instead
                             User user = new User(name, email, mobile, 0);
-                            reff.push().setValue(user); //push user to db
+                            reff.setValue(user); //store new user to do
                             Toast.makeText(Register.this, "User created.", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(), Login.class));
                         }else{

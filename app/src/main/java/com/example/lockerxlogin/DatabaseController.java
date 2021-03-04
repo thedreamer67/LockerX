@@ -4,10 +4,15 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class DatabaseController {
+    DatabaseReference reff;
+
     public DatabaseController(){}
 
     public void storeLockerStatus(int lockerID,int lockerStructureID){
@@ -46,5 +51,16 @@ public class DatabaseController {
         LocalTime time = LocalTime.now(); //dummy value
         return time;
     }
+
+    //method to update wallet balance
+//    public void updateWalletBalance(String email, float newBalance) {
+//        reff = FirebaseDatabase.getInstance().getReference().child("User").
+//        reff.setValue()
+//    }
+
+    //method to store new user to db
+//    public void storeNewUser() {
+//
+//    }
 
 }

@@ -1,5 +1,7 @@
 package com.example.lockerxlogin;
 
+import com.google.firebase.database.DatabaseReference;
+
 public class UserController {
     private User currentUser;
 
@@ -22,4 +24,11 @@ public class UserController {
     public void returnLocker(BookingController bc){
 
     }
+
+    //method to top up wallet balance
+//    public void topUpWallet(int topUpAmount, DatabaseController dc) {
+//        float newBalance = currentUser.getWalletBalance()+topUpAmount;
+//        currentUser.setWalletBalance(newBalance);
+//        dc.updateWalletBalance(currentUser.getEmail(), newBalance);
+//    }
 }
