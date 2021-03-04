@@ -20,11 +20,11 @@ public class DatabaseController {
     }
     public void createBooking(String email, int lockerStructureID, int lockerID,
                               LocalDate startDate, LocalTime startTime,
-                              LocalDate endDate, LocalTime endTime){
+                              LocalDate endDate, LocalTime endTime, char status){
         // insert codes to create a new row in booking table
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    /*@RequiresApi(api = Build.VERSION_CODES.O)
     public LocalDate retrieveBookingStartDate(String email, int lockerID, int lockerStructureID){
         //database query to retrieve the date of booking
         LocalDate date = LocalDate.now(); //dummy value
@@ -50,6 +50,11 @@ public class DatabaseController {
         //database query to retrieve the time of booking
         LocalTime time = LocalTime.now(); //dummy value
         return time;
+    }*/
+
+    public void setBookingStatus(String email, int lockerStructureID, int lockerID, LocalDate startDate,
+                                 LocalTime startTime, LocalDate endDate, LocalTime endTime, char status){
+        //query to set booking status
     }
 
     public char retrieveLockerSize(int lockerStructureID, int lockerID){
