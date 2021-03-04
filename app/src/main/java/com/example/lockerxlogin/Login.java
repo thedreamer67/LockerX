@@ -1,5 +1,6 @@
 package com.example.lockerxlogin;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,7 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class Login extends AppCompatActivity {
@@ -30,6 +35,8 @@ public class Login extends AppCompatActivity {
         LProgressBar = findViewById(R.id.LprogressBar);
         LLoginBtn= findViewById(R.id.LLoginBtn);
         LRegisterBtn = findViewById(R.id.LRegister);
+        fAuth = FirebaseAuth.getInstance();
+
 
         LLoginBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -52,9 +59,25 @@ public class Login extends AppCompatActivity {
                 }
 
                 LProgressBar.setVisibility(View.VISIBLE);
+                fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            Toast.makeText(Login.this, "Logged in succesfully.", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                        }else{
+                            Toast.makeText(Login.this, "Error !" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+
 
             }
-         });
+        });
+
+
+
 
 
 

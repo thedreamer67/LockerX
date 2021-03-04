@@ -22,10 +22,10 @@ import com.google.firebase.firestore.auth.FirebaseAuthCredentialsProvider;
 public class Register extends AppCompatActivity {
     EditText mEmail, mPassword;
     TextView mLoginBtn;
-    Button mRegisterBtn, log;
+    Button mRegisterBtn;
     ProgressBar mprogressBar;
     FirebaseAuth fAuth;
-
+    //
 
 
     @Override
@@ -44,6 +44,15 @@ public class Register extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(),MainActivity.class));
             finish();
         }
+        mLoginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),Login.class));
+
+            }
+
+        });
+
 
         mRegisterBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -72,7 +81,7 @@ public class Register extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             Toast.makeText(Register.this, "User created.", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         }else{
                             Toast.makeText(Register.this, "Error !" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
@@ -80,17 +89,11 @@ public class Register extends AppCompatActivity {
                 });
 
 
-            }
-
-        });
-        mLoginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),Login.class));
 
             }
 
         });
+
 
 
 
