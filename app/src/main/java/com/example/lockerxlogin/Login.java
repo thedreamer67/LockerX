@@ -45,8 +45,6 @@ public class Login extends AppCompatActivity {
         LRegisterBtn = findViewById(R.id.LRegister);
         fAuth = FirebaseAuth.getInstance();
 
-
-
         LLoginBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick (View v) {
@@ -128,8 +126,6 @@ public class Login extends AppCompatActivity {
                     }
                 });
 
-
-
             }
         });
 
@@ -141,8 +137,6 @@ public class Login extends AppCompatActivity {
             }
         });
 
-
-
         LRegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,8 +144,4 @@ public class Login extends AppCompatActivity {
             }
         });
     }
-
-
-
-
 }
