@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class Login extends AppCompatActivity {
     EditText LEmail, LPassword;
-    TextView LLoginPage, LRegisterBtn;
+    TextView LLoginPage, LRegisterBtn, LForgetPw;
     ProgressBar LProgressBar;
     Button LLoginBtn;
     FirebaseAuth fAuth;
@@ -32,6 +32,7 @@ public class Login extends AppCompatActivity {
         LEmail = findViewById(R.id.LEmail);
         LPassword = findViewById(R.id.LPassword);
        //LLoginPage = findViewById(R.id.LLoginText);
+        LForgetPw = findViewById(R.id.LForgetPassword);
        LProgressBar = findViewById(R.id.LprogressBar);
         LLoginBtn= findViewById(R.id.LLoginBtn);
         LRegisterBtn = findViewById(R.id.LRegister);
@@ -77,7 +78,12 @@ public class Login extends AppCompatActivity {
         });
 
 
-
+        LForgetPw.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),ForgetPassword.class));
+            }
+        });
 
 
 
