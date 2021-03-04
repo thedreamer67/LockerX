@@ -28,6 +28,16 @@ public class Register extends AppCompatActivity {
     FirebaseAuth fAuth;
     DatabaseReference reff;
 
+    //number
+    public static final String REG_NUMBER = ".*\\d+.*";
+    //lowercase
+    public static final String REG_UPPERCASE = ".*[A-Z]+.*";
+    //uppercase
+    public static final String REG_LOWERCASE = ".*[a-z]+.*";
+    //special character
+    public static final String REG_SYMBOL = ".*[~!@#$%^&*()_+|<>,.?/:;'\\[\\]{}\"]+.*";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +74,8 @@ public class Register extends AppCompatActivity {
                 String email = mEmail.getText().toString().trim();
                 String password = mPassword.getText().toString().trim();
                 long mobile = Long.parseLong(mMobile.getText().toString().trim());
+                String smobile = mobile+"";
+
 
                 if (TextUtils.isEmpty(email)) {
                     mEmail.setError("Email is required");
@@ -73,12 +85,21 @@ public class Register extends AppCompatActivity {
                     mPassword.setError("Password is required");
                     return;
                 }
-                if (password.length() < 6){//Change this constraint TODO{
-                    mPassword.setError("Password must have at least a capital letter and a symbol");
+                if(!checkPasswordRule(password)){
+                    mPassword.setError("Password must have at least 8 character with a uppercase, a lower case, a number and a symbol");
                     return;
                 }
 
-                mprogressBar.setVisibility(View.VISIBLE);
+                if(TextUtils.isEmpty(smobile)){
+                    mMobile.setError("Phone is required");
+                    return;
+                }
+
+                if(smobile.length()!=7){
+                    mMobile.setError("Please enter 8 digits only");
+                }
+
+                mprogressBar.setVisibility(View.GONE);
 
                 fAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -105,4 +126,18 @@ public class Register extends AppCompatActivity {
 
 
     }
+    public boolean checkPasswordRule(String password){
+        //return less 8
+        if (password == null || password.length() <8 ) return false;
+        int i = 0;
+        if (password.matches(REG_NUMBER)) i++;
+        if (password.matches(REG_LOWERCASE))i++;
+        if (password.matches(REG_UPPERCASE)) i++;
+        if (password.matches(REG_SYMBOL)) i++;
+
+        if (i  < 4 )  return false;
+
+        return true;
+    }
+
 }
