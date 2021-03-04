@@ -104,12 +104,13 @@
       android:id="@+id/RRegisterBtn"
       android:layout_width="wrap_content"
       android:layout_height="48dp"
-      android:layout_marginBottom="40dp"
+      android:layout_marginTop="40dp"
+      android:layout_marginBottom="30dp"
       android:text="Register"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/LprogressBar" />
+      app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
   <TextView
       android:id="@+id/textView4"
@@ -119,11 +120,9 @@
       android:layout_marginLeft="30dp"
       android:layout_marginEnd="31dp"
       android:layout_marginRight="31dp"
-      android:layout_marginBottom="2dp"
       android:text="At least 8 characters including at least 1 special character, 1 uppercase letter, 1 lowercase letter and 1 number"
       android:textSize="10sp"
       android:textStyle="italic"
-      app:layout_constraintBottom_toTopOf="@+id/LprogressBar"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/RPassword" />
@@ -133,14 +132,11 @@
       style="?android:attr/progressBarStyle"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="40dp"
-      android:layout_marginBottom="10dp"
       android:background="@color/white"
       android:visibility="invisible"
-      app:layout_constraintBottom_toTopOf="@+id/RRegisterBtn"
+      app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/textView4" />
+      app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
