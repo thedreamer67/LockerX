@@ -18,7 +18,7 @@ public class DatabaseController {
     public void storeLockerStatus(int lockerID,int lockerStructureID){
         //insert codes here to store new status of locker
     }
-    public void createBooking(String email, String lockerStructureID, String lockerID,
+    public void createBooking(String email, int lockerStructureID, int lockerID,
                               LocalDate startDate, LocalTime startTime,
                               LocalDate endDate, LocalTime endTime){
         // insert codes to create a new row in booking table

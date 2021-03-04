@@ -11,8 +11,9 @@ public class BookingController {
 
     public BookingController(){}
 
-    public void makeBooking(DatabaseController dc, String email, String lockerStructureID,
-                               String lockerID, LocalDate startDate, LocalTime startTime,
+
+    public void makeBooking(DatabaseController dc, String email, int lockerStructureID,
+                               int lockerID, LocalDate startDate, LocalTime startTime,
                                LocalDate endDate, LocalTime endTime){
         Booking booking = new Booking(startDate, startTime,endDate,endTime);
         dc.createBooking(email,lockerStructureID,lockerID,startDate,startTime,endDate,endTime);
@@ -41,5 +42,10 @@ public class BookingController {
                 return 2; // start time < current time and end time >0, in-progress
         } else
             return -1; //compulsory statement by program, will not reach this case
+    }
+
+    public float calculateRentalFees(DatabaseController dc, String email, int lockerID,
+                                     int lockerStructureID){
+
     }
 }
