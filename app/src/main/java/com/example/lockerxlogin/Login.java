@@ -57,7 +57,7 @@ public class Login extends AppCompatActivity {
                     LPassword.setError("Password must have at least a capital letter and a symbol");
                     return;
                 }
-
+//
                 LProgressBar.setVisibility(View.VISIBLE);
                 fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
