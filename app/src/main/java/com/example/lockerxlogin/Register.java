@@ -26,7 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class Register extends AppCompatActivity {
     EditText mEmail, mPassword, mName, mMobile;
-    TextView mLoginBtn;
+    TextView mLoginBtn,alreadyRegisterButton;
     Button mRegisterBtn;
     ProgressBar mprogressBar;
     FirebaseAuth fAuth;
@@ -52,6 +52,7 @@ public class Register extends AppCompatActivity {
         mPassword = findViewById(R.id.RPassword);
         mMobile = findViewById(R.id.RPhone);
         //mLoginBtn = findViewById(R.id.LoginFromRegisterBtn);
+        alreadyRegisterButton = findViewById(R.id.alreadyRegisterText);
         mprogressBar = findViewById(R.id.LprogressBar);
         fAuth = FirebaseAuth.getInstance();
         mRegisterBtn = findViewById(R.id.RRegisterBtn);
@@ -61,14 +62,14 @@ public class Register extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(),MainActivity.class));
             finish();
         }
-//        mLoginBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(getApplicationContext(),Login.class));
-//
-//            }
-//
-//        });
+        alreadyRegisterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),Login.class));
+
+            }
+
+        });
 
 
         mRegisterBtn.setOnClickListener(new View.OnClickListener(){
@@ -152,7 +153,7 @@ public class Register extends AppCompatActivity {
     }
     public boolean checkPasswordRule(String password){
         //return less 8
-        if (password == null || password.length() <8 ) return false;
+       /* if (password == null || password.length() <8 ) return false;
         int i = 0;
         if (password.matches(REG_NUMBER)) i++;
         if (password.matches(REG_LOWERCASE))i++;
@@ -160,7 +161,7 @@ public class Register extends AppCompatActivity {
         if (password.matches(REG_SYMBOL)) i++;
 
         if (i  < 4 )  return false;
-
+        */
         return true;
     }
 
