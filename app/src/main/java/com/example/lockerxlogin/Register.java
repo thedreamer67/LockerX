@@ -17,28 +17,32 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Register extends AppCompatActivity {
-    EditText mEmail, mPassword;
+    EditText mEmail, mPassword, mName, mMobile;
     TextView mLoginBtn;
     Button mRegisterBtn;
-   ProgressBar mprogressBar;
+    ProgressBar mprogressBar;
     FirebaseAuth fAuth;
-    //
-
+    DatabaseReference reff;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-
+        mName = findViewById(R.id.RName);
         mEmail = findViewById(R.id.REamil);
         mPassword = findViewById(R.id.RPassword);
+        mMobile = findViewById(R.id.RPhone);
         //mLoginBtn = findViewById(R.id.LoginFromRegisterBtn);
         mprogressBar = findViewById(R.id.LprogressBar);
         fAuth = FirebaseAuth.getInstance();
         mRegisterBtn = findViewById(R.id.RRegisterBtn);
+        reff = FirebaseDatabase.getInstance().getReference().child("User");
+
         if(fAuth.getCurrentUser() != null){
             startActivity(new Intent(getApplicationContext(),MainActivity.class));
             finish();
@@ -56,13 +60,14 @@ public class Register extends AppCompatActivity {
         mRegisterBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick (View v) {
+                String name = mName.getText().toString().trim();
                 String email = mEmail.getText().toString().trim();
                 String password = mPassword.getText().toString().trim();
+                long mobile = Long.parseLong(mMobile.getText().toString().trim());
 
                 if (TextUtils.isEmpty(email)) {
                     mEmail.setError("Email is required");
                     return;
-
                 }
                 if (TextUtils.isEmpty(password)) {
                     mPassword.setError("Password is required");
@@ -79,6 +84,8 @@ public class Register extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
+                            User user = new User(name, email, password, mobile, 0);
+                            reff.push().setValue(user);
                             Toast.makeText(Register.this, "User created.", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(), Login.class));
                         }else{
