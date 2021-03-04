@@ -53,7 +53,7 @@ public class DatabaseController {
     }
 
     //method to update wallet balance
-   public void updateWalletBalance(String email, float newBalance) {
+    public void updateWalletBalance(String email, float newBalance) {
 //        reff = FirebaseDatabase.getInstance().getReference().child("User").
 //        reff.setValue()
     }
