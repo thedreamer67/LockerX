@@ -31,8 +31,8 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         LEmail = findViewById(R.id.LEmail);
         LPassword = findViewById(R.id.LPassword);
-        LLoginPage = findViewById(R.id.LLoginText);
-        LProgressBar = findViewById(R.id.LprogressBar);
+       //LLoginPage = findViewById(R.id.LLoginText);
+       LProgressBar = findViewById(R.id.LprogressBar);
         LLoginBtn= findViewById(R.id.LLoginBtn);
         LRegisterBtn = findViewById(R.id.LRegister);
         fAuth = FirebaseAuth.getInstance();
@@ -57,7 +57,7 @@ public class Login extends AppCompatActivity {
                     LPassword.setError("Password must have at least a capital letter and a symbol");
                     return;
                 }
-
+//
                 LProgressBar.setVisibility(View.VISIBLE);
                 fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
