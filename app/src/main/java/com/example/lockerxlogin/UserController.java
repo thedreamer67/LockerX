@@ -22,13 +22,13 @@ public class UserController {
 
         bc.makeBooking(dc,currentUser.getEmail(),lockerStructureID,lockerID,startDate,startTime,endDate,endTime);
         //creates a new booking object and stores it in database using database controller
-        makeRentalPayment();
+        makePayment(dc,0);
     }
     public boolean makePayment(DatabaseController dc, float paymentAmount){
         float walletBalance = this.currentUser.getWalletBalance();
         if(walletBalance-paymentAmount>=0){
             this.currentUser.setWalletBalance(walletBalance-paymentAmount);
-            dc.
+            dc.updateWalletBalance(this.currentUser.getEmail(),this.currentUser.getWalletBalance());
             return true;
         }
         else

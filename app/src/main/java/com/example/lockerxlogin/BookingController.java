@@ -46,6 +46,6 @@ public class BookingController {
 
     public float calculateRentalFees(DatabaseController dc, String email, int lockerID,
                                      int lockerStructureID){
-
+        return 0;
     }
 }
