@@ -36,7 +36,7 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
 
         return myView;
     }
-
+//
     @Override
     public void onClick(View v) {
         switch (v.getId()){
