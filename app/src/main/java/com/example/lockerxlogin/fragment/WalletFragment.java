@@ -1,5 +1,6 @@
 package com.example.lockerxlogin.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -16,7 +17,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.lockerxlogin.MainActivity;
 import com.example.lockerxlogin.R;
+import com.example.lockerxlogin.TopUpPage;
 import com.example.lockerxlogin.ui.wallet.WalletViewModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,16 +27,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class WalletFragment extends Fragment {
-    TextView walletBalance, Title;
+public class WalletFragment extends Fragment implements View.OnClickListener{
+    TextView walletBalance;
     Button topUpButton;
     private WalletViewModel mViewModel;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
     DatabaseReference reff;
-    SpannableStringBuilder builder = new SpannableStringBuilder();
-
-
 
     public static WalletFragment newInstance() {
         return new WalletFragment();
@@ -45,6 +45,8 @@ public class WalletFragment extends Fragment {
         View myView = inflater.inflate(R.layout.fragment_wallet, container, false);
         walletBalance = myView.findViewById(R.id.walletBalance);
         topUpButton = myView.findViewById(R.id.topUpButton);
+        topUpButton.setOnClickListener(this);
+
         reff = FirebaseDatabase.getInstance().getReference().child("User").child("12345678");
         reff.addValueEventListener(new ValueEventListener() {
             @Override
@@ -65,6 +67,14 @@ public class WalletFragment extends Fragment {
         return myView;
     }
 
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.topUpButton:
+                this.startActivity(new Intent(getActivity(), TopUpPage.class));
+                break;
+        }
+
+    }
 
 
    /* @Override

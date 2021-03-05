@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LockerXLogin">
-        <activity android:name=".Controlling"></activity>
+        <activity android:name=".TopUpPage"></activity>
+        <activity android:name=".Controlling" />
         <activity android:name=".MainActivity" />
         <activity
             android:name=".ResetPassword"
