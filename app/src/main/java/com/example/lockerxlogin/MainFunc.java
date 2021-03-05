@@ -2,16 +2,16 @@ package com.example.lockerxlogin;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 
-import com.example.lockerxlogin.ui.home.HomeFragment;
-import com.example.lockerxlogin.ui.accounts.AccountsFragment;
-import com.example.lockerxlogin.ui.lockers.LockersFragment;
-import com.example.lockerxlogin.ui.wallet.WalletFragment;
+import com.example.lockerxlogin.fragment.HomeFragment;
+import com.example.lockerxlogin.fragment.LockersFragment;
+import com.example.lockerxlogin.fragment.WalletFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.annotation.NonNull;
+import androidx.navigation.fragment.NavHostFragment;
+
 import android.view.*;
 
 public class MainFunc extends AppCompatActivity {
@@ -33,14 +33,18 @@ public class MainFunc extends AppCompatActivity {
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     Fragment selectedFragment = null;
                     switch (item.getItemId()) {
-                        case R.id.homeFragment:
+                        case R.id.navigation_home:
                             selectedFragment = new HomeFragment();
                             break;
-                        case R.id.lockersFragment:
+                        case R.id.navigation_lockers:
                             selectedFragment = new LockersFragment();
                             break;
-                        case R.id.walletFragment:
+                        case R.id.navigation_wallet:
                             selectedFragment = new WalletFragment();
+                            break;
+
+                        case R.id.navigation_account:
+                            selectedFragment = new NavHostFragment();
                             break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
