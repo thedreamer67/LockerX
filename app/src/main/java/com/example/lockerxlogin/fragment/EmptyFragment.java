@@ -1,6 +1,4 @@
-package com.example.lockerxlogin.ui.lockers;
-
-import androidx.lifecycle.ViewModelProvider;
+package com.example.lockerxlogin.fragment;
 
 import android.os.Bundle;
 
@@ -13,25 +11,26 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.lockerxlogin.R;
+import com.example.lockerxlogin.ui.wallet.WalletViewModel;
 
-public class LockersFragment extends Fragment {
+public class EmptyFragment extends Fragment {
 
-    private LockersViewModel mViewModel;
+    //private WalletViewModel mViewModel;
 
-    public static LockersFragment newInstance() {
-        return new LockersFragment();
+    public static EmptyFragment newInstance() {
+        return new EmptyFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_lockers, container, false);
+        return inflater.inflate(R.layout.fragement_empty, container, false);
     }
 
-  /*  @Override
+   /* @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(LockersViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(WalletViewModel.class);
         // TODO: Use the ViewModel
     }*/
 

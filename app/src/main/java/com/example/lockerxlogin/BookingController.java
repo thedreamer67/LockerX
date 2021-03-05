@@ -8,9 +8,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class BookingController {
 
@@ -20,18 +17,23 @@ public class BookingController {
     public void makeBooking(DatabaseController dc, String email, int lockerStructureID,
                                int lockerID, LocalDate startDate, LocalTime startTime,
                                LocalDate endDate, LocalTime endTime){
-        Booking booking = new Booking(startDate, startTime,endDate,endTime);
-        dc.createBooking(email,lockerStructureID,lockerID,startDate,startTime,endDate,endTime);
+
+        /*I actually don't know if we need the statement below because never really use this object,
+         just store in database only*/
+        Booking booking = new Booking(startDate, startTime,endDate,endTime,
+                email,lockerStructureID,lockerID,'B'); //booking status to 'B',booked
+
+        dc.createBooking(email,lockerStructureID,lockerID,startDate,startTime,endDate,endTime,'B');
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     // returns 1 if expired, 2 if in progress, and 3 if not started
-    public int checkExpiredBooking(DatabaseController dc, String email, int lockerID,
-                                       int lockerStructureID) {
-        LocalDate startDate = dc.retrieveBookingStartDate(email, lockerID, lockerStructureID);
+    public int checkExpiredBooking(LocalDate startDate, LocalTime startTime,
+                                   LocalDate endDate, LocalTime endTime) {
+        /*LocalDate startDate = dc.retrieveBookingStartDate(email, lockerID, lockerStructureID);
         LocalTime startTime = dc.retrieveBookingStartTime(email, lockerID, lockerStructureID);
         LocalDate endDate = dc.retrieveBookingEndDate(email, lockerID, lockerStructureID);
-        LocalTime endTime = dc.retrieveBookingEndTime(email, lockerID, lockerStructureID);
+        LocalTime endTime = dc.retrieveBookingEndTime(email, lockerID, lockerStructureID);*/
         if (startDate.compareTo(LocalDate.now()) > 0) {
             return 3; //future reservation
         } else if (endDate.compareTo(LocalDate.now()) < 0) {
@@ -50,14 +52,12 @@ public class BookingController {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public float calculateRentalFees(DatabaseController dc, String email, int lockerID,
-                                     int lockerStructureID){
+    public float calculateRentalFees(DatabaseController dc, int lockerStructureID,
+                                     int lockerID, LocalDate startDate, LocalTime startTime,
+                                     LocalDate endDate, LocalTime endTime){
         char sizeArray[] = new char[]{'S','M','L'};
         float rentalArray[] = new float[]{1,2,3};
-        LocalDate startDate = dc.retrieveBookingStartDate(email, lockerID, lockerStructureID);
-        LocalTime startTime = dc.retrieveBookingStartTime(email, lockerID, lockerStructureID);
-        LocalDate endDate = dc.retrieveBookingEndDate(email, lockerID, lockerStructureID);
-        LocalTime endTime = dc.retrieveBookingEndTime(email, lockerID, lockerStructureID);
+
         char lockerSize = dc.retrieveLockerSize(lockerStructureID,lockerID);
 
         //finding rental rate based on locker size

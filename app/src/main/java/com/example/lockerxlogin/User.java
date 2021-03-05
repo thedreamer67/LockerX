@@ -7,21 +7,23 @@ public class User implements Account {
     private String email;
     private String password;
     private float walletBalance;
+    private float lateFees;
     private long mobile;
     //private ArrayList<Booking> booking;
 
     public User(){} //empty constructor
 
-    public User(String name, String email, String password, long mobile, float walletBalance){
+    public User(String name, String email, String password, long mobile, float walletBalance, float lateFees){
         this.name = name;
         this.email = email;
         this.password = password;
         this.mobile = mobile;
         this.walletBalance = walletBalance;
+        this.lateFees = lateFees;
         //this.booking = new ArrayList<Booking>();
     }
 
-    public User(String name, String email, long mobile, float walletBalance){
+    public User(String name, String email, long mobile){
         this.name = name;
         this.email = email;
         this.password = password;
@@ -67,6 +69,13 @@ public class User implements Account {
     }
     public float getWalletBalance() {
         return this.walletBalance;
+    }
+
+    public void setLateFees(float lateFees) {
+        this.lateFees = lateFees;
+    }
+    public float getLateFees() {
+        return this.lateFees;
     }
 
 //    public ArrayList<Booking> getBooking() {

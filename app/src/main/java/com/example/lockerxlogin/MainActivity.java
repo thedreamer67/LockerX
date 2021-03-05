@@ -55,13 +55,10 @@ public class MainActivity extends Activity {
 
 
 
-
-
         search = (Button) findViewById(R.id.searchBT);
         connect = (Button) findViewById(R.id.connectBT);
+
         listView = (ListView) findViewById(R.id.listview);
-
-
 
         if (savedInstanceState != null) {
             ArrayList<BluetoothDevice> list = savedInstanceState.getParcelableArrayList(DEVICE_LIST);

@@ -3,7 +3,13 @@
     package="com.example.lockerxlogin">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <permission
+        android:name="com.anchit.locationapi.maps.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name= "android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name= "android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -12,23 +18,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LockerXLogin">
-        <activity android:name=".ResetPassword"
-            android:exported="true"></activity>
-        <activity android:name=".ForgetPassword"
-            android:exported="true"/>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDO29ltiAU7L1LHsALO2U_kit0oP9G8yb8" />
+        <activity android:name=".TopUpPage"></activity>
+        <activity android:name=".Controlling" />
+        <activity android:name=".MainActivity" />
         <activity
-            android:name=".Login"
+            android:name=".ResetPassword"
             android:exported="true" />
         <activity
-            android:name=".Register"
+            android:name=".ForgetPassword"
+            android:exported="true" />
+        <activity
+            android:name=".Login"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,14 +40,22 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".Register"
+            android:exported="true" />
+        <activity
             android:name=".MainFunc"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="true"
+            >
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+             <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
+
+
+             <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
+
         </activity>
+
     </application>
 
 </manifest>

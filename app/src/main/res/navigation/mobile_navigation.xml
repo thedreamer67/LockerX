@@ -6,22 +6,32 @@
     app:startDestination="@id/accountsFragment">
     <fragment
         android:id="@+id/accountsFragment"
-        android:name="com.example.lockerxlogin.ui.accounts.AccountsFragment"
+        android:name="com.example.lockerxlogin.fragment.AccountsFragment"
         android:label="fragment_accounts"
         tools:layout="@layout/fragment_accounts" />
     <fragment
         android:id="@+id/lockersFragment"
-        android:name="com.example.lockerxlogin.ui.lockers.LockersFragment"
+        android:name="com.example.lockerxlogin.fragment.LockersFragment"
         android:label="fragment_lockers"
         tools:layout="@layout/fragment_lockers" />
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.lockerxlogin.ui.home.HomeFragment"
+        android:name="com.example.lockerxlogin.fragment.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_accountsFragment"
+            app:destination="@id/accountsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_lockersFragment"
+            app:destination="@id/lockersFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_walletFragment"
+            app:destination="@id/walletFragment" />
+    </fragment>
     <fragment
         android:id="@+id/walletFragment"
-        android:name="com.example.lockerxlogin.ui.wallet.WalletFragment"
+        android:name="com.example.lockerxlogin.fragment.WalletFragment"
         android:label="fragment_wallet"
         tools:layout="@layout/fragment_wallet" />
 </navigation>
