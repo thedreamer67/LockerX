@@ -7,7 +7,11 @@
     <string name="title_lockers">Lockers</string>
     <string name="title_wallet">Wallet</string>
     <string name="title_account">Account</string>
-
+    <string-array name="name">
+        <item>Visa</item>
+        <item>MasterCard</item>
+        <item>PayLah!</item>
+    </string-array>
     <string-array name="size">
         <item>small (30x40x30cm)</item>
         <item>medium (40x50x40cm)</item>

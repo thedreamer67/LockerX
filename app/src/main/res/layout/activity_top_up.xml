@@ -40,13 +40,12 @@
         app:layout_constraintHorizontal_bias="0.146"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.279" />
+        app:layout_constraintVertical_bias="0.275" />
 
     <Spinner
         android:id="@+id/paymentType"
-        android:layout_width="153dp"
-        android:layout_height="29dp"
-        android:entries="3"
+        android:layout_width="216dp"
+        android:layout_height="26dp"
         android:spinnerMode="dropdown"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -54,5 +53,17 @@
         app:layout_constraintStart_toEndOf="@+id/paymentMethod"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.273" />
+
+    <TextView
+        android:id="@+id/topUpAmount"
+        android:layout_width="115dp"
+        android:layout_height="22dp"
+        android:text="Top Up Amount"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.138"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/paymentMethod"
+        app:layout_constraintVertical_bias="0.097" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
