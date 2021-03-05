@@ -71,9 +71,7 @@ public class TopUpPage extends AppCompatActivity {
                 if (TextUtils.isEmpty(Amount)) {
                     topUpValue.setError("Please Enter an Amount");
                     return;
-                } else if (!isNumeric(Amount)) {
-                    topUpValue.setError("Please enter only digits");
-                } else if (Float.parseFloat(Amount) <= 0.01) {
+                } else if (Float.parseFloat(Amount) <= 0.009) {
                     topUpValue.setError("Please enter a valid value");
                 } else {
                     reff.addListenerForSingleValueEvent(new ValueEventListener() {
