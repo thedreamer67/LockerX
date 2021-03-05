@@ -1,6 +1,7 @@
 package com.example.lockerxlogin;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
@@ -14,40 +15,39 @@ import androidx.annotation.NonNull;
 import android.view.*;
 
 public class MainFunc extends AppCompatActivity {
-
-    ViewPager viewPager;
-    BottomNavigationView mNavigationView;
-    HomeFragment  homeFragments = new HomeFragment();
-    LockersFragment lockersFragments = new LockersFragment();
-    WalletFragment walletFragments = new WalletFragment();
-    AccountsFragment accountFragments = new AccountsFragment();
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.navigation_home:
-
-                return true;
-            case R.id.navigation_lockers:
-
-                return true;
-            case R.id.navigation_wallet:
-
-                return true;
-            case R.id.navigation_account:
-                return true;
-
-        }
-        return false;
-        }
-    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
+        BottomNavigationView bottomNav = findViewById(R.id.navigation);
+        bottomNav.setOnNavigationItemSelectedListener(navListener);
+        //I added this if statement to keep the selected fragment when rotating the device
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new HomeFragment()).commit();
+        }
     }
-
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    Fragment selectedFragment = null;
+                    switch (item.getItemId()) {
+                        case R.id.homeFragment:
+                            selectedFragment = new HomeFragment();
+                            break;
+                        case R.id.lockersFragment:
+                            selectedFragment = new LockersFragment();
+                            break;
+                        case R.id.walletFragment:
+                            selectedFragment = new WalletFragment();
+                            break;
+                    }
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            selectedFragment).commit();
+                    return true;
+                }
+            };
 
 }
 
