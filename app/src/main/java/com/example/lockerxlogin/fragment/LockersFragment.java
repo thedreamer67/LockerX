@@ -14,7 +14,6 @@ import android.widget.Button;
 
 import com.example.lockerxlogin.MainActivity;
 import com.example.lockerxlogin.R;
-import com.example.lockerxlogin.Register;
 import com.example.lockerxlogin.ui.lockers.LockersViewModel;
 
 public class LockersFragment extends Fragment implements View.OnClickListener {
