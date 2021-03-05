@@ -29,6 +29,7 @@ public class Booking {
     public java.time.LocalTime getStartTime(){
         return this.startTime;
     }
+
     public void setEndDate(java.time.LocalDate endDate){
         this.endDate = endDate;
     }
