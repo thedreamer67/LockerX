@@ -1,6 +1,4 @@
-package com.example.lockerxlogin.ui.home;
-
-import androidx.lifecycle.ViewModelProvider;
+package com.example.lockerxlogin.fragment;
 
 import android.os.Bundle;
 
@@ -13,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.lockerxlogin.R;
+import com.example.lockerxlogin.ui.home.HomeViewModel;
 
 public class HomeFragment extends Fragment {
 
