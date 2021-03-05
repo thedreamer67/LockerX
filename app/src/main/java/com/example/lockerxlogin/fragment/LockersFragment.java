@@ -32,7 +32,7 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
                              @Nullable Bundle savedInstanceState) {
 
        // LockerModeBtn = getView().findViewById(R.id.LLockerMode);
-        //LockerModeBtn.setOnClickListener(this);
+        //LockerModeBtn.setOnClickListener(this);/23
 
 
 
