@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/accountsFragment">
+    <fragment
+        android:id="@+id/accountsFragment"
+        android:name="com.example.lockerxlogin.ui.accounts.AccountsFragment"
+        android:label="fragment_accounts"
+        tools:layout="@layout/fragment_accounts" />
+    <fragment
+        android:id="@+id/lockersFragment"
+        android:name="com.example.lockerxlogin.ui.lockers.LockersFragment"
+        android:label="fragment_lockers"
+        tools:layout="@layout/fragment_lockers" />
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.lockerxlogin.ui.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/walletFragment"
+        android:name="com.example.lockerxlogin.ui.wallet.WalletFragment"
+        android:label="fragment_wallet"
+        tools:layout="@layout/fragment_wallet" />
+</navigation>
