@@ -29,7 +29,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class HomeFragment extends Fragment {
         //implements SEService.OnConnectedListener {
-
+//0
     private HomeViewModel mViewModel;
     private GoogleMap mMap;
     private FusedLocationProviderClient FusedLocationClient;
