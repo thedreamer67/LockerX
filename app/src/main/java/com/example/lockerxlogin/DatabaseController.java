@@ -15,6 +15,17 @@ public class DatabaseController {
 
     public DatabaseController(){}
 
+    //method to store new user to db
+    public void storeNewUser(String name, String email, long mobile) {
+        reff = FirebaseDatabase.getInstance().getReference().child("User"); //reference to the "User" table of the db
+        String smobile = mobile+"";
+        //store new user to db
+        reff.child(smobile).child("name").setValue(name);
+        reff.child(smobile).child("email").setValue(email);
+        reff.child(smobile).child("mobile").setValue(mobile);
+        reff.child(smobile).child("walletBalance").setValue(0);
+    }
+
     public void storeLockerStatus(int lockerID,int lockerStructureID){
         //insert codes here to store new status of locker
     }
@@ -63,9 +74,6 @@ public class DatabaseController {
 //        reff.setValue()
     }
 
-    //method to store new user to db
-//    public void storeNewUser() {
-//
-//    }
+
 
 }
