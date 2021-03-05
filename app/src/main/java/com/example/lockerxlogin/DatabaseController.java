@@ -2,10 +2,15 @@ package com.example.lockerxlogin;
 
 import android.os.Build;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -13,6 +18,7 @@ import java.util.*;
 
 public class DatabaseController {
     DatabaseReference reff;
+    TempDataStorage ds = new TempDataStorage();
 
     public DatabaseController(){}
 
@@ -25,7 +31,107 @@ public class DatabaseController {
         reff.child(smobile).child("email").setValue(email);
         reff.child(smobile).child("mobile").setValue(mobile);
         reff.child(smobile).child("walletBalance").setValue(0);
+
     }
+
+    //NEED TO CHANGE THIS
+    //retrieve all users from the db
+//    public ArrayList retrieveAllUsers() {
+//        ArrayList<User> userList = new ArrayList<User>();
+//        reff = FirebaseDatabase.getInstance().getReference().child("User");
+//        reff.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                userList.clear();
+//                if (snapshot.exists()) {
+//                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                        User user = dataSnapshot.getValue(User.class);
+//                        userList.add(user);
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//
+//        return userList;
+//    }
+
+    //NEED TO CHANGE THIS
+    //retrieve user using their email from db
+//    public ArrayList retrieveUserByID(String email) {
+//        ArrayList<User> userList = new ArrayList<User>();
+//        Query query = FirebaseDatabase.getInstance().getReference().child("User").orderByChild("email").equalTo(email);
+//        query.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                userList.clear();
+//                if (snapshot.exists()) {
+//                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                        User user = dataSnapshot.getValue(User.class);
+//                        userList.add(user);
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//
+//        return userList;
+//    }
+
+    //NOT WORKING YET
+    //retrieve user's mobile using their email from db
+    public String retrieveMobileByEmail(String email) {
+        reff = FirebaseDatabase.getInstance().getReference().child("User");
+        Query query = FirebaseDatabase.getInstance().getReference().child("User").orderByChild("email").equalTo(email);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        ds.setStr(dataSnapshot.child("mobile").getValue().toString());
+                    }
+//                    User user = snapshot.getValue(User.class);
+//                    ds.setStr(user.getMobile());
+//                    ds.setStr(snapshot.getKey(String.class)); //wrong but idk why
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
+        return ds.getStr();
+    }
+
+    //NOT WORKING YET
+    //retrieve number of bookings from db
+    public long retrieveBookingCount() {
+        reff = FirebaseDatabase.getInstance().getReference().child("Booking");
+        reff.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    ds.setLongNum(snapshot.getChildrenCount());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
+        return ds.getLongNum();
+    }
+
 
     public void storeLockerStatus(int lockerID,int lockerStructureID){
         //insert codes here to store new status of locker
