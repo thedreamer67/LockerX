@@ -54,9 +54,6 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
 
-
-
-
         search = (Button) findViewById(R.id.searchBT);
         connect = (Button) findViewById(R.id.connectBT);
         listView = (ListView) findViewById(R.id.listview);

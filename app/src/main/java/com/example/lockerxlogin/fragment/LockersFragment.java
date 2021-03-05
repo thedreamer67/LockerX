@@ -30,18 +30,21 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        View myView = inflater.inflate(R.layout.fragment_lockers, container, false);
+        LockerModeBtn = myView.findViewById(R.id.LLockerMode);
+        LockerModeBtn.setOnClickListener(this);
 
-       // LockerModeBtn = getView().findViewById(R.id.LLockerMode);
-        //LockerModeBtn.setOnClickListener(this);/23
-
-
-
-        return inflater.inflate(R.layout.fragment_lockers, container, false);
+        return myView;
     }
 
     @Override
     public void onClick(View v) {
-        startActivity(new Intent(getActivity(), MainActivity.class));
+        switch (v.getId()){
+            case R.id.LLockerMode:
+                this.startActivity(new Intent(getActivity(), MainActivity.class));
+                break;
+        }
+
     }
 
   /*  @Override
