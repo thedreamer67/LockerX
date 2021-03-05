@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -32,7 +33,8 @@ public class Register extends AppCompatActivity {
     Button mRegisterBtn;
     ProgressBar mprogressBar;
     FirebaseAuth fAuth;
-    DatabaseReference reff;
+//    DatabaseReference reff;
+    DatabaseController dc = new DatabaseController();
 
     //number
     public static final String REG_NUMBER = ".\\d+.";
@@ -58,7 +60,7 @@ public class Register extends AppCompatActivity {
         mprogressBar = findViewById(R.id.LprogressBar);
         fAuth = FirebaseAuth.getInstance();
         mRegisterBtn = findViewById(R.id.RRegisterBtn);
-        reff = FirebaseDatabase.getInstance().getReference().child("User"); //reference to the "User" table of the db
+//        reff = FirebaseDatabase.getInstance().getReference().child("User"); //reference to the "User" table of the db
 
         if(fAuth.getCurrentUser() != null){
             startActivity(new Intent(getApplicationContext(),MainActivity.class));
@@ -80,9 +82,7 @@ public class Register extends AppCompatActivity {
                 String name = mName.getText().toString().trim();
                 String email = mEmail.getText().toString().trim();
                 String password = mPassword.getText().toString().trim();
-                long mobile = Long.parseLong(mMobile.getText().toString().trim());
-                String smobile = mobile+"";
-
+                String smobile = mMobile.getText().toString().trim();
 
                 if (TextUtils.isEmpty(email)) {
                     mEmail.setError("Email is required");
@@ -104,6 +104,10 @@ public class Register extends AppCompatActivity {
 
                 if(smobile.length()!=8){
                     mMobile.setError("Please enter 8 digits only");
+                }
+
+                if (!isNumeric(smobile)) {
+                    mMobile.setError("Please enter only digits");
                 }
 
                 mprogressBar.setVisibility(View.GONE);
@@ -131,12 +135,14 @@ public class Register extends AppCompatActivity {
 
                             });
 
-
-                            User user = new User(name, email, mobile, 0);
-                            reff.child(smobile).setValue(user); //store new user to db
+//                            User user = new User(name, email, mobile, 0);
+//                            reff.child(smobile).setValue(user); //store new user to db
+                            long mobile = Long.parseLong(smobile);
+                            dc.storeNewUser(name, email, mobile);
                             Toast.makeText(Register.this, "User created.", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(), Login.class));
-                        }else{
+                        }
+                        else{
                             Toast.makeText(Register.this, "Error !" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -157,6 +163,18 @@ public class Register extends AppCompatActivity {
         if (lower.matcher(password).find()) i++;
         if (special.matcher(password).find()) i++;
         if (i  < 4 )  return false;
+        return true;
+    }
+
+    public static boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            long num = Long.parseLong(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
         return true;
     }
 

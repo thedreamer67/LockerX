@@ -9,11 +9,23 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.*;
 
 public class DatabaseController {
     DatabaseReference reff;
 
     public DatabaseController(){}
+
+    //method to store new user to db
+    public void storeNewUser(String name, String email, long mobile) {
+        reff = FirebaseDatabase.getInstance().getReference().child("User"); //reference to the "User" table of the db
+        String smobile = mobile+"";
+        //store new user to db
+        reff.child(smobile).child("name").setValue(name);
+        reff.child(smobile).child("email").setValue(email);
+        reff.child(smobile).child("mobile").setValue(mobile);
+        reff.child(smobile).child("walletBalance").setValue(0);
+    }
 
     public void storeLockerStatus(int lockerID,int lockerStructureID){
         //insert codes here to store new status of locker
@@ -58,14 +70,13 @@ public class DatabaseController {
     }
 
     //method to update wallet balance
-    public void updateWalletBalance(String email, float newBalance) {
-//        reff = FirebaseDatabase.getInstance().getReference().child("User").
-//        reff.setValue()
+    public void updateWalletBalance(String smobile, float newBalance) {
+        reff = FirebaseDatabase.getInstance().getReference().child("User");
+        Map<String, Object> walletUpdate = new HashMap<>();
+        walletUpdate.put("walletBalance", newBalance);
+        reff.child(smobile).updateChildren(walletUpdate);   //update walletBalance of user with smobile
     }
 
-    //method to store new user to db
-//    public void storeNewUser() {
-//
-//    }
+
 
 }
