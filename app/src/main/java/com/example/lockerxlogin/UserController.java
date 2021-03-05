@@ -4,6 +4,8 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
 import java.time.LocalDate;
@@ -12,6 +14,8 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
 public class UserController {
+
+
     private User currentUser;
 
     public UserController(User user){

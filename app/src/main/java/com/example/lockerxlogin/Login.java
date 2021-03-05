@@ -35,7 +35,10 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_login);
+        Toast.makeText(Login.this, "Hello", Toast.LENGTH_LONG).show();
+
         LEmail = findViewById(R.id.LEmail);
         LPassword = findViewById(R.id.LPassword);
         //LLoginPage = findViewById(R.id.LLoginText);
@@ -68,6 +71,7 @@ public class Login extends AppCompatActivity {
                 }
                 //
                 //LProgressBar.setVisibility(View.VISIBLE);
+
                 fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
 
                     @Override
@@ -77,6 +81,7 @@ public class Login extends AppCompatActivity {
                         // add else here
                         if (task.isSuccessful()) {
                             FBuser = fAuth.getCurrentUser();
+
                             if(!FBuser.isEmailVerified()){
                                 LProgressBar.setVisibility(View.VISIBLE);
                                 EditText resendVerificationEditText = new EditText(v.getContext());

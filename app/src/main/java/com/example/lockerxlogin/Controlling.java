@@ -18,6 +18,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Set;
@@ -44,7 +46,7 @@ public class Controlling extends Activity {
 
 
     private ProgressDialog progressDialog;
-    Button btnOn,btnOff, btnOn2, btnOff2;
+    Button btnOn,btnOff, btnOn2, btnOff2, LOGOUT;
 
 
     @Override
@@ -58,6 +60,7 @@ public class Controlling extends Activity {
         btnOff=(Button)findViewById(R.id.off);
         btnOn2=(Button)findViewById(R.id.on2);
         btnOff2=(Button)findViewById(R.id.off2);
+        //LOGOUT=(Button)findViewById(R.id.LOGOUT);
 
 
 
@@ -72,7 +75,14 @@ public class Controlling extends Activity {
 
 
 
-
+//        LOGOUT.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                FirebaseAuth.getInstance().signOut();//logout
+//                startActivity(new Intent(getApplicationContext(),Login.class));
+//                finish();
+//            }
+//        });
 
         btnOn.setOnClickListener(new View.OnClickListener()
         {
@@ -133,6 +143,12 @@ public class Controlling extends Activity {
 
 
 
+    }
+
+    public void LOGOUT(View view) {
+        FirebaseAuth.getInstance().signOut();//logout
+        startActivity(new Intent(getApplicationContext(),Login.class));
+        finish();
     }
 
     private class ReadInput implements Runnable {
@@ -316,4 +332,5 @@ public class Controlling extends Activity {
         // TODO Auto-generated method stub
         super.onDestroy();
     }
+
 }
