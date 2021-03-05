@@ -28,11 +28,11 @@ public class LockersFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_lockers, container, false);
     }
 
-    @Override
+  /*  @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(LockersViewModel.class);
         // TODO: Use the ViewModel
-    }
+    }*/
 
 }

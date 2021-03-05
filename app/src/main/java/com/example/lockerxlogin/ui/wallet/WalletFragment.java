@@ -28,11 +28,11 @@ public class WalletFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_wallet, container, false);
     }
 
-    @Override
+   /* @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(WalletViewModel.class);
         // TODO: Use the ViewModel
-    }
+    }*/
 
 }
