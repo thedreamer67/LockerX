@@ -9,6 +9,7 @@ import com.example.lockerxlogin.fragment.AccountsFragment;
 import com.example.lockerxlogin.fragment.HomeFragment;
 import com.example.lockerxlogin.fragment.LockersFragment;
 import com.example.lockerxlogin.fragment.WalletFragment;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,6 +28,9 @@ public class MainFunc extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
+
+
+
 
 
 
