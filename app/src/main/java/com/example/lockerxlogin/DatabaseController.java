@@ -132,7 +132,6 @@ public class DatabaseController {
     //so must check that the data is retrieved before you use it!
     public String retrieveMobileByEmail(String email) {
         ds.setStr("error");
-        reff = FirebaseDatabase.getInstance().getReference().child("User");
         Query query = FirebaseDatabase.getInstance().getReference().child("User").orderByChild("email").equalTo(email); //return the child node of "User" whose "email"==email
         //the .orderByChild() in the prev line doesnt affect where the snapshot will be pointed to!
         //snapshot will be the path ~\User in the db, NOT ~\User\[key of the user with "email"==email]\email
@@ -182,6 +181,36 @@ public class DatabaseController {
         return ds.getLongNum();
         //use this to check if data has been retrieved: count=ds.retrieveBookingCount(); while (count==="-1") {count=ds.retrieveBookingCount();}
     }
+
+
+    //retrieve available lockers from db using locationID
+//    public ArrayList<Locker> retrieveLockerByLoc(int locationID) {
+//        ArrayList<Locker> availLockers = new ArrayList<Locker>();
+//        Locker dummyLocker = new Locker();
+//        dummyLocker.setSize('E');
+//        availLockers.add(dummyLocker);
+//        ds.setAvailLockers(availLockers);
+//        Query query = FirebaseDatabase.getInstance().getReference().child("LockerStructure").orderByChild("locationID").equalTo(locationID);
+//        query.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.exists()) {
+//                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                        Locker
+//                        ds.setUser(user);
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//
+//        return ds.getUserList();
+//        //use this to check if data has been retrieved: ArrayList<User> userList = ds.retrieveAllUsers(); while (userList.get(0).getName()==="error") {userList=ds.retrieveAllUsers();}
+//    }
 
 
     public void storeLockerStatus(int lockerID,int lockerStructureID){

@@ -4,6 +4,8 @@ public class LockerStructure {
     protected int structureID;
     protected int locationID;
     protected String location;
+    protected String postalCode;
+    protected String address;
 
     public LockerStructure(){} //empty constructor
 
@@ -31,5 +33,21 @@ public class LockerStructure {
     }
     public String getLocation(){
         return this.location;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
