@@ -60,7 +60,7 @@ public class Register extends AppCompatActivity {
         mprogressBar = findViewById(R.id.LprogressBar);
         fAuth = FirebaseAuth.getInstance();
         mRegisterBtn = findViewById(R.id.RRegisterBtn);
-//        reff = FirebaseDatabase.getInstance().getReference().child("User"); //reference to the "User" table of the db
+//      reff = FirebaseDatabase.getInstance().getReference().child("User"); //reference to the "User" table of the db
 
         if(fAuth.getCurrentUser() != null){
             startActivity(new Intent(getApplicationContext(),MainActivity.class));

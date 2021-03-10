@@ -20,6 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
+
 import static com.example.lockerxlogin.Register.isNumeric;
 
 public class TopUpPage extends AppCompatActivity {
@@ -54,7 +56,11 @@ public class TopUpPage extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String balance = snapshot.child("walletBalance").getValue().toString();
-                topUpBalance.setText(FirstLine + balance);
+                float bal = Float.parseFloat(balance);
+                DecimalFormat df = new DecimalFormat("0.00");
+                df.setMaximumFractionDigits(2);
+                String FirstLine = ("You have \n$ ");
+                topUpBalance.setText(FirstLine + df.format(bal).toString());
             }
 
             @Override
