@@ -62,10 +62,10 @@ public class Register extends AppCompatActivity {
         mRegisterBtn = findViewById(R.id.RRegisterBtn);
 //      reff = FirebaseDatabase.getInstance().getReference().child("User"); //reference to the "User" table of the db
 
-        if(fAuth.getCurrentUser() != null){
+        /*if(fAuth.getCurrentUser() != null){
             startActivity(new Intent(getApplicationContext(),MainActivity.class));
             finish();
-        }
+        }*/
         alreadyRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
