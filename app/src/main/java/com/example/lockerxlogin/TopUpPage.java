@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ public class TopUpPage extends AppCompatActivity {
     EditText topUpValue;
     TextView topUpBalance, topUpAmount;
     Spinner paymentType;
+    ImageView visaLogo, masterLogo, paylahLogo;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
     DatabaseReference reff;
@@ -43,12 +46,43 @@ public class TopUpPage extends AppCompatActivity {
         topUpValue = findViewById(R.id.topUpValue);
         topUp = findViewById(R.id.topUp);
         paymentType = findViewById(R.id.paymentType);
+        visaLogo = findViewById(R.id.visaLogo);
+        masterLogo = findViewById(R.id.masterLogo);
+        paylahLogo = findViewById(R.id.paylahLogo);
         String FirstLine = ("You have \n$ ");
 
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(TopUpPage.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.name));
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         paymentType.setAdapter(myAdapter);
+        //System.out.println(paymentType.getSelectedItem().toString());
+        paymentType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                // your code here
+                if (paymentType.getSelectedItem().toString().equals("Visa")) {
+                    visaLogo.setVisibility(View.VISIBLE);
+                    masterLogo.setVisibility(View.INVISIBLE);
+                    paylahLogo.setVisibility(View.INVISIBLE);
+                }
+                if (paymentType.getSelectedItem().toString().equals("MasterCard")) {
+                    visaLogo.setVisibility(View.INVISIBLE);
+                    masterLogo.setVisibility(View.VISIBLE);
+                    paylahLogo.setVisibility(View.INVISIBLE);
+                }
+                if (paymentType.getSelectedItem().toString().equals("PayLah!")) {
+                    visaLogo.setVisibility(View.INVISIBLE);
+                    masterLogo.setVisibility(View.INVISIBLE);
+                    paylahLogo.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+                return;
+            }
+        });
 
 
         reff = FirebaseDatabase.getInstance().getReference().child("User").child("12345678");
