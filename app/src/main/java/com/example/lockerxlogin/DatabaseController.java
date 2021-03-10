@@ -271,6 +271,17 @@ public class DatabaseController {
         reff.child(smobile).updateChildren(walletUpdate);   //update walletBalance of user with smobile
     }
 
+    public ArrayList<Booking> retrieveBookedBookingList(){
+        //i dont think you need to have any parameters here
+        //dummy method
+        ArrayList<Booking> booking = new ArrayList<Booking>();
+        return booking;
+    }
 
+    //pls return me a list of lockerID filtered by locker size thanks
+    public ArrayList<Integer> retrieveLockerIDFilterByLockerSize(int lockerStructureID, int lockerSize){
+        ArrayList<Integer> dummy  = new ArrayList<Integer>();
+        return dummy;
+    }
 
 }
