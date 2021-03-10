@@ -42,7 +42,6 @@ public class TopUpPage extends AppCompatActivity {
     Spinner paymentType;
     ImageView visaLogo, masterLogo, paylahLogo;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference databaseReference = firebaseDatabase.getReference();
     DatabaseReference reff;
 
 
@@ -155,7 +154,6 @@ public class TopUpPage extends AppCompatActivity {
         topUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText resendVerificationEditText = new EditText(v.getContext());
                 final AlertDialog.Builder confirmTopUpDialog = new AlertDialog.Builder(v.getContext());
                 confirmTopUpDialog.setTitle("Confirm Top Up");
                 confirmTopUpDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {

@@ -57,8 +57,7 @@ public class WalletFragment extends Fragment implements View.OnClickListener{
                 Float bal = Float.parseFloat(balance);
                 DecimalFormat df = new DecimalFormat("0.00");
                 df.setMaximumFractionDigits(2);
-                String FirstLine = ("You have \n$ ");
-                walletBalance.setText(FirstLine + df.format(bal).toString());
+                walletBalance.setText("$" + df.format(bal).toString());
             }
 
             @Override
