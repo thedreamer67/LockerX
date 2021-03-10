@@ -73,9 +73,9 @@ public class DatabaseController {
 
     //retrieve user using their email from db
     public User retrieveUserByEmail(String email) {
-        User resetUser = new User();
-        resetUser.setName("error");
-        ds.setUser(resetUser);
+//        User resetUser = new User();
+//        resetUser.setName("error");
+//        ds.setUser(resetUser);
         Query query = FirebaseDatabase.getInstance().getReference().child("User").orderByChild("email").equalTo(email);
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -96,7 +96,6 @@ public class DatabaseController {
         });
 
         return ds.getUser();
-        //use this to check if data has been retrieved: User user = ds.retrieveUserByEmail("target email"); while (user.getName()==="error") {user=ds.retrieveUserByEmail("target email");}
     }
 
 
@@ -214,6 +213,40 @@ public class DatabaseController {
         return ds.getStructureList();
         //use this to check if data has been retrieved: ArrayList<LockerStructure> structureList = ds.retrieveStructureByPostalCode("123456"); while (structureList.get(0).getAddress()==="error") {structureList=ds.retrieveStructureByPostalCode("123456");}
     }
+
+
+    //retrieve all lockers of a structure using structureID
+//    public ArrayList<Locker> retrieveAvailLockers(int structureID) {
+//        ArrayList<Locker> lockerList = new ArrayList<Locker>();
+//        Locker dummyLocker = new Locker();
+//        dummyLocker.setSize('E');
+//        lockerList.add(dummyLocker);
+//        ds.setLockerList(lockerList);
+//        Query query = FirebaseDatabase.getInstance().getReference().child("LockerStructure").orderByChild("postalCode").equalTo(postalCode);
+//        query.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.exists()) {
+//                    ds.getStructureList().clear();
+//                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                        LockerStructure lockerStructure = dataSnapshot.getValue(LockerStructure.class);
+//                        ds.getStructureList().add(lockerStructure);
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//
+//        return ds.getStructureList();
+//        //use this to check if data has been retrieved: ArrayList<LockerStructure> structureList = ds.retrieveStructureByPostalCode("123456"); while (structureList.get(0).getAddress()==="error") {structureList=ds.retrieveStructureByPostalCode("123456");}
+//    }
+
+
+    //retrieve all bookings with 'B' status
 
 
     public void storeLockerStatus(int lockerID,int lockerStructureID){

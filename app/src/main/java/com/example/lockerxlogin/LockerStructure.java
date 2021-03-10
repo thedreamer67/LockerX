@@ -2,38 +2,30 @@ package com.example.lockerxlogin;
 
 public class LockerStructure {
     protected int structureID;
-    protected int locationID;
-    protected String location;
+//    protected int locationID;
     protected String postalCode;
     protected String address;
 
     public LockerStructure(){} //empty constructor
 
-    public LockerStructure(int structureID, int locationID, String location){
+    public LockerStructure(int structureID, String postalCode, String address){
         this.structureID = structureID;
-        this.locationID = structureID;
-        this.location = location;
+        this.postalCode = postalCode;
+        this.address = address;
     }
-    public void setStructureID(int lockerID){
-        this.structureID = lockerID;
+    public void setStructureID(int structureID){
+        this.structureID = structureID;
     }
     public int getStructureID(){
         return this.structureID;
     }
 
-    public void setLocationID(int lockerID){
-        this.locationID = locationID;
-    }
-    public int getLocationID(){
-        return this.locationID;
-    }
-
-    public void setLocation(String location){
-        this.location = location;
-    }
-    public String getLocation(){
-        return this.location;
-    }
+//    public void setLocationID(int lockerID){
+//        this.locationID = locationID;
+//    }
+//    public int getLocationID(){
+//        return this.locationID;
+//    }
 
     public String getPostalCode() {
         return postalCode;

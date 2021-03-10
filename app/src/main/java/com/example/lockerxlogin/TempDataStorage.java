@@ -9,8 +9,8 @@ public class TempDataStorage {
     private ArrayList<User> userList = new ArrayList<User>();
     private User user;
     private long userCount;
-    private ArrayList<Locker> availLockers = new ArrayList<Locker>();
     private ArrayList<LockerStructure> structureList = new ArrayList<LockerStructure>();
+    private ArrayList<Locker> lockerList = new ArrayList<Locker>();
 
     public TempDataStorage() {
     }
@@ -59,19 +59,19 @@ public class TempDataStorage {
         this.userCount = userCount;
     }
 
-    public ArrayList<Locker> getAvailLockers() {
-        return availLockers;
-    }
-
-    public void setAvailLockers(ArrayList<Locker> availLockers) {
-        this.availLockers = availLockers;
-    }
-
     public ArrayList<LockerStructure> getStructureList() {
         return structureList;
     }
 
     public void setStructureList(ArrayList<LockerStructure> structureList) {
         this.structureList = structureList;
+    }
+
+    public ArrayList<Locker> getLockerList() {
+        return lockerList;
+    }
+
+    public void setLockerList(ArrayList<Locker> lockerList) {
+        this.lockerList = lockerList;
     }
 }

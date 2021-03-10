@@ -21,9 +21,9 @@ public class UserController {
     public UserController(User user){
         this.currentUser = user;
     }
-    public boolean lockOrUnlock(LockerController lc, DatabaseController dc){
-        return lc.lockOrUnlock(dc);
-    }
+//    public boolean lockOrUnlock(LockerController lc, DatabaseController dc){
+//        return lc.lockOrUnlock(dc);
+//    }
 
     //method to create booking using the booking controller
     @RequiresApi(api = Build.VERSION_CODES.O)
