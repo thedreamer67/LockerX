@@ -178,7 +178,6 @@ public class TopUpPage extends AppCompatActivity {
                                     Float total = amount + balance;
                                     topUpBalance.setText("$ " + total.toString());
                                     Toast.makeText(TopUpPage.this, "Top Up Success!", Toast.LENGTH_SHORT).show();
-
                                 }
 
                                 @Override
@@ -196,7 +195,6 @@ public class TopUpPage extends AppCompatActivity {
                     }
                 });
                 confirmTopUpDialog.show();
-
 
             }
         });
