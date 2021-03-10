@@ -49,12 +49,12 @@ public class WalletFragment extends Fragment implements View.OnClickListener{
         topUpButton = myView.findViewById(R.id.topUpButton);
         topUpButton.setOnClickListener(this);
 
-        reff = FirebaseDatabase.getInstance().getReference().child("User").child("12345678");
+        reff = FirebaseDatabase.getInstance().getReference().child("User").child("90059608");
         reff.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String balance = snapshot.child("walletBalance").getValue().toString();
-                float bal = Float.parseFloat(balance);
+                Float bal = Float.parseFloat(balance);
                 DecimalFormat df = new DecimalFormat("0.00");
                 df.setMaximumFractionDigits(2);
                 String FirstLine = ("You have \n$ ");

@@ -2,7 +2,10 @@ package com.example.lockerxlogin;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.NoCopySpan;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,32 +33,40 @@ import static com.example.lockerxlogin.Register.isNumeric;
 public class TopUpPage extends AppCompatActivity {
     Button topUp;
     EditText topUpValue;
-    TextView topUpBalance, topUpAmount;
+    TextView topUpBalance, topUpAmount, topUpTitle, changeInBalance;
     Spinner paymentType;
     ImageView visaLogo, masterLogo, paylahLogo;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
     DatabaseReference reff;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_up);
 
+        topUpTitle = findViewById(R.id.topUpTitle);
         topUpAmount = findViewById(R.id.topUpAmount);
         topUpBalance = findViewById(R.id.topUpBalance);
         topUpValue = findViewById(R.id.topUpValue);
+        changeInBalance = findViewById(R.id.changeInBalance);
         topUp = findViewById(R.id.topUp);
         paymentType = findViewById(R.id.paymentType);
         visaLogo = findViewById(R.id.visaLogo);
         masterLogo = findViewById(R.id.masterLogo);
         paylahLogo = findViewById(R.id.paylahLogo);
-        String FirstLine = ("You have \n$ ");
+
+        reff = FirebaseDatabase.getInstance().getReference().child("User").child("90059608");
+
+        DecimalFormat df = new DecimalFormat("0.00");
+        df.setMaximumFractionDigits(2);
 
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(TopUpPage.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.name));
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         paymentType.setAdapter(myAdapter);
+
         //System.out.println(paymentType.getSelectedItem().toString());
         paymentType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
@@ -85,20 +97,52 @@ public class TopUpPage extends AppCompatActivity {
         });
 
 
-        reff = FirebaseDatabase.getInstance().getReference().child("User").child("12345678");
+
+
+
         reff.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String balance = snapshot.child("walletBalance").getValue().toString();
-                float bal = Float.parseFloat(balance);
-                DecimalFormat df = new DecimalFormat("0.00");
-                df.setMaximumFractionDigits(2);
-                String FirstLine = ("You have \n$ ");
-                topUpBalance.setText(FirstLine + df.format(bal).toString());
+                Float bal = Float.parseFloat(balance);
+                topUpBalance.setText("$ " + df.format(bal));
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
+        topUpValue.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String firstline = "You have $";
+                String secondline = "\n\nTop up amount: $";
+                String thirdline = "\n\nAfter top up: $";
+                reff.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        String balance = snapshot.child("walletBalance").getValue().toString();
+                        Float bal = Float.parseFloat(balance);
+                        Float topUp = Float.parseFloat(topUpValue.getText().toString().trim());
+                        double total = topUp+bal;
+                        changeInBalance.setText(firstline + df.format(bal) + secondline + s + thirdline + total);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
 
             }
         });
@@ -120,9 +164,10 @@ public class TopUpPage extends AppCompatActivity {
                             Float balance = Float.parseFloat(snapshot.child("walletBalance").getValue().toString());
                             Float amount = Float.parseFloat(Amount);
                             reff.child("walletBalance").setValue((amount + balance));
-                            topUpBalance.setText(FirstLine + (amount + balance));
+                            Float total = amount + balance;
+                            topUpBalance.setText("$ " + total.toString());
                             Toast.makeText(TopUpPage.this, "Top Up Success!", Toast.LENGTH_SHORT).show();
-                            reff = FirebaseDatabase.getInstance().getReference().child("User").child("12345678");
+
                         }
 
                         @Override

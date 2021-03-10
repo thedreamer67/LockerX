@@ -8,15 +8,15 @@
 
     <TextView
         android:id="@+id/topUpBalance"
-        android:layout_width="120dp"
-        android:layout_height="50dp"
-        android:maxLines="2"
+        android:layout_width="146dp"
+        android:layout_height="64dp"
+        android:textSize="36sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.14"
+        app:layout_constraintHorizontal_bias="0.064"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.081" />
+        app:layout_constraintVertical_bias="0.135" />
 
     <Button
         android:id="@+id/topUp"
@@ -25,10 +25,10 @@
         android:text="Top Up"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.917" />
+        app:layout_constraintVertical_bias="0.875" />
 
     <TextView
         android:id="@+id/paymentMethod"
@@ -119,5 +119,30 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.262"
         app:srcCompat="@drawable/paylah" />
+
+    <TextView
+        android:id="@+id/topUpTitle"
+        android:layout_width="78dp"
+        android:layout_height="31dp"
+        android:text="You have"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/topUpBalance"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.051"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.596" />
+
+    <TextView
+        android:id="@+id/changeInBalance"
+        android:layout_width="289dp"
+        android:layout_height="181dp"
+        android:gravity="center"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/topUp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.921" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
