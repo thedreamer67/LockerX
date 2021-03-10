@@ -1,11 +1,13 @@
 package com.example.lockerxlogin;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.NoCopySpan;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,8 +20,11 @@ import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -131,7 +136,7 @@ public class TopUpPage extends AppCompatActivity {
                         Float bal = Float.parseFloat(balance);
                         Float topUp = Float.parseFloat(topUpValue.getText().toString().trim());
                         double total = topUp+bal;
-                        changeInBalance.setText(firstline + df.format(bal) + secondline + s + thirdline + total);
+                        changeInBalance.setText(firstline + df.format(bal) + secondline + s + thirdline + df.format(total));
                     }
 
                     @Override
@@ -150,32 +155,49 @@ public class TopUpPage extends AppCompatActivity {
         topUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String Amount = topUpValue.getText().toString().trim();
+                EditText resendVerificationEditText = new EditText(v.getContext());
+                final AlertDialog.Builder confirmTopUpDialog = new AlertDialog.Builder(v.getContext());
+                confirmTopUpDialog.setTitle("Confirm Top Up");
+                confirmTopUpDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String Amount = topUpValue.getText().toString().trim();
 
-                if (TextUtils.isEmpty(Amount)) {
-                    topUpValue.setError("Please Enter an Amount");
-                    return;
-                } else if (Float.parseFloat(Amount) <= 0.009) {
-                    topUpValue.setError("Please enter a valid value");
-                } else {
-                    reff.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            Float balance = Float.parseFloat(snapshot.child("walletBalance").getValue().toString());
-                            Float amount = Float.parseFloat(Amount);
-                            reff.child("walletBalance").setValue((amount + balance));
-                            Float total = amount + balance;
-                            topUpBalance.setText("$ " + total.toString());
-                            Toast.makeText(TopUpPage.this, "Top Up Success!", Toast.LENGTH_SHORT).show();
+                        if (TextUtils.isEmpty(Amount)) {
+                            topUpValue.setError("Please Enter an Amount");
+                            return;
+                        } else if (Float.parseFloat(Amount) <= 0.009) {
+                            topUpValue.setError("Please enter a valid value");
+                        } else {
+                            reff.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    Float balance = Float.parseFloat(snapshot.child("walletBalance").getValue().toString());
+                                    Float amount = Float.parseFloat(Amount);
+                                    reff.child("walletBalance").setValue((amount + balance));
+                                    Float total = amount + balance;
+                                    topUpBalance.setText("$ " + total.toString());
+                                    Toast.makeText(TopUpPage.this, "Top Up Success!", Toast.LENGTH_SHORT).show();
 
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                }
+
+                            });
                         }
+                    }
+                });
+                confirmTopUpDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Automatically close the dialog
+                    }
+                });
+                confirmTopUpDialog.show();
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                        }
 
-                    });
-                }
             }
         });
     }

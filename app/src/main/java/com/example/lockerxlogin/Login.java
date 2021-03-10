@@ -87,7 +87,6 @@ public class Login extends AppCompatActivity {
                                 EditText resendVerificationEditText = new EditText(v.getContext());
                                 final AlertDialog.Builder resendVerificationMailDialog = new AlertDialog.Builder(v.getContext());
                                 resendVerificationMailDialog.setTitle("Resend verification email");
-                                resendVerificationMailDialog.setView(resendVerificationEditText);
                                 resendVerificationMailDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
