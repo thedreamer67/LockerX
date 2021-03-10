@@ -50,7 +50,8 @@ public class DatabaseController {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    ds.setUserCount(snapshot.getChildrenCount());
+                    ds.getUserList().clear();
+//                    ds.setUserCount(snapshot.getChildrenCount());
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         User user = dataSnapshot.getValue(User.class);
                         ds.getUserList().add(user);
@@ -81,7 +82,8 @@ public class DatabaseController {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        User user = new User(snapshot.child("name").getValue().toString(), snapshot.child("email").getValue().toString(), snapshot.child("mobile").getValue().toString(), Float.parseFloat(snapshot.child("walletBalance").getValue().toString()), Float.parseFloat(snapshot.child("lateFees").getValue().toString()));
+//                        User user = new User(snapshot.child("name").getValue().toString(), snapshot.child("email").getValue().toString(), snapshot.child("mobile").getValue().toString(), Float.parseFloat(snapshot.child("walletBalance").getValue().toString()), Float.parseFloat(snapshot.child("lateFees").getValue().toString()));
+                        User user = dataSnapshot.getValue(User.class);
                         ds.setUser(user);
                     }
                 }
@@ -183,34 +185,35 @@ public class DatabaseController {
     }
 
 
-    //retrieve available lockers from db using locationID
-//    public ArrayList<Locker> retrieveLockerByLoc(int locationID) {
-//        ArrayList<Locker> availLockers = new ArrayList<Locker>();
-//        Locker dummyLocker = new Locker();
-//        dummyLocker.setSize('E');
-//        availLockers.add(dummyLocker);
-//        ds.setAvailLockers(availLockers);
-//        Query query = FirebaseDatabase.getInstance().getReference().child("LockerStructure").orderByChild("locationID").equalTo(locationID);
-//        query.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                if (snapshot.exists()) {
-//                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-//                        Locker
-//                        ds.setUser(user);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//
-//        return ds.getUserList();
-//        //use this to check if data has been retrieved: ArrayList<User> userList = ds.retrieveAllUsers(); while (userList.get(0).getName()==="error") {userList=ds.retrieveAllUsers();}
-//    }
+    //retrieve all LockerStructures from db that has a certain postalCode
+    public ArrayList<LockerStructure> retrieveStructureByPostalCode(String postalCode) {
+        ArrayList<LockerStructure> structureList = new ArrayList<LockerStructure>();
+        LockerStructure dummyStructure = new LockerStructure();
+        dummyStructure.setAddress("error");
+        structureList.add(dummyStructure);
+        ds.setStructureList(structureList);
+        Query query = FirebaseDatabase.getInstance().getReference().child("LockerStructure").orderByChild("postalCode").equalTo(postalCode);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    ds.getStructureList().clear();
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        LockerStructure lockerStructure = dataSnapshot.getValue(LockerStructure.class);
+                        ds.getStructureList().add(lockerStructure);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        return ds.getStructureList();
+        //use this to check if data has been retrieved: ArrayList<LockerStructure> structureList = ds.retrieveStructureByPostalCode("123456"); while (structureList.get(0).getAddress()==="error") {structureList=ds.retrieveStructureByPostalCode("123456");}
+    }
 
 
     public void storeLockerStatus(int lockerID,int lockerStructureID){
