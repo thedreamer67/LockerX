@@ -137,8 +137,7 @@ public class Register extends AppCompatActivity {
 
 //                            User user = new User(name, email, mobile, 0);
 //                            reff.child(smobile).setValue(user); //store new user to db
-                            long mobile = Long.parseLong(smobile);
-                            dc.storeNewUser(name, email, mobile);
+                            dc.storeNewUser(name, email, smobile);
                             Toast.makeText(Register.this, "User created.", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(), Login.class));
                         }
