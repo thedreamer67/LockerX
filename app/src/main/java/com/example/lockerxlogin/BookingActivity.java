@@ -1,14 +1,18 @@
 package com.example.lockerxlogin;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.view.View;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 import com.example.lockerxlogin.ui.BookingViewModel;
 
@@ -34,13 +38,21 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
     private TimePicker timePicker;
     private DatePicker datePicker;
     private Calendar cal;
+    private int sYear;
+    private int sMonth;
+    private int sDay;
     private int mYear;
     private int mMonth;
     private int mDay;
+    private int eYear;
+    private int eMonth;
+    private int eDay;
     private int shour;
     private int sminute;
     private int ehour;
     private int eminute;
+    private LocalDate startDate, endDate;
+    private LocalTime startTime, endTime;
 
 
     TextView BselectedDateStart,BselectedDateEnd, BselectedStart, BselectedEnd,BcurrentLocation;
@@ -86,12 +98,6 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
         eminute =cal.get(Calendar.MINUTE);
         //setTitle(year+"-"+month+"-"+day+"-"+hour+"-"+minute);
 
-        datePicker = (DatePicker) findViewById(R.id.datePicker);
-        timePicker = (TimePicker) findViewById(R.id.timePicker);
-
-
-
-
 
         BendBtn.setOnClickListener(this);
         BdateBtnStart.setOnClickListener(this);
@@ -102,11 +108,13 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
         String title = this.getIntent().getStringExtra("title");
         BcurrentLocation = findViewById(R.id.currentLocation);
         BcurrentLocation.setText(title);
+
         Toast.makeText(BookingActivity.this,title +"here", Toast.LENGTH_LONG).show();
     }
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onClick(View v){
         switch (v.getId()){
@@ -123,15 +131,15 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
 
             case R.id.endBtn:
 
-                timePicker = (TimePicker)findViewById(R.id.timePicker);
-                timePicker.setIs24HourView(true);
-                showTimePicker();
+                //timePicker = (TimePicker)findViewById(R.id.timePicker);
+                //timePicker.setIs24HourView(true);
+                showEndTimePicker();
                 break;
 
             case R.id.sBtn:
-                timePicker = (TimePicker)findViewById(R.id.timePicker);
-                timePicker.setIs24HourView(true);
-                showTimePicker2();
+                //timePicker = (TimePicker)findViewById(R.id.timePicker);
+                //timePicker.setIs24HourView(true);
+                showStartTimePicker();
                 break;
             default:
 
@@ -140,9 +148,10 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
 
 
 
-    private void showTimePicker2() {//start
+    private void showStartTimePicker() {//start
 
-        TimePickerDialog mTimePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+        TimePickerDialog timeDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onTimeSet(TimePicker view, int hour, int minute) {
 
@@ -150,40 +159,44 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
                 cal.set(Calendar.MINUTE, minute);
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
                 BselectedStart.setText("Start time: "+sdf.format(cal.getTime()));//change to selected time
+                startTime = LocalTime.of(hour, minute);
+
             }
         }, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);
-       // mTimePickerDialog.setTitle("Select time:");
-       // mTimePickerDialog.setButton(TimePickerDialog.BUTTON_NEGATIVE, "", mTimePickerDialog);
-        //mTimePickerDialog.setCancelable(false);
-        mTimePickerDialog.show();
+
+        timeDialog.show();
 
     }
 
-    private void showTimePicker() {//end
+    private void showEndTimePicker() {//end
 
-        TimePickerDialog mTimePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+        TimePickerDialog timeDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onTimeSet(TimePicker view, int hour, int minute) {
 
                 cal.set(Calendar.HOUR_OF_DAY, hour);
                 cal.set(Calendar.MINUTE, minute);
 
-
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
                 BselectedEnd.setText("End time: "+sdf.format(cal.getTime()));//change to selected time
+                endTime = LocalTime.of(hour, minute);
 
             }
         }, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);
-        mTimePickerDialog.show();
+
+        timeDialog.show();
 
 
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void showStartDatePickerDialog() {
 
-        DatePickerDialog dialog = new DatePickerDialog(this,
+        DatePickerDialog dateDialog = new DatePickerDialog(this,
                 new DatePickerDialog.OnDateSetListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                        // LogUtils.d(TAG, "onDateSet: year: " + year + ", month: " + month + ", dayOfMonth: " + dayOfMonth);
@@ -192,8 +205,14 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
                         cal.set(Calendar.MONTH, month);
                         cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
+                        sYear = cal.get(Calendar.YEAR);
+                        sMonth = cal.get(Calendar.MONTH);
+                        sDay = cal.get(Calendar.DAY_OF_MONTH);
+
+
                         SimpleDateFormat sdfDate = new SimpleDateFormat("dd MMMM yyyy");
                         BselectedDateStart.setText(sdfDate.format(cal.getTime()));//change to selected date
+                        startDate = LocalDate.of(year,month,dayOfMonth);
 
                     }
                 },
@@ -201,15 +220,26 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
                 cal.get(Calendar.MONTH),
                 cal.get(Calendar.DAY_OF_MONTH));
 
-        dialog.getDatePicker().setMinDate(System.currentTimeMillis());
-        dialog.show();
+
+        dateDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        if (endDate != null){
+            Calendar c = Calendar.getInstance();
+            c.set(Calendar.YEAR,eYear);
+            c.set(Calendar.MONTH,eMonth);
+            c.set(Calendar.DAY_OF_MONTH,eDay);
+            dateDialog.getDatePicker().setMaxDate(c.getTimeInMillis());
+        }
+
+        dateDialog.show();
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void showEndDatePickerDialog() {
 
-        DatePickerDialog dialog = new DatePickerDialog(this,
+        DatePickerDialog dateDialog = new DatePickerDialog(this,
                 new DatePickerDialog.OnDateSetListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         // LogUtils.d(TAG, "onDateSet: year: " + year + ", month: " + month + ", dayOfMonth: " + dayOfMonth);
@@ -218,17 +248,30 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
                         cal.set(Calendar.MONTH, month);
                         cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
+                        eYear = cal.get(Calendar.YEAR);
+                        eMonth = cal.get(Calendar.MONTH);
+                        eDay = cal.get(Calendar.DAY_OF_MONTH);
+
                         SimpleDateFormat sdfDate = new SimpleDateFormat("dd MMMM yyyy");
                         BselectedDateEnd.setText(sdfDate.format(cal.getTime()));//change to selected date
+                        endDate = LocalDate.of(year, month, dayOfMonth);
 
                     }
                 },
                 cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH),
                 cal.get(Calendar.DAY_OF_MONTH));
+                Calendar c = Calendar.getInstance();
+                c.set(Calendar.YEAR,sYear);
+                c.set(Calendar.MONTH,sMonth);
+                c.set(Calendar.DAY_OF_MONTH,sDay);
+        dateDialog.getDatePicker().setMinDate(c.getTimeInMillis());
+        //if (startDate.getDayOfWeek() != null){
+        //    dateDialog.getDatePicker().setMinDate(c.getTimeInMillis());
+        //}
+        dateDialog.show();
 
-        dialog.getDatePicker().setMinDate(System.currentTimeMillis());
-        dialog.show();
+
 
     }
 
