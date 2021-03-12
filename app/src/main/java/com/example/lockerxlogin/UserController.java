@@ -13,11 +13,15 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class UserController {
 
 
     private User currentUser;
+
+    DatabaseController dc = new DatabaseController();
 
     public UserController(User user){
         this.currentUser = user;
@@ -110,9 +114,44 @@ public class UserController {
 //        dc.updateWalletBalance(currentUser.getEmail(), newBalance);
 //    }
 
+    //returns the ArrayList of Bookings of the user with mobile==mobile
+    //order: O (ongoing), F (future), R (history), C (cancelled)
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public ArrayList<Booking> getUserLockers(String mobile) {
+        //start thread + loading screen
+        ArrayList<Booking> userOBookings = dc.retrieveOBookingsForUser(mobile);
+        ArrayList<Booking> userFBookings = dc.retrieveBBookingsForUser(mobile);
+        ArrayList<Booking> userRBookings = dc.retrieveRBookingsForUser(mobile);
+        ArrayList<Booking> userCBookings = dc.retrieveCBookingsForUser(mobile);
+        //end thread
 
-//    public ArrayList<Booking> getUserLockers(String mobile) {
-//
-//    }
+        for (Booking booking : userOBookings) {
+            if (userFBookings.contains(booking)) {
+                userFBookings.remove(booking);
+            }
+            else {
+                booking.setStatus('O');
+            }
+        }
+
+
+
+        //sort all the sub-lists using startDate, then startTime
+        Comparator<Booking> bookingComparator = Comparator.comparing(Booking::getStartDate).thenComparing(Booking::getStartTime);
+        Collections.sort(userOBookings, bookingComparator);
+        Collections.sort(userFBookings, bookingComparator);
+        Collections.sort(userRBookings, bookingComparator);
+        Collections.sort(userCBookings, bookingComparator);
+
+
+        ArrayList<Booking> userBookings = new ArrayList<Booking>();
+        //combine all 4 lists into userBookings list
+        userBookings.addAll(userOBookings);
+        userBookings.addAll(userFBookings);
+        userBookings.addAll(userRBookings);
+        userBookings.addAll(userCBookings);
+        return userBookings;
+
+    }
 
 }
