@@ -14,13 +14,14 @@ public class ViewController {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     //retrieve a booking list containing all bookings which are booked, status = 'B'
-    public ArrayList<Integer> viewAvailLocker (DatabaseController dc, int lockerStructureID,
-                                               LocalDate startDate, LocalTime startTime, char lockerSize){
+    public ArrayList<Long> viewAvailLocker (DatabaseController dc, int lockerStructureID,
+                                               LocalDate startDate, LocalDate endDate, LocalTime startTime,
+                                               LocalTime endTime, char lockerSize){
 
         ArrayList<Booking> bookings = dc.retrieveBookedBookingList();
 
         //List to store all LockerIDs that are unavailable
-        ArrayList<Integer> unavailLockers = new ArrayList<Integer>();
+        ArrayList<Long> unavailLockers = new ArrayList<Long>();
 
         //variable declaration for use in for loop later to enhance readability
         LocalDate bookingStartDate;
@@ -34,24 +35,31 @@ public class ViewController {
             bookingStartTime = bookings.get(i).getStartTime();
             bookingEndDate = bookings.get(i).getEndDate();
             bookingEndTime = bookings.get(i).getEndTime();
-            if(bookingStartDate.compareTo(startDate)<=0 && bookingEndDate.compareTo(startDate)>=0){
-                if(bookingStartTime.compareTo(startTime)<=0 && bookingEndTime.compareTo(startTime)>0){
+
+            //checking for existing bookings (ongoing and future) which clash with the current user's selection
+            if ((bookingStartDate.compareTo(startDate)>=0 && bookingStartDate.compareTo(endDate)<=0) ||
+                    (bookingEndDate.compareTo(startDate)>=0 && bookingEndDate.compareTo(endDate)<=0) ||
+                    (bookingStartDate.compareTo(startDate)<=0 && bookingEndDate.compareTo(endDate)>=0)) {
+                if ((bookingStartTime.compareTo(startTime)>=0 && bookingStartTime.compareTo(endTime)<=0) ||
+                        (bookingEndTime.compareTo(startTime)>=0 && bookingEndTime.compareTo(endTime)<=0) ||
+                        (bookingStartTime.compareTo(startTime)<=0 && bookingEndTime.compareTo(endTime)>=0)) {
                     unavailLockers.add(bookings.get(i).getLockerID());
                 }
             }
         }
         //A list of lockerID, filtered by lockerSize
-        ArrayList<Integer> availLockers = dc.retrieveLockerIDFilterByLockerSize(lockerStructureID,lockerSize);
-        for(int j=0;j<availLockers.size();j++){
-            for(int a=0;a<unavailLockers.size();a++){
-                /*comparing list of available lockers to unavailable ones, if match, remove lockerID
-                from the available list*/
-                if(availLockers.get(j)==unavailLockers.get(a)){
-                    availLockers.remove(j);
-                    break;
-                }
-            }
-        }
-        return availLockers;
+//        ArrayList<Long> availLockers = dc.retrieveLockerIDFilterByLockerSize(lockerStructureID,lockerSize);
+//        for(int j=0;j<availLockers.size();j++){
+//            for(int a=0;a<unavailLockers.size();a++){
+//                /*comparing list of available lockers to unavailable ones, if match, remove lockerID
+//                from the available list*/
+//                if(availLockers.get(j)==unavailLockers.get(a)){
+//                    availLockers.remove(j);
+//                    break;
+//                }
+//            }
+//        }
+        return new ArrayList<Long>();
+//        return availLockers;
     }
 }

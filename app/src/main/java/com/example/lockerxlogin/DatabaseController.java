@@ -40,11 +40,11 @@ public class DatabaseController {
 
     //retrieve all users from the db
     public ArrayList retrieveAllUsers() {
-        ArrayList<User> userList = new ArrayList<User>();
-        User dummyUser = new User();
-        dummyUser.setName("error");
-        userList.add(dummyUser);
-        ds.setUserList(userList);
+//        ArrayList<User> userList = new ArrayList<User>();
+//        User dummyUser = new User();
+//        dummyUser.setName("error");
+//        userList.add(dummyUser);
+//        ds.setUserList(userList);
         reff = FirebaseDatabase.getInstance().getReference().child("User");
         reff.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -95,15 +95,16 @@ public class DatabaseController {
             }
         });
 
+
         return ds.getUser();
     }
 
 
     //retrieve user using their mobile from db
     public User retrieveUserByMobile(String mobile) {
-        User resetUser = new User();
-        resetUser.setName("error");
-        ds.setUser(resetUser);
+//        User resetUser = new User();
+//        resetUser.setName("error");
+//        ds.setUser(resetUser);
         Query query = FirebaseDatabase.getInstance().getReference().child("User").orderByChild("mobile").equalTo(mobile);
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -184,35 +185,7 @@ public class DatabaseController {
     }
 
 
-    //retrieve all LockerStructures from db that has a certain postalCode
-    public ArrayList<LockerStructure> retrieveStructureByPostalCode(String postalCode) {
-        ArrayList<LockerStructure> structureList = new ArrayList<LockerStructure>();
-        LockerStructure dummyStructure = new LockerStructure();
-        dummyStructure.setAddress("error");
-        structureList.add(dummyStructure);
-        ds.setStructureList(structureList);
-        Query query = FirebaseDatabase.getInstance().getReference().child("LockerStructure").orderByChild("postalCode").equalTo(postalCode);
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    ds.getStructureList().clear();
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        LockerStructure lockerStructure = dataSnapshot.getValue(LockerStructure.class);
-                        ds.getStructureList().add(lockerStructure);
-                    }
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        return ds.getStructureList();
-        //use this to check if data has been retrieved: ArrayList<LockerStructure> structureList = ds.retrieveStructureByPostalCode("123456"); while (structureList.get(0).getAddress()==="error") {structureList=ds.retrieveStructureByPostalCode("123456");}
-    }
 
 
     //retrieve all lockers of a structure using structureID
@@ -246,7 +219,7 @@ public class DatabaseController {
 //    }
 
 
-    //retrieve all bookings with 'B' status
+
 
 
     public void storeLockerStatus(int lockerID,int lockerStructureID){
@@ -315,6 +288,84 @@ public class DatabaseController {
     public ArrayList<Integer> retrieveLockerIDFilterByLockerSize(int lockerStructureID, int lockerSize){
         ArrayList<Integer> dummy  = new ArrayList<Integer>();
         return dummy;
+    }
+
+
+    //output: list of locker ids of lockers which match the desired size which are avail for the booking selection
+    //input: startDate, endDate, startTime, endTime, postalCode, lockerSize
+
+    //two db calls to retrieve:
+    //1) bookings with b
+    //retrieve all bookings with status=='B'
+    public ArrayList<Booking> retrieveBBookings() {
+        ds.setbBookingList(new ArrayList<Booking>());
+        Query query = FirebaseDatabase.getInstance().getReference().child("Booking").orderByChild("status").equalTo("B");
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        Booking booking = dataSnapshot.getValue(Booking.class);
+                        ds.getbBookingList().add(booking);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        return ds.getbBookingList();
+    }
+
+    //2) lockerIDs of lockers from lockerStructure with postal code == postalCode and of locker size == lockerSize
+    //retrieve all LockerStructures from db that has a certain postalCode --> need to change to get the lockers
+    public ArrayList<Locker> retrieveStructureByPostalCode(String postalCode, char lockerSize) {
+        ds.setLockerSize(lockerSize);
+        Query query = FirebaseDatabase.getInstance().getReference().child("LockerStructure").orderByChild("postalCode").equalTo(postalCode);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                Log.d(TAG, "onDataChange: in onDataChange of first query");
+                if (snapshot.exists()) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        long structureID = (long) dataSnapshot.child("structureID").getValue();
+                        ds.setStructureID(structureID);
+//                        Log.d(TAG, "onDataChange: End of first query");
+//                        Log.d(TAG, "onDataChange: structureID = " +structureID+"");
+//                        Log.d(TAG, "onDataChange: Locker structure: "+dataSnapshot.child("Locker").getValue());
+
+                        ArrayList<HashMap<String, Object>> lockerList = new ArrayList<HashMap<String, Object>>();
+                        lockerList = (ArrayList<HashMap<String, Object>>) dataSnapshot.child("Locker").getValue();
+                        if (lockerList.get(0) == null) {
+                            lockerList.remove(0);
+                        }
+//                        Log.d(TAG, "onDataChange: hashmap: " +lockerList.get(1).get("lockerID"));
+                        for (HashMap<String, Object> locker : lockerList) {
+                            if (locker.get("size").equals(Character.toString(ds.getLockerSize()))) {
+                                Locker matchingLocker = new Locker();
+                                matchingLocker.setStructureID(structureID);
+                                matchingLocker.setLockerID((Long) locker.get("lockerID"));
+                                ds.getLockerList().add(matchingLocker);
+//                                Log.d(TAG, "structureID: " +matchingLocker.getStructureID()+"");
+//                                Log.d(TAG, "lockerID: " +matchingLocker.getLockerID()+"");
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        return ds.getLockerList();
+        //use this to check if data has been retrieved: ArrayList<LockerStructure> structureList = ds.retrieveStructureByPostalCode("123456"); while (structureList.get(0).getAddress()==="error") {structureList=ds.retrieveStructureByPostalCode("123456");}
     }
 
 }

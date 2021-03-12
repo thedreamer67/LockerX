@@ -1,22 +1,22 @@
 package com.example.lockerxlogin;
 
 public class LockerStructure {
-    protected int structureID;
+    protected long structureID;
 //    protected int locationID;
     protected String postalCode;
     protected String address;
 
     public LockerStructure(){} //empty constructor
 
-    public LockerStructure(int structureID, String postalCode, String address){
+    public LockerStructure(long structureID, String postalCode, String address){
         this.structureID = structureID;
         this.postalCode = postalCode;
         this.address = address;
     }
-    public void setStructureID(int structureID){
+    public void setStructureID(long structureID){
         this.structureID = structureID;
     }
-    public int getStructureID(){
+    public long getStructureID(){
         return this.structureID;
     }
 

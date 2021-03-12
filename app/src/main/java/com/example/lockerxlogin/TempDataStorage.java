@@ -1,5 +1,6 @@
 package com.example.lockerxlogin;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 //this class is for retrieving data and being able to use the data outside of the onDataChange() method
@@ -11,6 +12,10 @@ public class TempDataStorage {
     private long userCount;
     private ArrayList<LockerStructure> structureList = new ArrayList<LockerStructure>();
     private ArrayList<Locker> lockerList = new ArrayList<Locker>();
+    private char lockerSize;
+    private long structureID;
+    private ArrayList<Booking> bBookingList = new ArrayList<Booking>();
+
 
     public TempDataStorage() {
     }
@@ -73,5 +78,29 @@ public class TempDataStorage {
 
     public void setLockerList(ArrayList<Locker> lockerList) {
         this.lockerList = lockerList;
+    }
+
+    public char getLockerSize() {
+        return lockerSize;
+    }
+
+    public void setLockerSize(char lockerSize) {
+        this.lockerSize = lockerSize;
+    }
+
+    public long getStructureID() {
+        return structureID;
+    }
+
+    public void setStructureID(long structureID) {
+        this.structureID = structureID;
+    }
+
+    public ArrayList<Booking> getbBookingList() {
+        return bBookingList;
+    }
+
+    public void setbBookingList(ArrayList<Booking> bBookingList) {
+        this.bBookingList = bBookingList;
     }
 }
