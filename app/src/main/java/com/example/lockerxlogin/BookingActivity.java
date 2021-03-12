@@ -32,7 +32,7 @@ import android.widget.Spinner;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class BookingActivity extends AppCompatActivity implements View.OnClickListener,DatePickerDialog.OnDateSetListener {
+public class BookingActivity extends AppCompatActivity implements View.OnClickListener {
 
     private BookingViewModel mViewModel;
     // DatePickerDialog.OnDateSetListener
@@ -197,59 +197,36 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
             }
         },ehour,eminute,true).show();
 
-//        GregorianCalendar c = new GregorianCalendar(mYear, mMonth, mDay, ehour,eminute);
-//        SimpleDateFormat sdf = new SimpleDateFormat("HH:MM");
-//
-//        BselectedEnd.setText(sdf.format(c.getTime()));
-//
-//        sdf = new SimpleDateFormat("HH MM");
-        //BselectedTime.setText(ehour+":"+eminute);
-
 
     }
 
     private void showDatePickerDialog() {
 
 
-        DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
 
-            public void onDateSet(DatePicker view, int year,
-                                  int monthOfYear, int dayOfMonth) {
+        final Calendar calendar = Calendar.getInstance();
 
-                final Calendar c = Calendar.getInstance();
-                mYear = c.get(Calendar.YEAR);
-                mMonth = c.get(Calendar.MONTH)+1;
-                mDay = c.get(Calendar.DAY_OF_MONTH);
-                updateDisplay();
-            }
-        };
+        DatePickerDialog dialog = new DatePickerDialog(this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                       // LogUtils.d(TAG, "onDateSet: year: " + year + ", month: " + month + ", dayOfMonth: " + dayOfMonth);
 
-        DatePickerDialog d = new DatePickerDialog(this,
-                mDateSetListener, mYear, mMonth, mDay);
-        d.show();
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, month);
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy");
+                        BselectedDate.setText(sdf.format(calendar.getTime()));//change to selected date
+
+                    }
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH));
+        dialog.show();
 
     }
-    private void updateDisplay(){
-        GregorianCalendar c = new GregorianCalendar(mYear, mMonth, mDay);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy");
-
-        //BselectedDate.setText(sdf.format(c.getTime()));//change to selected date
-
-        sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-        // transDateString=sdf.format(c.getTime());
-    }
-
-
-    @Override
-    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-        BselectedDate.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
-    }
-
-//    @Override
-//    public void onTimeSet(DatePicker timePicker, int year, int month, int dayOfMonth) {
-//        BselectedDate.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
-//    }
 
 
 }
