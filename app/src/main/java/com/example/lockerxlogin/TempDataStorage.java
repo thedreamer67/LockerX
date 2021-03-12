@@ -15,6 +15,10 @@ public class TempDataStorage {
     private char lockerSize;
     private long structureID;
     private ArrayList<Booking> bBookingList = new ArrayList<Booking>();
+    private ArrayList<Booking> userOBookingList = new ArrayList<Booking>();
+    private ArrayList<Booking> userBBookingList = new ArrayList<Booking>();
+    private ArrayList<Booking> userRBookingList = new ArrayList<Booking>();
+    private ArrayList<Booking> userCBookingList = new ArrayList<Booking>();
 
 
     public TempDataStorage() {
@@ -102,5 +106,37 @@ public class TempDataStorage {
 
     public void setbBookingList(ArrayList<Booking> bBookingList) {
         this.bBookingList = bBookingList;
+    }
+
+    public ArrayList<Booking> getUserOBookingList() {
+        return userOBookingList;
+    }
+
+    public void setUserOBookingList(ArrayList<Booking> userOBookingList) {
+        this.userOBookingList = userOBookingList;
+    }
+
+    public ArrayList<Booking> getUserBBookingList() {
+        return userBBookingList;
+    }
+
+    public void setUserBBookingList(ArrayList<Booking> userBBookingList) {
+        this.userBBookingList = userBBookingList;
+    }
+
+    public ArrayList<Booking> getUserRBookingList() {
+        return userRBookingList;
+    }
+
+    public void setUserRBookingList(ArrayList<Booking> userRBookingList) {
+        this.userRBookingList = userRBookingList;
+    }
+
+    public ArrayList<Booking> getUserCBookingList() {
+        return userCBookingList;
+    }
+
+    public void setUserCBookingList(ArrayList<Booking> userCBookingList) {
+        this.userCBookingList = userCBookingList;
     }
 }

@@ -322,7 +322,7 @@ public class DatabaseController {
 
     //2) lockerIDs of lockers from lockerStructure with postal code == postalCode and of locker size == lockerSize
     //retrieve all LockerStructures from db that has a certain postalCode --> need to change to get the lockers
-    public ArrayList<Locker> retrieveStructureByPostalCode(String postalCode, char lockerSize) {
+    public ArrayList<Locker> retrieveMatchingLockers(String postalCode, char lockerSize) {
         ds.setLockerSize(lockerSize);
         Query query = FirebaseDatabase.getInstance().getReference().child("LockerStructure").orderByChild("postalCode").equalTo(postalCode);
         query.addValueEventListener(new ValueEventListener() {
@@ -365,7 +365,11 @@ public class DatabaseController {
         });
 
         return ds.getLockerList();
-        //use this to check if data has been retrieved: ArrayList<LockerStructure> structureList = ds.retrieveStructureByPostalCode("123456"); while (structureList.get(0).getAddress()==="error") {structureList=ds.retrieveStructureByPostalCode("123456");}
     }
+
+
+//    public ArrayList<Booking> retrieveOBookingsForUser(String mobile) {
+//
+//    }
 
 }

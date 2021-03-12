@@ -59,6 +59,8 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
     private LocalDate startDate, endDate;
     private LocalTime startTime, endTime;
 
+    DatabaseController dc = new DatabaseController();
+
 
     TextView BselectedDateStart,BselectedDateEnd, BselectedStart, BselectedEnd,BcurrentLocation;
     Spinner BspinnerSize;
@@ -67,6 +69,7 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
     DatePicker BdatePick;
     FirebaseAuth fAuth;
     FirebaseUser FBuser;
+    String postal;
 
 
 
@@ -111,7 +114,7 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
         BsearchBtn.setOnClickListener(this);
         BstartBtn.setOnClickListener(this);
         String title = this.getIntent().getStringExtra("title");
-        String postal = this.getIntent().getStringExtra("postal");
+        postal = this.getIntent().getStringExtra("postal");
         BcurrentLocation = findViewById(R.id.currentLocation);
         BcurrentLocation.setText(title);
 
@@ -153,6 +156,8 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
 
                // alertDialog();
                 searchAvailableLocker();
+//                ArrayList<Booking> bBookings = dc.retrieveBBookings();
+//                ArrayList<Locker> matchingLockers = dc.retrieveMatchingLockers(postal, );
 
                 break;
             default:
