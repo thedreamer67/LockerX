@@ -21,6 +21,8 @@ import java.time.LocalTime;
 import java.util.*;
 import com.example.lockerxlogin.ui.BookingViewModel;
 
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -70,6 +72,7 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
     FirebaseAuth fAuth;
     FirebaseUser FBuser;
     String postal;
+    String size;
 
 
 
@@ -82,7 +85,7 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking);
 
-
+        BspinnerSize = findViewById(R.id.lockerSize);
         BstartBtn = findViewById(R.id.sBtn);
         BendBtn = findViewById(R.id.endBtn);
         BdateBtnStart = findViewById(R.id.dateBtnStart);
@@ -119,6 +122,33 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
         BcurrentLocation.setText(title);
 
         Toast.makeText(BookingActivity.this,title +"here", Toast.LENGTH_LONG).show();
+
+        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(BookingActivity.this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.size));
+        myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        BspinnerSize.setAdapter(myAdapter);
+        BspinnerSize.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                // your code here
+                if (BspinnerSize.getSelectedItem().toString().equals("small (30x40x30cm)")) {
+                    size = "S";
+                }
+                if (BspinnerSize.getSelectedItem().toString().equals("medium (40x50x40cm)")) {
+                   size = "M";
+                }
+                if (BspinnerSize.getSelectedItem().toString().equals("large (60x60x60cm)")) {
+                    size = "L";
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+                size = "S";
+                return;
+            }
+        });
     }
 
 
