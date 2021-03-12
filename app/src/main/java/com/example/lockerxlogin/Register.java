@@ -60,12 +60,12 @@ public class Register extends AppCompatActivity {
         mprogressBar = findViewById(R.id.LprogressBar);
         fAuth = FirebaseAuth.getInstance();
         mRegisterBtn = findViewById(R.id.RRegisterBtn);
-//        reff = FirebaseDatabase.getInstance().getReference().child("User"); //reference to the "User" table of the db
+//      reff = FirebaseDatabase.getInstance().getReference().child("User"); //reference to the "User" table of the db
 
-        if(fAuth.getCurrentUser() != null){
+        /*if(fAuth.getCurrentUser() != null){
             startActivity(new Intent(getApplicationContext(),MainActivity.class));
             finish();
-        }
+        }*/
         alreadyRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,8 +137,7 @@ public class Register extends AppCompatActivity {
 
 //                            User user = new User(name, email, mobile, 0);
 //                            reff.child(smobile).setValue(user); //store new user to db
-                            long mobile = Long.parseLong(smobile);
-                            dc.storeNewUser(name, email, mobile);
+                            dc.storeNewUser(name, email, smobile);
                             Toast.makeText(Register.this, "User created.", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(), Login.class));
                         }

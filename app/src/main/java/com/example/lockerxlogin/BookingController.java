@@ -11,6 +11,8 @@ import java.time.temporal.ChronoUnit;
 
 public class BookingController {
 
+    UserController uc = new UserController(Login.currUser);
+
     public BookingController(){}
 
 

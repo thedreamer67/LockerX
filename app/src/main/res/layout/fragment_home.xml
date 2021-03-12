@@ -140,7 +140,7 @@
 
 
     <Button
-        android:id="@+id/startBtn"
+        android:id="@+id/sBtn"
         android:layout_width="131dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"

@@ -8,7 +8,7 @@ public class Booking {
     private String email;
     private int lockerStructureID;
     private int lockerID;
-    private char status;
+    private char status;    //'B'=booked, 'R'=returned, 'C'=cancelled
 
     public Booking(){} //empty constructor
 

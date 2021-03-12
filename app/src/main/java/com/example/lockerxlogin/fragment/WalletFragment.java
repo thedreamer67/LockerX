@@ -27,6 +27,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
+
 public class WalletFragment extends Fragment implements View.OnClickListener{
     TextView walletBalance;
     Button topUpButton;
@@ -47,13 +49,15 @@ public class WalletFragment extends Fragment implements View.OnClickListener{
         topUpButton = myView.findViewById(R.id.topUpButton);
         topUpButton.setOnClickListener(this);
 
-        reff = FirebaseDatabase.getInstance().getReference().child("User").child("12345678");
+        reff = FirebaseDatabase.getInstance().getReference().child("User").child("90059608");
         reff.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String balance = snapshot.child("walletBalance").getValue().toString();
-                String FirstLine = ("You have \n$ ");
-                walletBalance.setText(FirstLine + balance);
+                Float bal = Float.parseFloat(balance);
+                DecimalFormat df = new DecimalFormat("0.00");
+                df.setMaximumFractionDigits(2);
+                walletBalance.setText("$" + df.format(bal).toString());
             }
 
             @Override

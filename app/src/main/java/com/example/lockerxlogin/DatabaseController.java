@@ -13,6 +13,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
@@ -26,81 +27,116 @@ public class DatabaseController {
     public DatabaseController(){}
 
     //method to store new user to db
-    public void storeNewUser(String name, String email, long mobile) {
+    public void storeNewUser(String name, String email, String mobile) {
         reff = FirebaseDatabase.getInstance().getReference().child("User"); //reference to the "User" table of the db
-        String smobile = mobile+"";
         //store new user to db
-        reff.child(smobile).child("name").setValue(name);
-        reff.child(smobile).child("email").setValue(email);
-        reff.child(smobile).child("mobile").setValue(mobile);
-        reff.child(smobile).child("walletBalance").setValue(0);
+        reff.child(mobile).child("name").setValue(name);
+        reff.child(mobile).child("email").setValue(email);
+        reff.child(mobile).child("mobile").setValue(mobile);
+        reff.child(mobile).child("walletBalance").setValue(0);
 
     }
 
-    //NEED TO CHECK THIS
-    //retrieve all users from the db
-//    public ArrayList retrieveAllUsers() {
-//        ArrayList<User> userList = new ArrayList<User>();
-//        reff = FirebaseDatabase.getInstance().getReference().child("User");
-//        reff.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                userList.clear();
-//                if (snapshot.exists()) {
-//                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-//                        User user = dataSnapshot.getValue(User.class);
-//                        userList.add(user);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//
-//        return userList;
-//    }
 
-    //NEED TO CHANGE THIS TO USE DS INSTEAD OF LOCAL VAR
+    //retrieve all users from the db
+    public ArrayList retrieveAllUsers() {
+        ArrayList<User> userList = new ArrayList<User>();
+        User dummyUser = new User();
+        dummyUser.setName("error");
+        userList.add(dummyUser);
+        ds.setUserList(userList);
+        reff = FirebaseDatabase.getInstance().getReference().child("User");
+        reff.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    ds.getUserList().clear();
+//                    ds.setUserCount(snapshot.getChildrenCount());
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        User user = dataSnapshot.getValue(User.class);
+                        ds.getUserList().add(user);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        return ds.getUserList();
+        //use this to check if data has been retrieved: ArrayList<User> userList = ds.retrieveAllUsers(); while (userList.get(0).getName()==="error") {userList=ds.retrieveAllUsers();}
+
+    }
+
+
     //retrieve user using their email from db
-//    public ArrayList retrieveUserByID(String email) {
-//        ArrayList<User> userList = new ArrayList<User>();
-//        Query query = FirebaseDatabase.getInstance().getReference().child("User").orderByChild("email").equalTo(email);
-//        query.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                userList.clear();
-//                if (snapshot.exists()) {
-//                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-//                        User user = dataSnapshot.getValue(User.class);
-//                        userList.add(user);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//
-//        return userList;
-//    }
+    public User retrieveUserByEmail(String email) {
+//        User resetUser = new User();
+//        resetUser.setName("error");
+//        ds.setUser(resetUser);
+        Query query = FirebaseDatabase.getInstance().getReference().child("User").orderByChild("email").equalTo(email);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                        User user = new User(snapshot.child("name").getValue().toString(), snapshot.child("email").getValue().toString(), snapshot.child("mobile").getValue().toString(), Float.parseFloat(snapshot.child("walletBalance").getValue().toString()), Float.parseFloat(snapshot.child("lateFees").getValue().toString()));
+                        User user = dataSnapshot.getValue(User.class);
+                        ds.setUser(user);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        return ds.getUser();
+    }
+
+
+    //retrieve user using their mobile from db
+    public User retrieveUserByMobile(String mobile) {
+        User resetUser = new User();
+        resetUser.setName("error");
+        ds.setUser(resetUser);
+        Query query = FirebaseDatabase.getInstance().getReference().child("User").orderByChild("mobile").equalTo(mobile);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        User user = new User(snapshot.child("name").getValue().toString(), snapshot.child("email").getValue().toString(), snapshot.child("mobile").getValue().toString(), Float.parseFloat(snapshot.child("walletBalance").getValue().toString()), Float.parseFloat(snapshot.child("lateFees").getValue().toString()));
+                        ds.setUser(user);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        return ds.getUser();
+        //use this to check if data has been retrieved: User user = ds.retriveUserByMobile("target mobile"); while (user.getName()==="error") {user=ds.retrieveUserByMobile("target mobile");}
+    }
+
 
     //retrieve user's mobile using their email from db
     //NOTE!!! when calling this method, make sure to do what's stated beside the return "error"; statement!
     //need to do this bc retrieving the data is asynchronous so other code may run before the data is even retrieved
     //so must check that the data is retrieved before you use it!
     public String retrieveMobileByEmail(String email) {
-        ds.setStr("");
-        reff = FirebaseDatabase.getInstance().getReference().child("User");
+        ds.setStr("error");
         Query query = FirebaseDatabase.getInstance().getReference().child("User").orderByChild("email").equalTo(email); //return the child node of "User" whose "email"==email
         //the .orderByChild() in the prev line doesnt affect where the snapshot will be pointed to!
         //snapshot will be the path ~\User in the db, NOT ~\User\[key of the user with "email"==email]\email
         //.orderByChild("email").equalTo(email) will give the snapshot of ~\User and only its children whose "email"==email will be included
-
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -120,15 +156,12 @@ public class DatabaseController {
             }
         });
 
-        if (ds.getStr()!="") {
-            return ds.getStr();
-        }
-        else {
-            return "error"; //use this to check if data has been retrieved --> can do: email=ds.retrieveMobileByEmail("target email"); while (email==="error") {email=ds.retrieveMobileByEmail("target email");}
-        }
+        return ds.getStr();
+        //use this to check if data has been retrieved: email=ds.retrieveMobileByEmail("target email"); while (email==="error") {email=ds.retrieveMobileByEmail("target email");}
     }
 
-    //retrieve number of bookings from db
+
+    //retrieve total number of bookings from db
     ////NOTE!!! when calling this method, make sure to do what's stated beside the return "error"; statement!
     public long retrieveBookingCount() {
         ds.setLongNum(-1);  //set as -1 to check if it has changed to the correct bookingCount
@@ -146,13 +179,74 @@ public class DatabaseController {
             }
         });
 
-        if (ds.getLongNum()!=-1) {
-            return ds.getLongNum();
-        }
-        else {
-            return -1; //use this to check if data has been retrieved --> can do: count=ds.retrieveBookingCount(); while (count==="-1") {count=ds.retrieveBookingCount();}
-        }
+        return ds.getLongNum();
+        //use this to check if data has been retrieved: count=ds.retrieveBookingCount(); while (count==="-1") {count=ds.retrieveBookingCount();}
     }
+
+
+    //retrieve all LockerStructures from db that has a certain postalCode
+    public ArrayList<LockerStructure> retrieveStructureByPostalCode(String postalCode) {
+        ArrayList<LockerStructure> structureList = new ArrayList<LockerStructure>();
+        LockerStructure dummyStructure = new LockerStructure();
+        dummyStructure.setAddress("error");
+        structureList.add(dummyStructure);
+        ds.setStructureList(structureList);
+        Query query = FirebaseDatabase.getInstance().getReference().child("LockerStructure").orderByChild("postalCode").equalTo(postalCode);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    ds.getStructureList().clear();
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        LockerStructure lockerStructure = dataSnapshot.getValue(LockerStructure.class);
+                        ds.getStructureList().add(lockerStructure);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        return ds.getStructureList();
+        //use this to check if data has been retrieved: ArrayList<LockerStructure> structureList = ds.retrieveStructureByPostalCode("123456"); while (structureList.get(0).getAddress()==="error") {structureList=ds.retrieveStructureByPostalCode("123456");}
+    }
+
+
+    //retrieve all lockers of a structure using structureID
+//    public ArrayList<Locker> retrieveAvailLockers(int structureID) {
+//        ArrayList<Locker> lockerList = new ArrayList<Locker>();
+//        Locker dummyLocker = new Locker();
+//        dummyLocker.setSize('E');
+//        lockerList.add(dummyLocker);
+//        ds.setLockerList(lockerList);
+//        Query query = FirebaseDatabase.getInstance().getReference().child("LockerStructure").orderByChild("postalCode").equalTo(postalCode);
+//        query.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.exists()) {
+//                    ds.getStructureList().clear();
+//                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                        LockerStructure lockerStructure = dataSnapshot.getValue(LockerStructure.class);
+//                        ds.getStructureList().add(lockerStructure);
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//
+//        return ds.getStructureList();
+//        //use this to check if data has been retrieved: ArrayList<LockerStructure> structureList = ds.retrieveStructureByPostalCode("123456"); while (structureList.get(0).getAddress()==="error") {structureList=ds.retrieveStructureByPostalCode("123456");}
+//    }
+
+
+    //retrieve all bookings with 'B' status
 
 
     public void storeLockerStatus(int lockerID,int lockerStructureID){
@@ -210,6 +304,17 @@ public class DatabaseController {
         reff.child(smobile).updateChildren(walletUpdate);   //update walletBalance of user with smobile
     }
 
+    public ArrayList<Booking> retrieveBookedBookingList(){
+        //i dont think you need to have any parameters here
+        //dummy method
+        ArrayList<Booking> booking = new ArrayList<Booking>();
+        return booking;
+    }
 
+    //pls return me a list of lockerID filtered by locker size thanks
+    public ArrayList<Integer> retrieveLockerIDFilterByLockerSize(int lockerStructureID, int lockerSize){
+        ArrayList<Integer> dummy  = new ArrayList<Integer>();
+        return dummy;
+    }
 
 }
