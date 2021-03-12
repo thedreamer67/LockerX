@@ -8,6 +8,48 @@
     tools:context=".fragment.BookingFragment">
 
     <TextView
+        android:id="@+id/selectedDateEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Display Date"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.103"
+        app:layout_constraintStart_toEndOf="@+id/dateBtnStart"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.329" />
+
+    <ImageButton
+        android:id="@+id/dateBtnEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:background="@color/white"
+        android:src="@drawable/calendar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.329"
+        tools:src="@drawable/calendar" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginLeft="60dp"
+        android:hint="Pick a end date:"
+        android:textColorHint="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.329" />
+
+    <TextView
         android:id="@+id/selectedStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -80,11 +122,11 @@
         app:layout_constraintVertical_bias="0.13999999" />
 
     <ImageButton
-        android:id="@+id/dateBtn"
+        android:id="@+id/dateBtnStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
         android:background="@color/white"
         android:src="@drawable/calendar"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -97,15 +139,15 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="132dp"
-        android:layout_marginLeft="132dp"
-        android:hint="Pick a date:"
+        android:layout_marginStart="60dp"
+        android:layout_marginLeft="60dp"
+        android:hint="Pick a start date:"
         android:textColorHint="@color/black"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.253" />
+        app:layout_constraintVertical_bias="0.249" />
 
     <ImageButton
         android:id="@+id/endBtn"
@@ -164,12 +206,13 @@
 
     <DatePicker
         android:id="@+id/datePicker"
-        android:layout_width="288dp"
-        android:layout_height="264dp"
+        android:layout_width="291dp"
+        android:layout_height="259dp"
         android:headerBackground="#1D3557"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -186,7 +229,7 @@
         app:layout_constraintVertical_bias="0.857" />
 
     <TextView
-        android:id="@+id/seletedDate"
+        android:id="@+id/selectedDateStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Display Date"
@@ -194,10 +237,10 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.103"
+        app:layout_constraintStart_toEndOf="@+id/dateBtnStart"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.364" />
+        app:layout_constraintVertical_bias="0.249" />
 
     <TimePicker
         android:id="@+id/timePicker"

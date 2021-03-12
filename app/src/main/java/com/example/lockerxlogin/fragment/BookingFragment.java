@@ -82,10 +82,10 @@ public class BookingFragment extends Fragment implements View.OnClickListener ,D
         View view = inflater.inflate(R.layout.fragment_booking, container, false);
         BstartBtn = (Button)view.findViewById(R.id.sBtn);
         BendBtn = (Button)view.findViewById(R.id.endBtn);
-        BdateBtn = view.findViewById(R.id.dateBtn);
+        BdateBtn = view.findViewById(R.id.dateBtnStart);
         BliveBtn = view.findViewById(R.id.liveBtn);
         BsearchBtn = view.findViewById(R.id.searchBtn);
-        BselectedDate = view.findViewById(R.id.seletedDate);
+        BselectedDate = view.findViewById(R.id.selectedDateStart);
 
         BstartBtn.setOnClickListener(this);
         BendBtn.setOnClickListener(this);
@@ -111,7 +111,7 @@ public class BookingFragment extends Fragment implements View.OnClickListener ,D
     @Override
     public void onClick(View v){
         switch (v.getId()){
-            case R.id.dateBtn:
+            case R.id.dateBtnStart:
                 final Calendar c = Calendar.getInstance();
                 int mYear = c.get(Calendar.YEAR);
                 int mMonth = c.get(Calendar.MONTH);
