@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 
 public class UserController {
 
@@ -108,4 +109,10 @@ public class UserController {
 //        currentUser.setWalletBalance(newBalance);
 //        dc.updateWalletBalance(currentUser.getEmail(), newBalance);
 //    }
+
+
+//    public ArrayList<Booking> getUserLockers(String mobile) {
+//
+//    }
+
 }

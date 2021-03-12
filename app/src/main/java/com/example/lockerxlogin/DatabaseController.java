@@ -132,57 +132,57 @@ public class DatabaseController {
     //NOTE!!! when calling this method, make sure to do what's stated beside the return "error"; statement!
     //need to do this bc retrieving the data is asynchronous so other code may run before the data is even retrieved
     //so must check that the data is retrieved before you use it!
-    public String retrieveMobileByEmail(String email) {
-        ds.setStr("error");
-        Query query = FirebaseDatabase.getInstance().getReference().child("User").orderByChild("email").equalTo(email); //return the child node of "User" whose "email"==email
-        //the .orderByChild() in the prev line doesnt affect where the snapshot will be pointed to!
-        //snapshot will be the path ~\User in the db, NOT ~\User\[key of the user with "email"==email]\email
-        //.orderByChild("email").equalTo(email) will give the snapshot of ~\User and only its children whose "email"==email will be included
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.d(TAG, "Key of this snapshot is: "+snapshot.getKey()); //key (last part of the path of the location of the snapshot)=User
-                if (snapshot.exists()) {
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        String mobile = dataSnapshot.child("mobile").getValue().toString();
-                        ds.setStr(mobile);
-//                        Log.d(TAG, "mobile: " + ds.getStr());
-                    }
-                }
-//                Log.d(TAG, "mobile: "+ds.getStr());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-
-        return ds.getStr();
-        //use this to check if data has been retrieved: email=ds.retrieveMobileByEmail("target email"); while (email==="error") {email=ds.retrieveMobileByEmail("target email");}
-    }
+//    public String retrieveMobileByEmail(String email) {
+//        ds.setStr("error");
+//        Query query = FirebaseDatabase.getInstance().getReference().child("User").orderByChild("email").equalTo(email); //return the child node of "User" whose "email"==email
+//        //the .orderByChild() in the prev line doesnt affect where the snapshot will be pointed to!
+//        //snapshot will be the path ~\User in the db, NOT ~\User\[key of the user with "email"==email]\email
+//        //.orderByChild("email").equalTo(email) will give the snapshot of ~\User and only its children whose "email"==email will be included
+//        query.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                Log.d(TAG, "Key of this snapshot is: "+snapshot.getKey()); //key (last part of the path of the location of the snapshot)=User
+//                if (snapshot.exists()) {
+//                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                        String mobile = dataSnapshot.child("mobile").getValue().toString();
+//                        ds.setStr(mobile);
+////                        Log.d(TAG, "mobile: " + ds.getStr());
+//                    }
+//                }
+////                Log.d(TAG, "mobile: "+ds.getStr());
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//            }
+//        });
+//
+//        return ds.getStr();
+//        //use this to check if data has been retrieved: email=ds.retrieveMobileByEmail("target email"); while (email==="error") {email=ds.retrieveMobileByEmail("target email");}
+//    }
 
 
     //retrieve total number of bookings from db
     ////NOTE!!! when calling this method, make sure to do what's stated beside the return "error"; statement!
-    public long retrieveBookingCount() {
-        ds.setLongNum(-1);  //set as -1 to check if it has changed to the correct bookingCount
-        reff = FirebaseDatabase.getInstance().getReference().child("Booking");
-        reff.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    ds.setLongNum(snapshot.getChildrenCount());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-
-        return ds.getLongNum();
-        //use this to check if data has been retrieved: count=ds.retrieveBookingCount(); while (count==="-1") {count=ds.retrieveBookingCount();}
-    }
+//    public long retrieveBookingCount() {
+//        ds.setLongNum(-1);  //set as -1 to check if it has changed to the correct bookingCount
+//        reff = FirebaseDatabase.getInstance().getReference().child("Booking");
+//        reff.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.exists()) {
+//                    ds.setLongNum(snapshot.getChildrenCount());
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//            }
+//        });
+//
+//        return ds.getLongNum();
+//        //use this to check if data has been retrieved: count=ds.retrieveBookingCount(); while (count==="-1") {count=ds.retrieveBookingCount();}
+//    }
 
 
 
@@ -298,15 +298,24 @@ public class DatabaseController {
     //1) bookings with b
     //retrieve all bookings with status=='B'
     public ArrayList<Booking> retrieveBBookings() {
-        ds.setbBookingList(new ArrayList<Booking>());
+        ds.setBBookingList(new ArrayList<Booking>());
         Query query = FirebaseDatabase.getInstance().getReference().child("Booking").orderByChild("status").equalTo("B");
         query.addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        Booking booking = dataSnapshot.getValue(Booking.class);
-                        ds.getbBookingList().add(booking);
+                        Booking booking = new Booking();
+                        booking.setStartDate(LocalDate.parse(dataSnapshot.child("startDate").getValue().toString()));
+                        booking.setEndDate(LocalDate.parse(dataSnapshot.child("endDate").getValue().toString()));
+                        booking.setStartTime(LocalTime.parse(dataSnapshot.child("startTime").getValue().toString()));
+                        booking.setEndTime(LocalTime.parse(dataSnapshot.child("endTime").getValue().toString()));
+                        booking.setMobile(dataSnapshot.child("mobile").getValue().toString());
+                        booking.setStructureID((Long) dataSnapshot.child("structureID").getValue());
+                        booking.setLockerID((Long) dataSnapshot.child("lockerID").getValue());
+                        booking.setStatus(dataSnapshot.child("status").getValue().toString().charAt(0));
+                        ds.getBBookingList().add(booking);
                     }
                 }
             }
@@ -317,7 +326,7 @@ public class DatabaseController {
             }
         });
 
-        return ds.getbBookingList();
+        return ds.getBBookingList();
     }
 
     //2) lockerIDs of lockers from lockerStructure with postal code == postalCode and of locker size == lockerSize
@@ -368,8 +377,117 @@ public class DatabaseController {
     }
 
 
-//    public ArrayList<Booking> retrieveOBookingsForUser(String mobile) {
-//
-//    }
+    public ArrayList<Booking> retrieveRBookingsForUser(String mobile) {
+        ds.setMobile(mobile);
+        ds.setUserRBookingList(new ArrayList<Booking>());
+        Query query = FirebaseDatabase.getInstance().getReference().child("Booking").orderByChild("status").equalTo("R");
+        query.addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        Booking booking = new Booking();
+                        booking.setStartDate(LocalDate.parse(dataSnapshot.child("startDate").getValue().toString()));
+                        booking.setEndDate(LocalDate.parse(dataSnapshot.child("endDate").getValue().toString()));
+                        booking.setStartTime(LocalTime.parse(dataSnapshot.child("startTime").getValue().toString()));
+                        booking.setEndTime(LocalTime.parse(dataSnapshot.child("endTime").getValue().toString()));
+                        booking.setMobile(dataSnapshot.child("mobile").getValue().toString());
+                        booking.setStructureID((Long) dataSnapshot.child("structureID").getValue());
+                        booking.setLockerID((Long) dataSnapshot.child("lockerID").getValue());
+                        booking.setStatus(dataSnapshot.child("status").getValue().toString().charAt(0));
+                        if (booking.getMobile().equals(ds.getMobile())) {
+                            ds.getUserRBookingList().add(booking);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        return ds.getUserRBookingList();
+    }
+
+
+    public ArrayList<Booking> retrieveCBookingsForUser(String mobile) {
+        ds.setMobile(mobile);
+        ds.setUserCBookingList(new ArrayList<Booking>());
+        Query query = FirebaseDatabase.getInstance().getReference().child("Booking").orderByChild("status").equalTo("C");
+        query.addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        Booking booking = new Booking();
+                        booking.setStartDate(LocalDate.parse(dataSnapshot.child("startDate").getValue().toString()));
+                        booking.setEndDate(LocalDate.parse(dataSnapshot.child("endDate").getValue().toString()));
+                        booking.setStartTime(LocalTime.parse(dataSnapshot.child("startTime").getValue().toString()));
+                        booking.setEndTime(LocalTime.parse(dataSnapshot.child("endTime").getValue().toString()));
+                        booking.setMobile(dataSnapshot.child("mobile").getValue().toString());
+                        booking.setStructureID((Long) dataSnapshot.child("structureID").getValue());
+                        booking.setLockerID((Long) dataSnapshot.child("lockerID").getValue());
+                        booking.setStatus(dataSnapshot.child("status").getValue().toString().charAt(0));
+                        if (booking.getMobile().equals(ds.getMobile())) {
+                            ds.getUserCBookingList().add(booking);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        return ds.getUserCBookingList();
+    }
+
+
+    public ArrayList<Booking> retrieveOBookingsForUser(String mobile) {
+        ds.setMobile(mobile);
+        ds.setUserOBookingList(new ArrayList<Booking>());
+        Query query = FirebaseDatabase.getInstance().getReference().child("Booking").orderByChild("status").equalTo("O");
+        query.addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    LocalDate currDate = java.time.LocalDate.now();
+                    LocalTime currTime = java.time.LocalTime.now();
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        Booking booking = new Booking();
+                        booking.setStartDate(LocalDate.parse(dataSnapshot.child("startDate").getValue().toString()));
+                        booking.setEndDate(LocalDate.parse(dataSnapshot.child("endDate").getValue().toString()));
+                        booking.setStartTime(LocalTime.parse(dataSnapshot.child("startTime").getValue().toString()));
+                        booking.setEndTime(LocalTime.parse(dataSnapshot.child("endTime").getValue().toString()));
+                        booking.setMobile(dataSnapshot.child("mobile").getValue().toString());
+                        booking.setStructureID((Long) dataSnapshot.child("structureID").getValue());
+                        booking.setLockerID((Long) dataSnapshot.child("lockerID").getValue());
+                        booking.setStatus(dataSnapshot.child("status").getValue().toString().charAt(0));
+                        if (booking.getMobile().equals(ds.getMobile())) {
+                            if ((currDate.compareTo(booking.getStartDate())>=0) && (currDate.compareTo(booking.getEndDate())<=0)) {
+                                if ((currTime.compareTo(booking.getStartTime())>=0) && (currTime.compareTo(booking.getEndTime())<=0)) {
+                                    ds.getUserOBookingList().add(booking);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        return ds.getUserOBookingList();
+    }
 
 }

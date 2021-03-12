@@ -188,8 +188,32 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
 
                // alertDialog();
                 searchAvailableLocker();
-//                ArrayList<Booking> bBookings = dc.retrieveBBookings();
-//                ArrayList<Locker> matchingLockers = dc.retrieveMatchingLockers(postal, );
+
+                //start new thread + loading screen!
+                ArrayList<Booking> bBookings = dc.retrieveBBookings();
+                ArrayList<Locker> availLockers = dc.retrieveMatchingLockers(postal, size.charAt(0));
+                //end thread but still keep loading screen or
+                //end thread then start new thread + loading screen
+                ArrayList<Long> unavailLockers = new ArrayList<Long>();
+
+                for (Booking booking : bBookings) {
+                    if ((booking.getStartDate().compareTo(startDate)>=0 && booking.getStartDate().compareTo(endDate)<=0) ||
+                            (booking.getEndDate().compareTo(startDate)>=0 && booking.getEndDate().compareTo(endDate)<=0) ||
+                            (booking.getStartDate().compareTo(startDate)<=0 && booking.getEndDate().compareTo(endDate)>=0)) {
+                        if ((booking.getStartTime().compareTo(startTime)>=0 && booking.getStartTime().compareTo(endTime)<=0) ||
+                                (booking.getEndTime().compareTo(startTime)>=0 && booking.getEndTime().compareTo(endTime)<=0) ||
+                                (booking.getStartTime().compareTo(startTime)<=0 && booking.getEndTime().compareTo(endTime)>=0)) {
+                            unavailLockers.add(booking.getLockerID());
+                        }
+                    }
+                }
+                for (Locker locker : availLockers) {
+                    if (unavailLockers.contains(locker.getLockerID())) {
+                        availLockers.remove(locker);
+                    }
+                }
+
+                //avail lockers that can be booked for the user's selection: ArrayList<Locker> availLockers
 
                 break;
             default:

@@ -5,8 +5,9 @@ import java.util.ArrayList;
 
 //this class is for retrieving data and being able to use the data outside of the onDataChange() method
 public class TempDataStorage {
-    private String str;
-    private long longNum;
+//    private String str;
+//    private long longNum;
+    private String mobile;
     private ArrayList<User> userList = new ArrayList<User>();
     private User user;
     private long userCount;
@@ -24,21 +25,29 @@ public class TempDataStorage {
     public TempDataStorage() {
     }
 
-    public String getStr() {
-        return str;
+    public String getMobile() {
+        return mobile;
     }
 
-    public void setStr(String str) {
-        this.str = str;
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
-    public long getLongNum() {
-        return longNum;
-    }
-
-    public void setLongNum(long longNum) {
-        this.longNum = longNum;
-    }
+    //    public String getStr() {
+//        return str;
+//    }
+//
+//    public void setStr(String str) {
+//        this.str = str;
+//    }
+//
+//    public long getLongNum() {
+//        return longNum;
+//    }
+//
+//    public void setLongNum(long longNum) {
+//        this.longNum = longNum;
+//    }
 
     public ArrayList<User> getUserList() {
         return userList;
@@ -100,11 +109,11 @@ public class TempDataStorage {
         this.structureID = structureID;
     }
 
-    public ArrayList<Booking> getbBookingList() {
+    public ArrayList<Booking> getBBookingList() {
         return bBookingList;
     }
 
-    public void setbBookingList(ArrayList<Booking> bBookingList) {
+    public void setBBookingList(ArrayList<Booking> bBookingList) {
         this.bBookingList = bBookingList;
     }
 

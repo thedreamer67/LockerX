@@ -58,10 +58,10 @@ public class Booking {
     }
     public String getMobile(){ return this.mobile; }
 
-    public void setLockerStructureID(long lockerStructureID){
+    public void setStructureID(long lockerStructureID){
         this.structureID = lockerStructureID;
     }
-    public long getLockerStructureID(){
+    public long getStructureID(){
         return this.structureID;
     }
 
