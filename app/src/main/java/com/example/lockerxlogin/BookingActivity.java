@@ -111,6 +111,7 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
         BsearchBtn.setOnClickListener(this);
         BstartBtn.setOnClickListener(this);
         String title = this.getIntent().getStringExtra("title");
+        String postal = this.getIntent().getStringExtra("postal");
         BcurrentLocation = findViewById(R.id.currentLocation);
         BcurrentLocation.setText(title);
 
@@ -150,9 +151,9 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
 
             case R.id.searchBtn:
 
-
                // alertDialog();
                 searchAvailableLocker();
+
                 break;
             default:
 
@@ -209,6 +210,7 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
     private void alertDialog() {
+        //final androidx.appcompat.app.AlertDialog.Builder continueBookingDialog = new AlertDialog.Builder();
         AlertDialog.Builder dialog=new AlertDialog.Builder(this);
         dialog.setMessage("Please choose valid start date, end date and start time, end time!");
         dialog.setTitle("Dialog Box");

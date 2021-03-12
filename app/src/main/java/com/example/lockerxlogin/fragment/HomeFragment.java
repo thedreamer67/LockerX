@@ -51,6 +51,7 @@ public class HomeFragment extends Fragment  {
     private Handler mHandler = new Handler();
     private HomeViewModel mViewModel;
     private GoogleMap mMap;
+    private String post;
     private FusedLocationProviderClient client;
     public final LatLng defaultLocation = new LatLng(1.3521, 103.8198);
     public final LatLng Woodlands = new LatLng(1.439874, 103.779376);
@@ -112,6 +113,7 @@ public class HomeFragment extends Fragment  {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
                         if(marker != null && marker.getTitle().equals("Woodlands")){
+                            post = "738600";
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                                     marker.getPosition(), 15
                             ));
@@ -129,6 +131,7 @@ public class HomeFragment extends Fragment  {
 
                                             Intent intent = new Intent(getActivity(), BookingActivity.class);
                                             intent.putExtra("title", marker.getTitle());
+                                            intent.putExtra("postal",post);
                                             Toast.makeText(getActivity(),marker.getTitle() +" is selected.",Toast.LENGTH_SHORT)
                                                     .show();
                                             getActivity().startActivity(intent);
@@ -161,6 +164,7 @@ public class HomeFragment extends Fragment  {
 
                         }
                         else if(marker != null && marker.getTitle().equals("Jurong")){
+                            post = "648886";
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                                     marker.getPosition(), 15
                             ));
@@ -187,6 +191,8 @@ public class HomeFragment extends Fragment  {
 //                                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, af).commit();
                                             Intent intent = new Intent(getActivity(), BookingActivity.class);
                                             intent.putExtra("title", marker.getTitle());
+                                            intent.putExtra("postal",post);
+
                                             Toast.makeText(getActivity(),marker.getTitle() +" is selected.",Toast.LENGTH_SHORT)
                                                     .show();
                                             getActivity().startActivity(intent);
@@ -209,6 +215,7 @@ public class HomeFragment extends Fragment  {
                             },  1600);
                         }
                         else if(marker != null && marker.getTitle().equals("USS")){
+                            post = "098269";
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                                     marker.getPosition(), 15
                             ));
@@ -236,6 +243,7 @@ public class HomeFragment extends Fragment  {
 //                                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, af).commit();
                                             Intent intent = new Intent(getActivity(), BookingActivity.class);
                                             intent.putExtra("title", marker.getTitle());
+                                            intent.putExtra("postal",post);
                                             Toast.makeText(getActivity(),marker.getTitle() +" is selected.",Toast.LENGTH_SHORT)
                                                     .show();
                                             getActivity().startActivity(intent);
