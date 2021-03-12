@@ -38,37 +38,37 @@ public class DatabaseController {
     }
 
 
-    //retrieve all users from the db
-    public ArrayList retrieveAllUsers() {
-//        ArrayList<User> userList = new ArrayList<User>();
-//        User dummyUser = new User();
-//        dummyUser.setName("error");
-//        userList.add(dummyUser);
-//        ds.setUserList(userList);
-        reff = FirebaseDatabase.getInstance().getReference().child("User");
-        reff.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    ds.getUserList().clear();
-//                    ds.setUserCount(snapshot.getChildrenCount());
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        User user = dataSnapshot.getValue(User.class);
-                        ds.getUserList().add(user);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        return ds.getUserList();
-        //use this to check if data has been retrieved: ArrayList<User> userList = ds.retrieveAllUsers(); while (userList.get(0).getName()==="error") {userList=ds.retrieveAllUsers();}
-
-    }
+//    //retrieve all users from the db
+//    public ArrayList retrieveAllUsers() {
+////        ArrayList<User> userList = new ArrayList<User>();
+////        User dummyUser = new User();
+////        dummyUser.setName("error");
+////        userList.add(dummyUser);
+////        ds.setUserList(userList);
+//        reff = FirebaseDatabase.getInstance().getReference().child("User");
+//        reff.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.exists()) {
+//                    ds.getUserList().clear();
+////                    ds.setUserCount(snapshot.getChildrenCount());
+//                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                        User user = dataSnapshot.getValue(User.class);
+//                        ds.getUserList().add(user);
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//
+//        return ds.getUserList();
+//        //use this to check if data has been retrieved: ArrayList<User> userList = ds.retrieveAllUsers(); while (userList.get(0).getName()==="error") {userList=ds.retrieveAllUsers();}
+//
+//    }
 
 
     //retrieve user using their email from db
@@ -100,32 +100,32 @@ public class DatabaseController {
     }
 
 
-    //retrieve user using their mobile from db
-    public User retrieveUserByMobile(String mobile) {
-//        User resetUser = new User();
-//        resetUser.setName("error");
-//        ds.setUser(resetUser);
-        Query query = FirebaseDatabase.getInstance().getReference().child("User").orderByChild("mobile").equalTo(mobile);
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        User user = new User(snapshot.child("name").getValue().toString(), snapshot.child("email").getValue().toString(), snapshot.child("mobile").getValue().toString(), Float.parseFloat(snapshot.child("walletBalance").getValue().toString()), Float.parseFloat(snapshot.child("lateFees").getValue().toString()));
-                        ds.setUser(user);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        return ds.getUser();
-        //use this to check if data has been retrieved: User user = ds.retriveUserByMobile("target mobile"); while (user.getName()==="error") {user=ds.retrieveUserByMobile("target mobile");}
-    }
+//    //retrieve user using their mobile from db
+//    public User retrieveUserByMobile(String mobile) {
+////        User resetUser = new User();
+////        resetUser.setName("error");
+////        ds.setUser(resetUser);
+//        Query query = FirebaseDatabase.getInstance().getReference().child("User").orderByChild("mobile").equalTo(mobile);
+//        query.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.exists()) {
+//                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                        User user = new User(snapshot.child("name").getValue().toString(), snapshot.child("email").getValue().toString(), snapshot.child("mobile").getValue().toString(), Float.parseFloat(snapshot.child("walletBalance").getValue().toString()), Float.parseFloat(snapshot.child("lateFees").getValue().toString()));
+//                        ds.setUser(user);
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//
+//        return ds.getUser();
+//        //use this to check if data has been retrieved: User user = ds.retriveUserByMobile("target mobile"); while (user.getName()==="error") {user=ds.retrieveUserByMobile("target mobile");}
+//    }
 
 
     //retrieve user's mobile using their email from db
@@ -222,14 +222,7 @@ public class DatabaseController {
 
 
 
-    public void storeLockerStatus(int lockerID,int lockerStructureID){
-        //insert codes here to store new status of locker
-    }
-    public void createBooking(String email, int lockerStructureID, int lockerID,
-                              LocalDate startDate, LocalTime startTime,
-                              LocalDate endDate, LocalTime endTime, char status){
-        // insert codes to create a new row in booking table
-    }
+
 
     /*@RequiresApi(api = Build.VERSION_CODES.O)
     public LocalDate retrieveBookingStartDate(String email, int lockerID, int lockerStructureID){
@@ -259,6 +252,9 @@ public class DatabaseController {
         return time;
     }*/
 
+
+    // TODO all these methods below
+
     public void setBookingStatus(String email, int lockerStructureID, int lockerID, LocalDate startDate,
                                  LocalTime startTime, LocalDate endDate, LocalTime endTime, char status){
         //query to set booking status
@@ -269,6 +265,17 @@ public class DatabaseController {
         return 'S'; //dummy value
     }
 
+    public void setLockerStatus(int lockerID,int lockerStructureID){
+        //insert codes here to store new status of locker
+    }
+
+
+    public void createBooking(String email, int lockerStructureID, int lockerID,
+                              LocalDate startDate, LocalTime startTime,
+                              LocalDate endDate, LocalTime endTime, char status){
+        // insert codes to create a new row in booking table
+    }
+
     //method to update wallet balance
     public void updateWalletBalance(String smobile, float newBalance) {
         reff = FirebaseDatabase.getInstance().getReference().child("User");
@@ -277,18 +284,15 @@ public class DatabaseController {
         reff.child(smobile).updateChildren(walletUpdate);   //update walletBalance of user with smobile
     }
 
-    public ArrayList<Booking> retrieveBookedBookingList(){
-        //i dont think you need to have any parameters here
-        //dummy method
-        ArrayList<Booking> booking = new ArrayList<Booking>();
-        return booking;
-    }
+    // TODO edit profile methods
 
-    //pls return me a list of lockerID filtered by locker size thanks
-    public ArrayList<Integer> retrieveLockerIDFilterByLockerSize(int lockerStructureID, int lockerSize){
-        ArrayList<Integer> dummy  = new ArrayList<Integer>();
-        return dummy;
-    }
+
+
+//    //pls return me a list of lockerID filtered by locker size thanks
+//    public ArrayList<Integer> retrieveLockerIDFilterByLockerSize(int lockerStructureID, int lockerSize){
+//        ArrayList<Integer> dummy  = new ArrayList<Integer>();
+//        return dummy;
+//    }
 
 
     //output: list of locker ids of lockers which match the desired size which are avail for the booking selection
