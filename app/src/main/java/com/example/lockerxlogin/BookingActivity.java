@@ -97,6 +97,7 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
 
         BselectedDateStart = findViewById(R.id.selectedDateStart);
         BselectedDateEnd = findViewById(R.id.selectedDateEnd);
+        BspinnerSize = findViewById(R.id.spinnerSize);
 
         cal = Calendar.getInstance();
 
@@ -200,9 +201,6 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
         //startActivity(new Intent(getApplicationContext(), MainFunc.class));
         if (startDate == null || endDate == null || startTime == null || endTime == null) {
             alertDialog();
-
-            Log.d("SS","1");
-            //Toast.makeText(BookingActivity.this, "Please select Valid Date/Time.", Toast.LENGTH_SHORT).show();
         }
         else if (startDate.compareTo(java.time.LocalDate.now()) == 0 && startDate.compareTo(endDate) == 0){
             if (startTime.compareTo(java.time.LocalTime.now())<0){
@@ -398,5 +396,6 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
 
 
     }
+
 
 }
