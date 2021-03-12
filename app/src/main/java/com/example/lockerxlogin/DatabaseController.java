@@ -490,4 +490,39 @@ public class DatabaseController {
         return ds.getUserOBookingList();
     }
 
+    public ArrayList<Booking> retrieveBBookingsForUser(String mobile) {
+        ds.setMobile(mobile);
+        ds.setUserBBookingList(new ArrayList<Booking>());
+        Query query = FirebaseDatabase.getInstance().getReference().child("Booking").orderByChild("status").equalTo("B");
+        query.addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        Booking booking = new Booking();
+                        booking.setStartDate(LocalDate.parse(dataSnapshot.child("startDate").getValue().toString()));
+                        booking.setEndDate(LocalDate.parse(dataSnapshot.child("endDate").getValue().toString()));
+                        booking.setStartTime(LocalTime.parse(dataSnapshot.child("startTime").getValue().toString()));
+                        booking.setEndTime(LocalTime.parse(dataSnapshot.child("endTime").getValue().toString()));
+                        booking.setMobile(dataSnapshot.child("mobile").getValue().toString());
+                        booking.setStructureID((Long) dataSnapshot.child("structureID").getValue());
+                        booking.setLockerID((Long) dataSnapshot.child("lockerID").getValue());
+                        booking.setStatus(dataSnapshot.child("status").getValue().toString().charAt(0));
+                        if (booking.getMobile().equals(ds.getMobile())) {
+                            ds.getUserBBookingList().add(booking);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        return ds.getUserBBookingList();
+    }
+
 }
