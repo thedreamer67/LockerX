@@ -16,16 +16,16 @@ public class BookingController {
     public BookingController(){}
 
 
-    public void makeBooking(DatabaseController dc, String email, int lockerStructureID,
-                               int lockerID, LocalDate startDate, LocalTime startTime,
+    public void makeBooking(DatabaseController dc, String email, long structureID,
+                               long lockerID, LocalDate startDate, LocalTime startTime,
                                LocalDate endDate, LocalTime endTime){
 
         /*I actually don't know if we need the statement below because never really use this object,
          just store in database only*/
         Booking booking = new Booking(startDate, startTime,endDate,endTime,
-                email,lockerStructureID,lockerID,'B'); //booking status to 'B',booked
+                email,structureID,lockerID,'B'); //booking status to 'B',booked
 
-        dc.createBooking(email,lockerStructureID,lockerID,startDate,startTime,endDate,endTime,'B');
+        dc.createBooking(email,structureID,lockerID,startDate,startTime,endDate,endTime,'B');
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -54,13 +54,13 @@ public class BookingController {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public float calculateRentalFees(DatabaseController dc, int lockerStructureID,
-                                     int lockerID, LocalDate startDate, LocalTime startTime,
+    public float calculateRentalFees(DatabaseController dc, long structureID,
+                                     long lockerID, LocalDate startDate, LocalTime startTime,
                                      LocalDate endDate, LocalTime endTime){
         char sizeArray[] = new char[]{'S','M','L'};
         float rentalArray[] = new float[]{1,2,3};
 
-        char lockerSize = dc.retrieveLockerSize(lockerStructureID,lockerID);
+        char lockerSize = dc.retrieveLockerSize(structureID,lockerID);
 
         //finding rental rate based on locker size
         int index=-1;

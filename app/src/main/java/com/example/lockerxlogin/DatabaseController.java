@@ -255,22 +255,22 @@ public class DatabaseController {
 
     // TODO all these methods below
 
-    public void setBookingStatus(String email, int lockerStructureID, int lockerID, LocalDate startDate,
+    public void setBookingStatus(String email, long structureID, long lockerID, LocalDate startDate,
                                  LocalTime startTime, LocalDate endDate, LocalTime endTime, char status){
         //query to set booking status
     }
 
-    public char retrieveLockerSize(int lockerStructureID, int lockerID){
+    public char retrieveLockerSize(long structureID, long lockerID){
         //database query to retrieve locker size
         return 'S'; //dummy value
     }
 
-    public void setLockerStatus(int lockerID,int lockerStructureID){
+    public void setLockerStatus(long lockerID,long structureID){
         //insert codes here to store new status of locker
     }
 
 
-    public void createBooking(String email, int lockerStructureID, int lockerID,
+    public void createBooking(String email, long structureID, long lockerID,
                               LocalDate startDate, LocalTime startTime,
                               LocalDate endDate, LocalTime endTime, char status){
         // insert codes to create a new row in booking table

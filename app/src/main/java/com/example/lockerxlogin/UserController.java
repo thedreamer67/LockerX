@@ -32,8 +32,8 @@ public class UserController {
 
     //method to create booking using the booking controller
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public boolean makeBooking(DatabaseController dc, BookingController bc, int lockerStructureID,
-                            int lockerID, LocalDate startDate, LocalTime startTime,
+    public boolean makeBooking(DatabaseController dc, BookingController bc, long structureID,
+                               long lockerID, LocalDate startDate, LocalTime startTime,
                             LocalDate endDate, LocalTime endTime){
 
         //deduct late fees first when making a booking
@@ -43,10 +43,10 @@ public class UserController {
             }
         }
 
-        float rentalFees = bc.calculateRentalFees(dc,lockerStructureID, lockerID, startDate,
+        float rentalFees = bc.calculateRentalFees(dc,structureID, lockerID, startDate,
                 startTime,endDate,endTime);
         if(makePayment(dc, rentalFees)==true){
-            bc.makeBooking(dc,currentUser.getEmail(),lockerStructureID,lockerID,startDate,startTime,endDate,endTime);
+            bc.makeBooking(dc,currentUser.getEmail(),structureID,lockerID,startDate,startTime,endDate,endTime);
             //creates a new booking object and stores it in database using database controller
             return true;
         }
@@ -66,7 +66,7 @@ public class UserController {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public boolean returnLocker(DatabaseController dc, BookingController bc, LocalDate startDate,
                                 LocalTime startTime, LocalDate endDate, LocalTime endTime,
-                                int lockerStructureID, int lockerID){
+                                long structureID, long lockerID){
 
         //retrieve status of booking, 1=booking expired, 2=booking in-progress, 3=reservation
         int status = bc.checkExpiredBooking(startDate,startTime,endDate,endTime);
@@ -75,12 +75,12 @@ public class UserController {
             this.currentUser.setLateFees(this.currentUser.getLateFees()+lateFees);
 
             //set booking status to 'R', returned
-            dc.setBookingStatus(this.currentUser.getEmail(), lockerStructureID, lockerID, startDate,
+            dc.setBookingStatus(this.currentUser.getEmail(), structureID, lockerID, startDate,
                     startTime, endDate, endTime, 'R');
             return true;
         }
         else if(status==2){
-            dc.setBookingStatus(this.currentUser.getEmail(), lockerStructureID, lockerID, startDate,
+            dc.setBookingStatus(this.currentUser.getEmail(), structureID, lockerID, startDate,
                     startTime, endDate, endTime, 'R');
             return true;
         }
