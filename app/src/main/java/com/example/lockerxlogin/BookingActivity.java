@@ -73,6 +73,7 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
     FirebaseUser FBuser;
     String postal;
     String size;
+    String title;
 
 
 
@@ -97,7 +98,7 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
 
         BselectedDateStart = findViewById(R.id.selectedDateStart);
         BselectedDateEnd = findViewById(R.id.selectedDateEnd);
-        BspinnerSize = findViewById(R.id.spinnerSize);
+        BspinnerSize = findViewById(R.id.lockerSize);
 
         cal = Calendar.getInstance();
 
@@ -117,7 +118,7 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
         BliveBtn.setOnClickListener(this);
         BsearchBtn.setOnClickListener(this);
         BstartBtn.setOnClickListener(this);
-        String title = this.getIntent().getStringExtra("title");
+        title = this.getIntent().getStringExtra("title");
         postal = this.getIntent().getStringExtra("postal");
         BcurrentLocation = findViewById(R.id.currentLocation);
         BcurrentLocation.setText(title);
@@ -206,39 +207,38 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
             if (startTime.compareTo(java.time.LocalTime.now())<0){
                 //System.out.print(startTime.compareTo(endTime));
                alertDialog();
-                Log.d("SS","2");
-                //Toast.makeText(BookingActivity.this, "Please select Valid Date/Time.", Toast.LENGTH_SHORT).show();
+
             }
             else if (startTime.compareTo(endTime) >0){
                alertDialog();
-                Log.d("SS","3");
-                System.out.print(3);
-                //
-                //Toast.makeText(BookingActivity.this, "Please select Valid Date/Time.", Toast.LENGTH_SHORT).show();
-                //System.out.print(startTime.compareTo(endTime));
+
             }
-            else
-                startActivity(new Intent(getApplicationContext(), AvailableLockers.class));
+            else {
+              //  Intent intent = new Intent(this, AvailableLockers.class);
+                //startActivity(new Intent(getApplicationContext(), AvailableLockers.class));
+               // intent.putExtra("title", title);
+                startActivity(new Intent(getApplicationContext(), AvailableLockers.class));//AvailableLockers
+            }
         }
         else if (startDate.compareTo(endDate) == 0){
             if (startTime.compareTo(endTime) >0){
-                Log.d("SS","4");
-                //Log.d("tab","")
+
                 alertDialog();
-                System.out.print(4);
-                //
-               // System.out.print(startTime.compareTo(endTime));
-               // Toast.makeText(BookingActivity.this, "Please select Valid Date/Time.", Toast.LENGTH_SHORT).show();
+
             }
             else{
-                startActivity(new Intent(getApplicationContext(), AvailableLockers.class));
-                System.out.print(startTime.compareTo(endTime));
+               // Intent intent = new Intent(this, AvailableLockers.class);
+                //startActivity(new Intent(getApplicationContext(), AvailableLockers.class));
+                startActivity(new Intent(getApplicationContext(), AvailableLockers.class));//AvailableLockers
+//                intent.putExtra("title", title);
             }
         }
         else {
 
-                startActivity(new Intent(getApplicationContext(), AvailableLockers.class));
-                System.out.print(startTime.compareTo(endTime));
+           // Intent intent = new Intent(this, AvailableLockers.class);
+            startActivity(new Intent(getApplicationContext(), AvailableLockers.class));
+            //intent.putExtra("title", title);
+
 
         }
     }
