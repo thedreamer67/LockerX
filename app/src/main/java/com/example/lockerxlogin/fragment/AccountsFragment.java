@@ -43,7 +43,13 @@ public class AccountsFragment extends Fragment  {
         userEmail = user.getEmail();
         textViewEditProfileID.setText(userEmail);
 
+        String title = getArguments().getString("title");
+        Toast.makeText(getActivity(),title +" BRUH.",Toast.LENGTH_SHORT)
+                .show();
+
         textViewMobileNumID.setText(user.getPhoneNumber());
+        //String markerLocation = getActivity().getIntent().getStringExtra("selectedLocationString");
+        //Toast.makeText(getActivity(),markerLocation,Toast.LENGTH_SHORT).show();
 
 
 
