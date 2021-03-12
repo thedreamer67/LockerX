@@ -5,13 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 import com.example.lockerxlogin.ui.BookingViewModel;
@@ -140,24 +145,104 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
                 //timePicker = (TimePicker)findViewById(R.id.timePicker);
                 //timePicker.setIs24HourView(true);
                 showStartTimePicker();
+
+                break;
+
+            case R.id.searchBtn:
+
+
+               // alertDialog();
+                searchAvailableLocker();
                 break;
             default:
 
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void searchAvailableLocker(){
+        //startActivity(new Intent(getApplicationContext(), MainFunc.class));
+        if (startDate == null || endDate == null || startTime == null || endTime == null) {
+            alertDialog();
+
+            Log.d("SS","1");
+            //Toast.makeText(BookingActivity.this, "Please select Valid Date/Time.", Toast.LENGTH_SHORT).show();
+        }
+        else if (startDate.compareTo(java.time.LocalDate.now()) == 0 && startDate.compareTo(endDate) == 0){
+            if (startTime.compareTo(java.time.LocalTime.now())<0){
+                //System.out.print(startTime.compareTo(endTime));
+               alertDialog();
+                Log.d("SS","2");
+                //Toast.makeText(BookingActivity.this, "Please select Valid Date/Time.", Toast.LENGTH_SHORT).show();
+            }
+            else if (startTime.compareTo(endTime) >0){
+               alertDialog();
+                Log.d("SS","3");
+                System.out.print(3);
+                //
+                //Toast.makeText(BookingActivity.this, "Please select Valid Date/Time.", Toast.LENGTH_SHORT).show();
+                //System.out.print(startTime.compareTo(endTime));
+            }
+            else
+                startActivity(new Intent(getApplicationContext(), AvailableLockers.class));
+        }
+        else if (startDate.compareTo(endDate) == 0){
+            if (startTime.compareTo(endTime) >0){
+                Log.d("SS","4");
+                //Log.d("tab","")
+                alertDialog();
+                System.out.print(4);
+                //
+               // System.out.print(startTime.compareTo(endTime));
+               // Toast.makeText(BookingActivity.this, "Please select Valid Date/Time.", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                startActivity(new Intent(getApplicationContext(), AvailableLockers.class));
+                System.out.print(startTime.compareTo(endTime));
+            }
+        }
+        else {
+
+                startActivity(new Intent(getApplicationContext(), AvailableLockers.class));
+                System.out.print(startTime.compareTo(endTime));
+
+        }
+    }
+    private void alertDialog() {
+        AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+        dialog.setMessage("Please choose valid start date, end date and start time, end time!");
+        dialog.setTitle("Dialog Box");
+        dialog.setPositiveButton("YES",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        Toast.makeText(getApplicationContext(),"Yes is clicked",Toast.LENGTH_LONG).show();
+                    }
+                });
+        dialog.setNegativeButton("cancel",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(),"cancel is clicked",Toast.LENGTH_LONG).show();
+            }
+        });
+        AlertDialog alertDialog=dialog.create();
+        alertDialog.show();
+    }
+
 
 
     private void showStartTimePicker() {//start
 
-        TimePickerDialog timeDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+        TimePickerDialog timeDialog = new TimePickerDialog(this, TimePickerDialog.THEME_HOLO_DARK, new TimePickerDialog.OnTimeSetListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onTimeSet(TimePicker view, int hour, int minute) {
 
+
                 cal.set(Calendar.HOUR_OF_DAY, hour);
                 cal.set(Calendar.MINUTE, minute);
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+
                 BselectedStart.setText("Start time: "+sdf.format(cal.getTime()));//change to selected time
                 startTime = LocalTime.of(hour, minute);
 
@@ -170,7 +255,7 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
 
     private void showEndTimePicker() {//end
 
-        TimePickerDialog timeDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+        TimePickerDialog timeDialog = new TimePickerDialog(this, TimePickerDialog.THEME_HOLO_DARK, new TimePickerDialog.OnTimeSetListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onTimeSet(TimePicker view, int hour, int minute) {
@@ -212,7 +297,7 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
 
                         SimpleDateFormat sdfDate = new SimpleDateFormat("dd MMMM yyyy");
                         BselectedDateStart.setText(sdfDate.format(cal.getTime()));//change to selected date
-                        startDate = LocalDate.of(year,month,dayOfMonth);
+                        startDate = LocalDateTime.ofInstant(cal.toInstant(), cal.getTimeZone().toZoneId()).toLocalDate();
 
                     }
                 },
@@ -254,17 +339,19 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
 
                         SimpleDateFormat sdfDate = new SimpleDateFormat("dd MMMM yyyy");
                         BselectedDateEnd.setText(sdfDate.format(cal.getTime()));//change to selected date
-                        endDate = LocalDate.of(year, month, dayOfMonth);
+                        endDate = LocalDateTime.ofInstant(cal.toInstant(), cal.getTimeZone().toZoneId()).toLocalDate();
 
                     }
                 },
                 cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH),
                 cal.get(Calendar.DAY_OF_MONTH));
+
                 Calendar c = Calendar.getInstance();
                 c.set(Calendar.YEAR,sYear);
                 c.set(Calendar.MONTH,sMonth);
                 c.set(Calendar.DAY_OF_MONTH,sDay);
+
         dateDialog.getDatePicker().setMinDate(c.getTimeInMillis());
         //if (startDate.getDayOfWeek() != null){
         //    dateDialog.getDatePicker().setMinDate(c.getTimeInMillis());

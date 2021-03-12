@@ -20,7 +20,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LockerXLogin">
-        <activity android:name=".BookingActivity"></activity>
+        <activity android:name=".AvailableLockers"></activity>
+        <activity android:name=".BookingActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
