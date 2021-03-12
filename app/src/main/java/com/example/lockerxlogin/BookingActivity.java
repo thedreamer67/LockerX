@@ -71,9 +71,8 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
     DatePicker BdatePick;
     FirebaseAuth fAuth;
     FirebaseUser FBuser;
-    String postal;
-    String size;
-    String title;
+    String postal,size,title;
+    ArrayList<Locker> avalockers;
 
 
 
@@ -188,37 +187,43 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
 
                // alertDialog();
                 searchAvailableLocker();
+                //getAvaiLockers();
 
-                //start new thread + loading screen!
-                ArrayList<Booking> bBookings = dc.retrieveBBookings();
-                ArrayList<Locker> availLockers = dc.retrieveMatchingLockers(postal, size.charAt(0));
-                //end thread but still keep loading screen or
-                //end thread then start new thread + loading screen
-                ArrayList<Long> unavailLockers = new ArrayList<Long>();
 
-                for (Booking booking : bBookings) {
-                    if ((booking.getStartDate().compareTo(startDate)>=0 && booking.getStartDate().compareTo(endDate)<=0) ||
-                            (booking.getEndDate().compareTo(startDate)>=0 && booking.getEndDate().compareTo(endDate)<=0) ||
-                            (booking.getStartDate().compareTo(startDate)<=0 && booking.getEndDate().compareTo(endDate)>=0)) {
-                        if ((booking.getStartTime().compareTo(startTime)>=0 && booking.getStartTime().compareTo(endTime)<=0) ||
-                                (booking.getEndTime().compareTo(startTime)>=0 && booking.getEndTime().compareTo(endTime)<=0) ||
-                                (booking.getStartTime().compareTo(startTime)<=0 && booking.getEndTime().compareTo(endTime)>=0)) {
-                            unavailLockers.add(booking.getLockerID());
-                        }
-                    }
-                }
-                for (Locker locker : availLockers) {
-                    if (unavailLockers.contains(locker.getLockerID())) {
-                        availLockers.remove(locker);
-                    }
-                }
-
-                //avail lockers that can be booked for the user's selection: ArrayList<Locker> availLockers
 
                 break;
             default:
 
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void getAvaiLockers() {
+
+        //start new thread + loading screen!
+        ArrayList<Booking> bBookings = dc.retrieveBBookings();
+        ArrayList<Locker> availLockers = dc.retrieveMatchingLockers(postal, size.charAt(0));
+        //end thread but still keep loading screen or
+        //end thread then start new thread + loading screen
+        ArrayList<Long> unavailLockers = new ArrayList<Long>();
+
+        for (Booking booking : bBookings) {
+            if ((booking.getStartDate().compareTo(startDate)>=0 && booking.getStartDate().compareTo(endDate)<=0) ||
+                    (booking.getEndDate().compareTo(startDate)>=0 && booking.getEndDate().compareTo(endDate)<=0) ||
+                    (booking.getStartDate().compareTo(startDate)<=0 && booking.getEndDate().compareTo(endDate)>=0)) {
+                if ((booking.getStartTime().compareTo(startTime)>=0 && booking.getStartTime().compareTo(endTime)<=0) ||
+                        (booking.getEndTime().compareTo(startTime)>=0 && booking.getEndTime().compareTo(endTime)<=0) ||
+                        (booking.getStartTime().compareTo(startTime)<=0 && booking.getEndTime().compareTo(endTime)>=0)) {
+                    unavailLockers.add(booking.getLockerID());
+                }
+            }
+        }
+        for (Locker locker : availLockers) {
+            if (unavailLockers.contains(locker.getLockerID())) {
+                availLockers.remove(locker);
+            }
+        }
+        avalockers = availLockers;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -229,19 +234,21 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
         }
         else if (startDate.compareTo(java.time.LocalDate.now()) == 0 && startDate.compareTo(endDate) == 0){
             if (startTime.compareTo(java.time.LocalTime.now())<0){
-                //System.out.print(startTime.compareTo(endTime));
                alertDialog();
-
             }
             else if (startTime.compareTo(endTime) >0){
                alertDialog();
-
             }
             else {
               //  Intent intent = new Intent(this, AvailableLockers.class);
                 //startActivity(new Intent(getApplicationContext(), AvailableLockers.class));
                // intent.putExtra("title", title);
-                startActivity(new Intent(getApplicationContext(), AvailableLockers.class));//AvailableLockers
+                getAvaiLockers();
+                Intent intent = new Intent(this, AvailableLockers.class);
+                //intent.putExtra("title", title);  //pass location
+                intent.putExtra("avlockers",avalockers);
+
+                //avail lockers that can be booked for the user's selection: ArrayList<Locker> availLockers
             }
         }
         else if (startDate.compareTo(endDate) == 0){
@@ -251,17 +258,25 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
 
             }
             else{
-               // Intent intent = new Intent(this, AvailableLockers.class);
-                //startActivity(new Intent(getApplicationContext(), AvailableLockers.class));
-                startActivity(new Intent(getApplicationContext(), AvailableLockers.class));//AvailableLockers
-//                intent.putExtra("title", title);
+
+                //startActivity(new Intent(getApplicationContext(), AvailableLockers.class));//AvailableLockers
+
+                getAvaiLockers();
+                Intent intent = new Intent(this, AvailableLockers.class);
+                //intent.putExtra("title", title);  //pass location
+                intent.putExtra("avlockers",avalockers);
+                //avail lockers that can be booked for the user's selection: ArrayList<Locker> availLockers
+
             }
         }
         else {
 
-           // Intent intent = new Intent(this, AvailableLockers.class);
-            startActivity(new Intent(getApplicationContext(), AvailableLockers.class));
-            //intent.putExtra("title", title);
+            getAvaiLockers();
+            Intent intent = new Intent(this, AvailableLockers.class);
+            //intent.putExtra("title", title);  //pass location
+            intent.putExtra("avlockers",avalockers);
+            //avail lockers that can be booked for the user's selection: ArrayList<Locker> availLockers
+            //intent.putExtra("title", title);//pass location
 
 
         }
