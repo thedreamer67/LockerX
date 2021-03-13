@@ -62,7 +62,7 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
         ArrayList<BookingHistoryArr> bookingHistoryArr = new ArrayList<BookingHistoryArr>();
         bookingHistoryArr.add(new BookingHistoryArr("1","2021-02-17",
                 "16:00:00","3","91237777", "2021-02-17",
-                "13:00:00","R", "1"));
+                "13:00:00","O", "1"));
         bookingHistoryArr.add(new BookingHistoryArr("2","2021-03-02",
                 "16:00:00","2","91237777", "2021-03-02",
                 "14:00:00","R", "2"));

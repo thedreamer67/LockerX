@@ -1,10 +1,16 @@
 package com.example.lockerxlogin;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 public class ReturnLocker extends AppCompatActivity {
@@ -28,6 +34,7 @@ public class ReturnLocker extends AppCompatActivity {
     Button returnBtn;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +48,7 @@ public class ReturnLocker extends AppCompatActivity {
         rtextLockerid = findViewById(R.id.rtextLockerid);
         rtextLockerStructureid = findViewById(R.id.rtextLockerStructureid);
         returnBtn = findViewById(R.id.returnBtn);
+        rbookedDuration = findViewById(R.id.rbookedDuration);
 
 
         bookid = this.getIntent().getStringExtra("bookid");
@@ -65,17 +73,16 @@ public class ReturnLocker extends AppCompatActivity {
         rtextLockerid.setText(lockerid);
         rtextLockerStructureid.setText(structureid);
 
-        //TODO diff between startTime and endTime
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-//
-//        Date endTimeD = (Date) formatter.parse(endTime);
-//        Date startDateD = (Date) formatter.parse(startTime);
-//        long convertedLend = endTimeD.getTime();
-//        long convertedLstart = startDateD.getTime();
-//        long diff = convertedLend-convertedLstart;
-//        duration = String.valueOf(diff);
-//
-//
-//        bookedDuration.setText(duration);
+        String strs = startDate +" "+ startTime;//2021-04-21 13:00:00
+        String stre = endDate +" "+ endTime;//2021-04-21 13:00:00
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime sdateTime = LocalDateTime.parse(strs, formatter);
+        LocalDateTime edateTime = LocalDateTime.parse(stre, formatter);
+        Duration d = Duration.between(sdateTime,edateTime);
+        long minutes = d.toMinutes();
+        int hoursd = (int) Math.floor((int)minutes / 60);
+        int min = (int)minutes % 60;
+        duration = hoursd+" hours "+min+" minutes";
+        rbookedDuration.setText(duration);
     }
 }

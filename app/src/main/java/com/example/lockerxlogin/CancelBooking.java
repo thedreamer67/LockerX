@@ -5,8 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.time.LocalTime;
+import static java.time.temporal.ChronoUnit.MINUTES;
 
 public class CancelBooking extends AppCompatActivity {
 
@@ -68,18 +78,18 @@ public class CancelBooking extends AppCompatActivity {
         textLockerid.setText(lockerid);
         textLockerStructureid.setText(structureid);
 
-        //TODO diff between startTime and endTime
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-//
-//        Date endTimeD = (Date) formatter.parse(endTime);
-//        Date startDateD = (Date) formatter.parse(startTime);
-//        long convertedLend = endTimeD.getTime();
-//        long convertedLstart = startDateD.getTime();
-//        long diff = convertedLend-convertedLstart;
-//        duration = String.valueOf(diff);
-//
-//
-//        bookedDuration.setText(duration);
+
+        String strs = startDate +" "+ startTime;//2021-04-21 13:00:00
+        String stre = endDate +" "+ endTime;//2021-04-21 13:00:00
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime sdateTime = LocalDateTime.parse(strs, formatter);
+        LocalDateTime edateTime = LocalDateTime.parse(stre, formatter);
+        Duration d = Duration.between(sdateTime,edateTime);
+        long minutes = d.toMinutes();
+        int hoursd = (int) Math.floor((int)minutes / 60);
+        int min = (int)minutes % 60;
+        duration = hoursd+" hours "+min+" minutes";
+        bookedDuration.setText(duration);
 
 
 
