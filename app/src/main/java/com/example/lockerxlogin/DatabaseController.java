@@ -22,20 +22,19 @@ import java.util.*;
 public class DatabaseController {
     private static final String TAG = "DatabaseController"; //for Log
 
-    DatabaseReference reff;
     TempDataStorage ds = new TempDataStorage();
 
     public DatabaseController(){}
 
     //method to store new user to db
     public void storeNewUser(String name, String email, String mobile) {
-        reff = FirebaseDatabase.getInstance().getReference().child("User"); //reference to the "User" table of the db
+        DatabaseReference reff = FirebaseDatabase.getInstance().getReference().child("User"); //reference to the "User" table of the db
         //store new user to db
         reff.child(mobile).child("name").setValue(name);
         reff.child(mobile).child("email").setValue(email);
         reff.child(mobile).child("mobile").setValue(mobile);
         reff.child(mobile).child("walletBalance").setValue(0);
-
+        reff.child(mobile).child("lateFees").setValue(0);
     }
 
 
@@ -262,7 +261,7 @@ public class DatabaseController {
         ds.setBooking(booking);
 
         Query query = FirebaseDatabase.getInstance().getReference().child("Booking").orderByChild("mobile").equalTo(mobile);
-        query.addValueEventListener(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -274,10 +273,19 @@ public class DatabaseController {
                                     if (Long.parseLong(dataSnapshot.child("structureID").getValue().toString())==ds.getBooking().getStructureID()) {
                                         if (Long.parseLong(dataSnapshot.child("lockerID").getValue().toString())==ds.getBooking().getStructureID()) {
                                             String key = dataSnapshot.getKey();
-                                            reff = FirebaseDatabase.getInstance().getReference().child("Booking");
+                                            Log.d(TAG, "onDataChange: key of the matching booking=" +key);
+                                            Log.d(TAG, "onDataChange: old status=" + dataSnapshot.child("status").getValue().toString());
+                                            DatabaseReference reff = FirebaseDatabase.getInstance().getReference().child("Booking");
                                             Map<String, Object> statusUpdate = new HashMap<>();
                                             statusUpdate.put("status", ds.getBooking().getStatus());
                                             reff.child(key).updateChildren(statusUpdate);
+                                            Log.d(TAG, "onDataChange: new status=" + dataSnapshot.child("status").getValue().toString());
+                                            query.removeEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot snapshot) {}
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError error) {}
+                                            });
                                         }
                                     }
                                 }
@@ -285,7 +293,6 @@ public class DatabaseController {
                         }
                     }
                 }
-
             }
 
             @Override
@@ -296,23 +303,72 @@ public class DatabaseController {
     }
 
 
-    public void setLockerStatus(long lockerID,long structureID){
-        //insert codes here to store new status of locker
+    public void setLockerStatus(long structureID, long lockerID){
+        ds.setStructureID(structureID);
+        ds.setLockerID(lockerID);
+
+        Query query = FirebaseDatabase.getInstance().getReference().child("LockerStructure").child(structureID+"").child("Locker");
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+//                    Log.d(TAG, "onDataChange: snapshot exists");
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        if (Long.parseLong(dataSnapshot.child("lockerID").getValue().toString())==ds.getLockerID()) {
+                            Log.d(TAG, "onDataChange: old value=" +dataSnapshot.child("isLocked").getValue());
+                            ds.setIsLocked((Boolean) dataSnapshot.child("isLocked").getValue());
+                            DatabaseReference reff = FirebaseDatabase.getInstance().getReference().child("LockerStructure").child(ds.getStructureID()+"").child("Locker");
+                            Map<String, Object> lockerStatus = new HashMap<>();
+                            if (ds.getIsLocked()) {
+                                lockerStatus.put("isLocked", false);
+                            }
+                            else if (!ds.getIsLocked()) {
+                                lockerStatus.put("isLocked", true);
+                            }
+                            reff.child(ds.getLockerID()+"").updateChildren(lockerStatus);
+                            Log.d(TAG, "onDataChange: new value=" +dataSnapshot.child("isLocked").getValue());
+                            query.removeEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {}
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {}
+                            });
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
 
-    public void createBooking(String email, long structureID, long lockerID,
+    public void createBooking(String mobile, long structureID, long lockerID,
                               LocalDate startDate, LocalTime startTime,
-                              LocalDate endDate, LocalTime endTime, char status){
-        // insert codes to create a new row in booking table
+                              LocalDate endDate, LocalTime endTime, char status) {
+        DatabaseReference reff = FirebaseDatabase.getInstance().getReference().child("Booking").push();
+        reff.child("mobile").setValue(mobile);
+        reff.child("structureID").setValue(structureID);
+        reff.child("lockerID").setValue(lockerID);
+        reff.child("startDate").setValue(startDate.toString());
+        reff.child("startTime").setValue(startTime.toString());
+        reff.child("endDate").setValue(endDate.toString());
+        reff.child("endTime").setValue(endTime.toString());
+        reff.child("status").setValue(Character.toString(status));
+        Log.d(TAG, "createBooking: booking created");
     }
+
 
     //method to update wallet balance
-    public void updateWalletBalance(String smobile, float newBalance) {
-        reff = FirebaseDatabase.getInstance().getReference().child("User");
+    public void updateWalletBalance(String mobile, float newBalance) {
+        DatabaseReference reff = FirebaseDatabase.getInstance().getReference().child("User");
         Map<String, Object> walletUpdate = new HashMap<>();
         walletUpdate.put("walletBalance", newBalance);
-        reff.child(smobile).updateChildren(walletUpdate);   //update walletBalance of user with smobile
+        reff.child(mobile).updateChildren(walletUpdate);   //update walletBalance of user with mobile
     }
 
     // TODO edit profile methods

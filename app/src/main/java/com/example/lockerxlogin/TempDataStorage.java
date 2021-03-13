@@ -18,6 +18,7 @@ public class TempDataStorage {
     private long lockerID;
     private Booking booking;
     private String locationName;
+    private boolean isLocked;
     private ArrayList<Booking> bBookingList = new ArrayList<Booking>();
     private ArrayList<Booking> userOBookingList = new ArrayList<Booking>();
     private ArrayList<Booking> userBBookingList = new ArrayList<Booking>();
@@ -174,5 +175,13 @@ public class TempDataStorage {
 
     public void setLocationName(String locationName) {
         this.locationName = locationName;
+    }
+
+    public boolean getIsLocked() {
+        return isLocked;
+    }
+
+    public void setIsLocked(boolean locked) {
+        isLocked = locked;
     }
 }
