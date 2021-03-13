@@ -1,5 +1,8 @@
 package com.example.lockerxlogin;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class Booking {
     private java.time.LocalDate startDate;
     private java.time.LocalTime startTime;
@@ -12,15 +15,15 @@ public class Booking {
 
     public Booking(){} //empty constructor
 
-    public Booking(java.time.LocalDate startDate, java.time.LocalTime startTime,
-                   java.time.LocalDate endDate, java.time.LocalTime endTime, String mobile,
-                   long lockerStructureID, long lockerID, char status){
+    public Booking(LocalDate startDate, LocalTime startTime,
+                   LocalDate endDate, LocalTime endTime, String mobile,
+                   long structureID, long lockerID, char status){
         this.startDate = startDate;
         this.startTime = startTime;
         this.endDate = endDate;
         this.endTime = endTime;
         this.mobile = mobile;
-        this.structureID = lockerStructureID;
+        this.structureID = structureID;
         this.lockerID = lockerID;
         this.status = status;
     }

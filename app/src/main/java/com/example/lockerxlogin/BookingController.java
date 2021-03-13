@@ -8,12 +8,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 
 public class BookingController {
 
     //UserController uc = new UserController(Login.currUser);
 
     public BookingController(){}
+
+    DatabaseController dc = new DatabaseController();
 
 
     public void makeBooking(DatabaseController dc, String email, long structureID,
@@ -54,23 +57,19 @@ public class BookingController {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public float calculateRentalFees(DatabaseController dc, long structureID,
-                                     long lockerID, LocalDate startDate, LocalTime startTime,
-                                     LocalDate endDate, LocalTime endTime){
-        char sizeArray[] = new char[]{'S','M','L'};
-        float rentalArray[] = new float[]{1,2,3};
+    public float calculateRentalFees(long structureID, long lockerID, LocalDate startDate,
+                                     LocalTime startTime, LocalDate endDate, LocalTime endTime) {
+
+        HashMap<Character, Float> priceMap = new HashMap<Character, Float>();
+        priceMap.put('S', (float) 1);
+        priceMap.put('M', (float) 2);
+        priceMap.put('L', (float) 3);
+        //priceMap = {'S'=1, 'M'=2, 'L'=3}
 
         char lockerSize = dc.retrieveLockerSize(structureID,lockerID);
 
         //finding rental rate based on locker size
-        int index=-1;
-        for(int i=0;i<rentalArray.length;i++){
-            if (lockerSize == rentalArray[i]){
-                index=i;
-                break;
-            }
-        }
-        float rentalRate = rentalArray[index]; //rental rate per hour
+        float rentalRate = priceMap.get(lockerSize);
 
         //merging date and time to datetime format
         LocalDateTime startDateTime = LocalDateTime.of(startDate,startTime);
