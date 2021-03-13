@@ -19,6 +19,8 @@ public class TempDataStorage {
     private Booking booking;
     private String locationName;
     private boolean isLocked;
+    private long userBookingCount;
+
     private ArrayList<Booking> bBookingList = new ArrayList<Booking>();
     private ArrayList<Booking> userOBookingList = new ArrayList<Booking>();
     private ArrayList<Booking> userBBookingList = new ArrayList<Booking>();
@@ -183,5 +185,13 @@ public class TempDataStorage {
 
     public void setIsLocked(boolean locked) {
         isLocked = locked;
+    }
+
+    public long getUserBookingCount() {
+        return userBookingCount;
+    }
+
+    public void setUserBookingCount(long userBookingCount) {
+        this.userBookingCount = userBookingCount;
     }
 }

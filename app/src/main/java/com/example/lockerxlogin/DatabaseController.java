@@ -524,6 +524,25 @@ public class DatabaseController {
         return ds.getLockerList();
     }
 
+    public long retrieveUserBookingCount(String mobile) {
+        ds.setUserBookingCount(-1);
+        Query query = FirebaseDatabase.getInstance().getReference().child("Booking").orderByChild("mobile").equalTo(mobile);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    ds.setUserBookingCount(snapshot.getChildrenCount());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        return ds.getUserBookingCount();
+    }
+
 
     public ArrayList<Booking> retrieveRBookingsForUser(String mobile) {
         ds.setMobile(mobile);
