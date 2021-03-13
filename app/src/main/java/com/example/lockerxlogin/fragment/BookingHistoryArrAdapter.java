@@ -23,6 +23,7 @@ import com.example.lockerxlogin.DatabaseController;
 import com.example.lockerxlogin.MainActivity;
 import com.example.lockerxlogin.R;
 import com.example.lockerxlogin.Register;
+import com.example.lockerxlogin.ReturnLocker;
 
 import org.w3c.dom.CDATASection;
 
@@ -190,8 +191,23 @@ public class BookingHistoryArrAdapter extends RecyclerView.Adapter<BookingHistor
                 //Automatically close the dialog
                 Context mContext = view.getContext();
                 final Intent intent;
-                //TODO return locker activity
-                intent =  new Intent(mContext, MainActivity.class);
+                intent =  new Intent(mContext, ReturnLocker.class);
+                //TODO - go to cancelled locker booking activity class.
+
+                intent.putExtra("bookid",bookid);
+                intent.putExtra("endDate",endDate);
+                intent.putExtra("endTime",endTime);
+                intent.putExtra("lockerid",lockerid);
+                intent.putExtra("startDate",startDate);
+                intent.putExtra("startTime",startTime);
+                intent.putExtra("status",status);
+                intent.putExtra("structureid",structureid);
+                intent.putExtra("mobile",mobile);
+                intent.putExtra("location",location);
+                intent.putExtra("size",size);
+                intent.putExtra("totalPay",totalPay);
+
+
                 /* Mayb transfer variable
                 intent.putExtra("title", marker.getTitle());
                 intent.putExtra("postal",post);*/

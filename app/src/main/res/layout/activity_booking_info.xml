@@ -18,20 +18,7 @@
         app:layout_constraintVertical_bias="0.01999998" />
 
     <TextView
-        android:id="@+id/textViewTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginLeft="100dp"
-        android:layout_marginBottom="20dp"
-        android:text="Reserving Time:"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.232" />
-
-    <TextView
-        android:id="@+id/textLocation"
+        android:id="@+id/bLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -48,16 +35,15 @@
         app:layout_constraintVertical_bias="0.022" />
 
     <TextView
-        android:id="@+id/bookedDuration"
+        android:id="@+id/bbookedDuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginLeft="14dp"
         android:text="2hrs"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/textView6"
         app:layout_constraintStart_toEndOf="@+id/textView13"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.39" />
@@ -88,7 +74,7 @@
         app:layout_constraintVertical_bias="0.335" />
 
     <Button
-        android:id="@+id/cancelBtn"
+        android:id="@+id/bookBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="RESERVE AND PAY"
@@ -103,8 +89,8 @@
         android:id="@+id/textViewDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginLeft="100dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginLeft="80dp"
         android:text="Reserving Date:"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -112,11 +98,37 @@
         app:layout_constraintVertical_bias="0.129" />
 
     <TextView
-        android:id="@+id/bookedDate"
+        android:id="@+id/bbookedTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginLeft="9dp"
+        android:text="TextView"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textViewTime"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.224" />
+
+    <TextView
+        android:id="@+id/textViewTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginBottom="20dp"
+        android:text="Reserving Time:"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.231" />
+
+    <TextView
+        android:id="@+id/bbookedDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
         android:text="TextView"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -125,21 +137,7 @@
         app:layout_constraintVertical_bias="0.129" />
 
     <TextView
-        android:id="@+id/bookedTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:text="TextView"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textViewTime"
-        app:layout_constraintTop_toBottomOf="@+id/bookedDate"
-        app:layout_constraintVertical_bias="0.049" />
-
-    <TextView
-        android:id="@+id/textSize"
+        android:id="@+id/btextSize"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="44dp"
@@ -176,7 +174,7 @@
         app:layout_constraintVertical_bias="0.657" />
 
     <TextView
-        android:id="@+id/textTotalPay"
+        android:id="@+id/btextTotalPay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="44dp"
@@ -189,7 +187,7 @@
         app:layout_constraintVertical_bias="0.657" />
 
     <TextView
-        android:id="@+id/textLockerStructureid"
+        android:id="@+id/btextLockerStructureid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
@@ -217,8 +215,8 @@
         android:id="@+id/textRate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginLeft="14dp"
         android:text="$1/hr"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -230,11 +228,11 @@
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
-        android:layout_marginLeft="76dp"
+        android:layout_marginStart="33dp"
+        android:layout_marginLeft="33dp"
         android:text="Rate:"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/bookedDuration"
+        app:layout_constraintStart_toEndOf="@+id/bbookedDuration"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.39" />
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CancelBooking">
+    tools:context=".ReturnLocker">
 
     <ImageButton
         android:id="@+id/imageButton7"
@@ -18,7 +18,7 @@
         app:layout_constraintVertical_bias="0.01999998" />
 
     <TextView
-        android:id="@+id/cLocation"
+        android:id="@+id/rLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -73,20 +73,21 @@
         app:layout_constraintVertical_bias="0.231" />
 
     <TextView
-        android:id="@+id/cbookedTime"
+        android:id="@+id/rbookedTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginLeft="12dp"
+        android:layout_marginTop="20dp"
         android:text="TextView"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textViewTime"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.224" />
+        app:layout_constraintTop_toBottomOf="@+id/rbookedDate"
+        app:layout_constraintVertical_bias="0.049" />
 
     <TextView
-        android:id="@+id/cbookedDate"
+        android:id="@+id/rbookedDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
@@ -124,7 +125,7 @@
         app:layout_constraintVertical_bias="0.66" />
 
     <TextView
-        android:id="@+id/ctextSize"
+        android:id="@+id/rtextSize"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="44dp"
@@ -137,7 +138,7 @@
         app:layout_constraintVertical_bias="0.446" />
 
     <TextView
-        android:id="@+id/ctextTotalPay"
+        android:id="@+id/rtextTotalPay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
@@ -151,7 +152,7 @@
         app:layout_constraintVertical_bias="0.66" />
 
     <TextView
-        android:id="@+id/ctextLockerid"
+        android:id="@+id/rtextLockerid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="44dp"
@@ -164,7 +165,7 @@
         app:layout_constraintVertical_bias="0.553" />
 
     <TextView
-        android:id="@+id/ctextLockerStructureid"
+        android:id="@+id/rtextLockerStructureid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="44dp"
@@ -211,7 +212,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/cbookedDuration"
+        android:id="@+id/rbookedDuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
@@ -225,7 +226,7 @@
         app:layout_constraintVertical_bias="0.39" />
 
     <Button
-        android:id="@+id/cancelBtn"
+        android:id="@+id/returnBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="CANCEL"

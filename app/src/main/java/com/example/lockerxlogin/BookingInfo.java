@@ -18,19 +18,19 @@ public class BookingInfo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_info);
 
-        payBtn = findViewById(R.id.cancelBtn);
-        textLocation = findViewById(R.id.textLocation);
-        textDateDuration = findViewById(R.id.bookedDate);
-        textTimeDuration = findViewById(R.id.bookedTime);
-        textBookingHour = findViewById(R.id.bookedDuration);
-        textRate = findViewById(R.id.textRate);
-        textSize = findViewById(R.id.textSize);
-        textLockerid = findViewById(R.id.textLockerStructureid);
-        textTotalPay = findViewById(R.id.textTotalPay);
+        payBtn = findViewById(R.id.bookBtn);
+        textLocation = findViewById(R.id.bLocation);
+        textDateDuration = findViewById(R.id.bbookedDate);
+        textTimeDuration = findViewById(R.id.bbookedTime);
+        textBookingHour = findViewById(R.id.bbookedDuration);
+        //textRate = findViewById(R.id.textRate);
+        textSize = findViewById(R.id.btextSize);
+        textLockerid = findViewById(R.id.btextLockerStructureid);
+        textTotalPay = findViewById(R.id.btextTotalPay);
 
         locationstr = this.getIntent().getStringExtra("title");
 
-        textLocation.setText(locationstr);
+        //textLocation.setText(locationstr);
 
 
     }
