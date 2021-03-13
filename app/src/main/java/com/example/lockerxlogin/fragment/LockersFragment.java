@@ -9,13 +9,18 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.lockerxlogin.BookingHistoryArr;
+import com.example.lockerxlogin.DatabaseController;
+import com.example.lockerxlogin.Login;
 import com.example.lockerxlogin.MainActivity;
+import com.example.lockerxlogin.MainFunc;
 import com.example.lockerxlogin.R;
 import com.example.lockerxlogin.Viewholder_Booking;
 import com.example.lockerxlogin.ui.lockers.LockersViewModel;
@@ -30,6 +35,8 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private Handler mainHandler = new Handler();
+    private volatile boolean stopThread = false;
 
 
 
@@ -106,5 +113,50 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    class ExampleRunnable2 implements Runnable{
+        ExampleRunnable2(){
+            //
+        }
 
+        @Override
+        public void run() {
+            Log.d("TAG", "Adding progress bar");
+            //textViewForProgressBar.setVisibility(View.VISIBLE);
+
+
+
+            for (int i = 0; i < 10000; i++) {
+                DatabaseController dc = new DatabaseController();
+//                User user;
+                  Log.d("TAG", "HIHIHI");
+
+
+
+
+
+                    stopThread = true;
+                    if (stopThread){
+                        //dbProgressBar.setVisibility(View.GONE);
+
+                        return;}
+                }
+
+            }
+
+        }
+
+
+    public void startThread(View view){
+        stopThread = false;
+        LockersFragment.ExampleRunnable2 runnable = new LockersFragment.ExampleRunnable2();
+        new Thread(runnable).start();
+
+    }
+    public void stopThread(View view){
+        stopThread = true;
+    }
 }
+
+
+
+

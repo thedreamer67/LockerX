@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class ViewController {
 
-    public ViewController(){} //constructor
+  /*  public ViewController(){} //constructor
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     //retrieve a booking list containing all bookings which are booked, status = 'B'
@@ -52,14 +52,15 @@ public class ViewController {
 //        for(int j=0;j<availLockers.size();j++){
 //            for(int a=0;a<unavailLockers.size();a++){
 //                /*comparing list of available lockers to unavailable ones, if match, remove lockerID
-//                from the available list*/
+//                from the available list
 //                if(availLockers.get(j)==unavailLockers.get(a)){
 //                    availLockers.remove(j);
 //                    break;
 //                }
 //            }
 //        }
-        return new ArrayList<Long>();
+        //return new ArrayList<Long>();
 //        return availLockers;
-    }
+
+    }*/
 }

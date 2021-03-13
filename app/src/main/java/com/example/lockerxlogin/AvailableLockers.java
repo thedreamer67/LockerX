@@ -5,9 +5,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 
 import com.example.lockerxlogin.fragment.BookingHistoryArrAdapter;
+import com.example.lockerxlogin.fragment.LockersFragment;
 
 import java.util.ArrayList;
 
@@ -16,10 +19,14 @@ public class AvailableLockers extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private Handler mainHandler = new Handler();
+    private volatile boolean stopThread = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AvailableLockers.BookingMultiThread dbThread = new AvailableLockers.BookingMultiThread();
+        new Thread(dbThread).start();
         setContentView(R.layout.activity_available_lockers);
         ArrayList<Viewholder_Booking> exampleList = new ArrayList<>();
         exampleList.add(new Viewholder_Booking( "Line 1", "Line 2"));
@@ -63,5 +70,50 @@ public class AvailableLockers extends AppCompatActivity {
         //  mRecyclerView.setLayoutManager(mLayoutManager);
         //   mRecyclerView.setAdapter(mAdapter);
 
+    }
+    class BookingMultiThread implements Runnable{
+        BookingMultiThread(){
+            //
+        }
+
+        @Override
+        public void run() {
+            //TODO place code here to run for this thread
+
+
+
+
+            for (int i = 0; i < 10000; i++) {
+                Log.d("TAG", "HIHIHI");
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+
+
+
+
+                stopThread = true;
+                if (stopThread){
+                    //dbProgressBar.setVisibility(View.GONE);
+
+                    return;}
+            }
+
+        }
+
+    }
+
+
+    public void startThread(View view){
+        stopThread = false;
+        AvailableLockers.BookingMultiThread runnable = new AvailableLockers.BookingMultiThread();
+        new Thread(runnable).start();
+
+    }
+    public void stopThread(View view){
+        stopThread = true;
     }
 }
