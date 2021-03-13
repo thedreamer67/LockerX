@@ -51,6 +51,9 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
                              @Nullable Bundle savedInstanceState) {
 
         View myView = inflater.inflate(R.layout.fragment_lockers, container, false);
+        //Start multi thread here.
+        LockersFragment.RetrieveBookingThread runnable = new LockersFragment.RetrieveBookingThread();
+        new Thread(runnable).start();
         ArrayList<Viewholder_Booking> exampleList = new ArrayList<>();
         exampleList.add(new Viewholder_Booking( "Line 1", "Line 2"));
         exampleList.add(new Viewholder_Booking( "Line 3", "Line 4"));
@@ -113,8 +116,8 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    class ExampleRunnable2 implements Runnable{
-        ExampleRunnable2(){
+    class RetrieveBookingThread implements Runnable{
+        RetrieveBookingThread(){
             //
         }
 
@@ -126,20 +129,27 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
 
 
             for (int i = 0; i < 10000; i++) {
-                DatabaseController dc = new DatabaseController();
-//                User user;
-                  Log.d("TAG", "HIHIHI");
 
+//
 
-
-
-
-                    stopThread = true;
-                    if (stopThread){
-                        //dbProgressBar.setVisibility(View.GONE);
-
-                        return;}
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+
+
+
+
+
+
+                }
+            stopThread = true;
+            if (stopThread){
+                //dbProgressBar.setVisibility(View.GONE);
+                Log.d("TAG", "Stopping thread");
+
+                return;}
 
             }
 
@@ -148,7 +158,7 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
 
     public void startThread(View view){
         stopThread = false;
-        LockersFragment.ExampleRunnable2 runnable = new LockersFragment.ExampleRunnable2();
+        LockersFragment.RetrieveBookingThread runnable = new LockersFragment.RetrieveBookingThread();
         new Thread(runnable).start();
 
     }
