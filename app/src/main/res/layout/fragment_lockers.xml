@@ -6,18 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".fragment.LockersFragment">
 
-    <ImageButton
-        android:id="@+id/imageButton3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|right"
-        android:layout_marginTop="44dp"
-        android:layout_marginEnd="332dp"
-        android:layout_marginRight="332dp"
-        android:src="@drawable/chat"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
         android:id="@+id/LLockerMode"
         android:layout_width="158dp"

@@ -22,6 +22,7 @@ public class UserController {
     private User currentUser;
 
     DatabaseController dc = new DatabaseController();
+    BookingController bc = new BookingController();
 
     public UserController(User user){
         this.currentUser = user;
@@ -32,19 +33,19 @@ public class UserController {
 
     //method to create booking using the booking controller
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public boolean makeBooking(DatabaseController dc, BookingController bc, long structureID,
+    public boolean makeBooking(long structureID,
                                long lockerID, LocalDate startDate, LocalTime startTime,
                             LocalDate endDate, LocalTime endTime, char size){
 
         //deduct late fees first when making a booking
         if(currentUser.getLateFees()>0){
-            if(makePayment(dc,currentUser.getLateFees())==false){
+            if(makePayment(currentUser.getLateFees())==false){
                 return false;
             }
         }
 
         float rentalFees = bc.calculateRentalFees(structureID, lockerID, startDate, startTime,endDate,endTime,size);
-        if(makePayment(dc, rentalFees)==true){
+        if(makePayment(rentalFees)==true){
             bc.makeBooking(dc,currentUser.getEmail(),structureID,lockerID,startDate,startTime,endDate,endTime);
             //creates a new booking object and stores it in database using database controller
             return true;
@@ -52,7 +53,9 @@ public class UserController {
         else
             return false;
     }
-    public boolean makePayment(DatabaseController dc, float paymentAmount){
+
+
+    public boolean makePayment(float paymentAmount){
         float walletBalance = this.currentUser.getWalletBalance();
         if(walletBalance-paymentAmount>=0){
             this.currentUser.setWalletBalance(walletBalance-paymentAmount);
@@ -62,8 +65,10 @@ public class UserController {
         else
             return false;
     }
+
+
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public boolean returnLocker(DatabaseController dc, BookingController bc, LocalDate startDate,
+    public boolean returnLocker(LocalDate startDate,
                                 LocalTime startTime, LocalDate endDate, LocalTime endTime,
                                 long structureID, long lockerID){
 
@@ -86,6 +91,7 @@ public class UserController {
         else
             return false;
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public float calculateLateFees(LocalDate endDate, LocalTime endTime){
@@ -115,7 +121,7 @@ public class UserController {
 
     //returns the ArrayList of Bookings of the user with mobile==mobile
     //order: O (ongoing), F (future), R (history), C (cancelled)
-    @RequiresApi(api = Build.VERSION_CODES.N)
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public ArrayList<Booking> getUserLockers(String mobile) {
         //start thread + loading screen
         ArrayList<Booking> userOBookings = new ArrayList<Booking>();

@@ -56,7 +56,7 @@ public class AccountsFragment extends Fragment  {
         currentUserMobile = user.getMobile();
         TextView textViewEditProfileID = (TextView) myView.findViewById(R.id.textViewEditProfileID);
         TextView textViewEmailID = (TextView) myView.findViewById(R.id.textViewEmailID);
-        TextView textViewSettingsID = (TextView) myView.findViewById(R.id.textViewSettingsID);
+        TextView textViewLateFees = (TextView) myView.findViewById(R.id.textViewLateFees);
         TextView textViewMobileNumID = (TextView) myView.findViewById(R.id.textViewMobileNumID);
         TextView textViewNameID = (TextView) myView.findViewById(R.id.textViewNameID);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

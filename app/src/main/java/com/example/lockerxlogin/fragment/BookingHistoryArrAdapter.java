@@ -147,7 +147,6 @@ public class BookingHistoryArrAdapter extends RecyclerView.Adapter<BookingHistor
                 Context mContext = view.getContext();
                 final Intent intent;
                 intent =  new Intent(mContext, CancelBooking.class);
-                //TODO - go to cancelled locker booking activity class.
 
                 intent.putExtra("bookid",bookid);
                 intent.putExtra("endDate",endDate);
@@ -195,7 +194,6 @@ public class BookingHistoryArrAdapter extends RecyclerView.Adapter<BookingHistor
                 Context mContext = view.getContext();
                 final Intent intent;
                 intent =  new Intent(mContext, ReturnLocker.class);
-                //TODO - go to cancelled locker booking activity class.
 
                 intent.putExtra("bookid",bookid);
                 intent.putExtra("endDate",endDate);
@@ -241,30 +239,5 @@ public class BookingHistoryArrAdapter extends RecyclerView.Adapter<BookingHistor
         continueBookingDialog.show();
     }
 
-    public void passValue(){
-
-//        Context mContext = view.getContext();
-//        final Intent intent;
-//        intent =  new Intent(mContext, CancelBooking.class);
-//        //TODO - go to cancelled locker booking activity class.
-//
-//        intent.putExtra("bookid",bookid);
-//        intent.putExtra("endDate",endDate);
-//        intent.putExtra("endTime",endTime);
-//        intent.putExtra("lockerid",lockerid);
-//        intent.putExtra("startDate",startDate);
-//        intent.putExtra("startTime",startTime);
-//        intent.putExtra("status",status);
-//        intent.putExtra("structureid",structureid);
-//        intent.putExtra("mobile",mobile);
-//
-//
-//                /* Mayb transfer variable
-//                intent.putExtra("title", marker.getTitle());
-//                intent.putExtra("postal",post);*/
-//
-//        mContext.startActivity(intent);
-
-    }
 
 }
