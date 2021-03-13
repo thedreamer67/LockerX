@@ -257,8 +257,8 @@ public class DatabaseController {
     // TODO all these methods below
 
     public void setBookingStatus(String mobile, long structureID, long lockerID, LocalDate startDate,
-                                 LocalTime startTime, LocalDate endDate, LocalTime endTime, char status){
-        Booking booking = new Booking(startDate, startTime, endDate, endTime, mobile, structureID, lockerID, status);
+                                 LocalTime startTime, LocalDate endDate, LocalTime endTime, char newStatus){
+        Booking booking = new Booking(startDate, startTime, endDate, endTime, mobile, structureID, lockerID, newStatus);
         ds.setBooking(booking);
 
         Query query = FirebaseDatabase.getInstance().getReference().child("Booking").orderByChild("mobile").equalTo(mobile);
@@ -272,11 +272,14 @@ public class DatabaseController {
                             if (LocalTime.parse(dataSnapshot.child("startTime").getValue().toString()).compareTo(ds.getBooking().getStartTime()) == 0) {
                                 if (LocalTime.parse(dataSnapshot.child("endTime").getValue().toString()).compareTo(ds.getBooking().getEndTime()) == 0) {
                                     if (Long.parseLong(dataSnapshot.child("structureID").getValue().toString())==ds.getBooking().getStructureID()) {
-                                        if (Long.parseLong(dataSnapshot.child("structureID").getValue().toString())==ds.getBooking().getStructureID()) {
-
+                                        if (Long.parseLong(dataSnapshot.child("lockerID").getValue().toString())==ds.getBooking().getStructureID()) {
+                                            String key = dataSnapshot.getKey();
+                                            reff = FirebaseDatabase.getInstance().getReference().child("Booking");
+                                            Map<String, Object> statusUpdate = new HashMap<>();
+                                            statusUpdate.put("status", ds.getBooking().getStatus());
+                                            reff.child(key).updateChildren(statusUpdate);
                                         }
                                     }
-
                                 }
                             }
                         }
@@ -290,7 +293,6 @@ public class DatabaseController {
 
             }
         });
-
     }
 
 
