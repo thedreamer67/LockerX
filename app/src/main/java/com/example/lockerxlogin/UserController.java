@@ -118,21 +118,28 @@ public class UserController {
     @RequiresApi(api = Build.VERSION_CODES.N)
     public ArrayList<Booking> getUserLockers(String mobile) {
         //start thread + loading screen
-        ArrayList<Booking> userOBookings = dc.retrieveOBookingsForUser(mobile);
-        ArrayList<Booking> userFBookings = dc.retrieveBBookingsForUser(mobile);
+        ArrayList<Booking> userOBookings = new ArrayList<Booking>();
+        ArrayList<Booking> userFBookings = new ArrayList<Booking>();
+        ArrayList<Booking> userBBookings = dc.retrieveBBookingsForUser(mobile);
         ArrayList<Booking> userRBookings = dc.retrieveRBookingsForUser(mobile);
         ArrayList<Booking> userCBookings = dc.retrieveCBookingsForUser(mobile);
         //end thread
 
-        for (Booking booking : userOBookings) {
-            if (userFBookings.contains(booking)) {
-                userFBookings.remove(booking);
+        LocalDate currDate = java.time.LocalDate.now();
+        LocalTime currTime = java.time.LocalTime.now();
+
+        //filter B bookings into ongoing (O) and future (F) bookings
+        for (Booking booking : userBBookings) {
+            if ((currDate.compareTo(booking.getStartDate())>=0) && (currDate.compareTo(booking.getEndDate())<=0)) {
+                if ((currTime.compareTo(booking.getStartTime())>=0) && (currTime.compareTo(booking.getEndTime())<=0)) {
+                    booking.setStatus('O');
+                    userOBookings.add(booking);
+                }
             }
             else {
-                booking.setStatus('O');
+                userFBookings.add(booking);
             }
         }
-
 
 
         //sort all the sub-lists using startDate, then startTime

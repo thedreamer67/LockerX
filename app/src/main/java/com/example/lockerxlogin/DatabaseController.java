@@ -541,46 +541,46 @@ public class DatabaseController {
     }
 
 
-    public ArrayList<Booking> retrieveOBookingsForUser(String mobile) {
-        ds.setMobile(mobile);
-        ds.setUserOBookingList(new ArrayList<Booking>());
-        Query query = FirebaseDatabase.getInstance().getReference().child("Booking").orderByChild("status").equalTo("O");
-        query.addValueEventListener(new ValueEventListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    LocalDate currDate = java.time.LocalDate.now();
-                    LocalTime currTime = java.time.LocalTime.now();
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        Booking booking = new Booking();
-                        booking.setStartDate(LocalDate.parse(dataSnapshot.child("startDate").getValue().toString()));
-                        booking.setEndDate(LocalDate.parse(dataSnapshot.child("endDate").getValue().toString()));
-                        booking.setStartTime(LocalTime.parse(dataSnapshot.child("startTime").getValue().toString()));
-                        booking.setEndTime(LocalTime.parse(dataSnapshot.child("endTime").getValue().toString()));
-                        booking.setMobile(dataSnapshot.child("mobile").getValue().toString());
-                        booking.setStructureID((Long) dataSnapshot.child("structureID").getValue());
-                        booking.setLockerID((Long) dataSnapshot.child("lockerID").getValue());
-                        booking.setStatus(dataSnapshot.child("status").getValue().toString().charAt(0));
-                        if (booking.getMobile().equals(ds.getMobile())) {
-                            if ((currDate.compareTo(booking.getStartDate())>=0) && (currDate.compareTo(booking.getEndDate())<=0)) {
-                                if ((currTime.compareTo(booking.getStartTime())>=0) && (currTime.compareTo(booking.getEndTime())<=0)) {
-                                    ds.getUserOBookingList().add(booking);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        return ds.getUserOBookingList();
-    }
+//    public ArrayList<Booking> retrieveOBookingsForUser(String mobile) {
+//        ds.setMobile(mobile);
+//        ds.setUserOBookingList(new ArrayList<Booking>());
+//        Query query = FirebaseDatabase.getInstance().getReference().child("Booking").orderByChild("status").equalTo("B");
+//        query.addValueEventListener(new ValueEventListener() {
+//            @RequiresApi(api = Build.VERSION_CODES.O)
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.exists()) {
+//                    LocalDate currDate = java.time.LocalDate.now();
+//                    LocalTime currTime = java.time.LocalTime.now();
+//                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                        Booking booking = new Booking();
+//                        booking.setStartDate(LocalDate.parse(dataSnapshot.child("startDate").getValue().toString()));
+//                        booking.setEndDate(LocalDate.parse(dataSnapshot.child("endDate").getValue().toString()));
+//                        booking.setStartTime(LocalTime.parse(dataSnapshot.child("startTime").getValue().toString()));
+//                        booking.setEndTime(LocalTime.parse(dataSnapshot.child("endTime").getValue().toString()));
+//                        booking.setMobile(dataSnapshot.child("mobile").getValue().toString());
+//                        booking.setStructureID((Long) dataSnapshot.child("structureID").getValue());
+//                        booking.setLockerID((Long) dataSnapshot.child("lockerID").getValue());
+//                        booking.setStatus(dataSnapshot.child("status").getValue().toString().charAt(0));
+//                        if (booking.getMobile().equals(ds.getMobile())) {
+//                            if ((currDate.compareTo(booking.getStartDate())>=0) && (currDate.compareTo(booking.getEndDate())<=0)) {
+//                                if ((currTime.compareTo(booking.getStartTime())>=0) && (currTime.compareTo(booking.getEndTime())<=0)) {
+//                                    ds.getUserOBookingList().add(booking);
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//
+//        return ds.getUserOBookingList();
+//    }
 
     public ArrayList<Booking> retrieveBBookingsForUser(String mobile) {
         ds.setMobile(mobile);
