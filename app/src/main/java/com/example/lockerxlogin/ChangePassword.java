@@ -17,14 +17,15 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.regex.Pattern;
+
 public class ChangePassword extends AppCompatActivity {
 
     Button btnConfirmChangePw;
-    EditText plainTextOldPassword, plainTextNewPassword , plainTextNewConfirmPassword;
+    EditText plainTextOldPassword, plainTextNewPassword, plainTextNewConfirmPassword;
     FirebaseAuth fAuth;
     FirebaseUser fUser;
     String confirmedPassword;
-
 
 
     @Override
@@ -41,44 +42,62 @@ public class ChangePassword extends AppCompatActivity {
         btnConfirmChangePw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("TAG", "On Click listener clicked");
-                if( String.valueOf(plainTextNewConfirmPassword.getText()).equals( String.valueOf(plainTextNewPassword.getText()))){
-                    Log.d("TAG", "Entered if statement");
 
-                    fAuth.signInWithEmailAndPassword(Login.currUser.getEmail(), String.valueOf(plainTextOldPassword.getText())).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                if (String.valueOf(plainTextNewConfirmPassword.getText()).equals(String.valueOf(plainTextNewPassword.getText()))) {
+                    if (!checkPasswordRule(String.valueOf(plainTextNewConfirmPassword.getText())))
+                        Toast.makeText(ChangePassword.this, "Password must have at least 8 character with a uppercase, a lower case, a number and a symbol.", Toast.LENGTH_SHORT).show();
+                    else{
+                        fAuth.signInWithEmailAndPassword(Login.currUser.getEmail(), String.valueOf(plainTextOldPassword.getText())).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
 
 
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                Log.d("TAG", "Succesfully signed in ");
-                                fUser.updatePassword(String.valueOf(plainTextNewPassword.getText())).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if(task.isSuccessful()){
-                                            Toast.makeText(ChangePassword.this, "Password has been changed!", Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(getApplicationContext(), MainFunc.class));
-                                        }else{
-                                            Toast.makeText(ChangePassword.this, "Error! Password not changed", Toast.LENGTH_SHORT).show();
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d("TAG", "Succesfully signed in ");
+                                    fUser.updatePassword(String.valueOf(plainTextNewPassword.getText())).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Toast.makeText(ChangePassword.this, "Password has been changed!", Toast.LENGTH_SHORT).show();
+                                                startActivity(new Intent(getApplicationContext(), MainFunc.class));
+                                            } else {
+                                                Toast.makeText(ChangePassword.this, "Error! Password not changed", Toast.LENGTH_SHORT).show();
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+
+                                } else {
+                                    Toast.makeText(ChangePassword.this, "Old password does not match!", Toast.LENGTH_SHORT).show();
+                                }
 
                             }
-
-                            else {
-                                Toast.makeText(ChangePassword.this, "Old password does not match!", Toast.LENGTH_SHORT).show();
-                            }
-
-                        }
-                    });
-
+                        });
                 }
 
-                else {
-                    Toast.makeText(ChangePassword.this, "New password and confirm password does not match!", Toast.LENGTH_SHORT).show();
-                }
+                    } else {
+                        Toast.makeText(ChangePassword.this, "New password and confirm password does not match!", Toast.LENGTH_SHORT).show();
+                    }
+
             }
         });
+
+
     }
+    public boolean checkPasswordRule(String password){
+        //return less 8
+        if (password == null || password.length() <8 ) return false;
+        Pattern upper = Pattern.compile("[a-z]");
+        Pattern lower = Pattern.compile("[A-Z]");
+        Pattern digit = Pattern.compile("[0-9]");
+        Pattern special = Pattern.compile ("[!@#$%&*()_+=|<>?{}\\[\\]~-]");
+        int i = 0;
+        if (digit.matcher(password).find()) i++;
+        if (upper.matcher(password).find())i++;
+        if (lower.matcher(password).find()) i++;
+        if (special.matcher(password).find()) i++;
+        if (i  < 4 )  return false;
+        return true;
+    }
+
+
 }

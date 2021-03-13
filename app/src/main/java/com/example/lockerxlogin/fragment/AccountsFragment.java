@@ -67,6 +67,7 @@ public class AccountsFragment extends Fragment  {
         Log.d("TAG" , "The current user mobile is "  + currentUserMobile);
         textViewMobileNumID.setText("Mobile Number : " + currentUserMobile);
         textViewEditProfileID.setVisibility(View.VISIBLE);
+        textViewLateFees.setText("Late fees: " + Login.currUser.getLateFees());
 
         textViewEditProfileID.setOnClickListener(new View.OnClickListener() {
             @Override
