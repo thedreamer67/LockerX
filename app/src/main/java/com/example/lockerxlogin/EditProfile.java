@@ -49,7 +49,7 @@ public class EditProfile extends AppCompatActivity {
         btnSaveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserController uc = new UserController(currUser);
+                UserController uc = new UserController();
               //  uc.updateUserEmail(String.valueOf(plainTextEmail.getText()));
                 uc.updateUserMobile(String.valueOf(plaintextMobileNum.getText()));
                 uc.updateUserName(String.valueOf(plainTextFullName.getText()));

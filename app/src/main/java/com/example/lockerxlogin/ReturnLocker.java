@@ -47,7 +47,7 @@ public class ReturnLocker extends AppCompatActivity {
     private volatile boolean stopThread = false;
     DatabaseController dc = new DatabaseController();
     BookingController bc = new BookingController();
-    UserController uc = new UserController(Login.currUser);
+    UserController uc = new UserController();
 
     public TextView rLocation, rbookedDate, rbookedTime ,rbookedDuration, rtextSize, rtextLockerStructureid,
             rtextLockerid, rtextTotalPay;

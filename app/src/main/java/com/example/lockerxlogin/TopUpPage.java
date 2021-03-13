@@ -41,8 +41,9 @@ public class TopUpPage extends AppCompatActivity {
     TextView topUpBalance, topUpAmount, topUpTitle, changeInBalance;
     Spinner paymentType;
     ImageView visaLogo, masterLogo, paylahLogo;
-    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    DatabaseReference reff;
+//    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+//    DatabaseReference reff;
+    UserController uc = new UserController();
 
 
     @Override
@@ -61,7 +62,7 @@ public class TopUpPage extends AppCompatActivity {
         masterLogo = findViewById(R.id.masterLogo);
         paylahLogo = findViewById(R.id.paylahLogo);
 
-        reff = FirebaseDatabase.getInstance().getReference().child("User").child("90059608");
+        //reff = FirebaseDatabase.getInstance().getReference().child("User").child("90059608");
 
         DecimalFormat df = new DecimalFormat("0.00");
         df.setMaximumFractionDigits(2);
@@ -104,18 +105,22 @@ public class TopUpPage extends AppCompatActivity {
 
 
 
-        reff.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String balance = snapshot.child("walletBalance").getValue().toString();
-                Float bal = Float.parseFloat(balance);
-                topUpBalance.setText("$ " + df.format(bal));
-            }
+//        reff.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                String balance = snapshot.child("walletBalance").getValue().toString();
+//                Float bal = Float.parseFloat(balance);
+//                topUpBalance.setText("$ " + df.format(bal));
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//            }
+//        });
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
+        String balance = Float.toString(Login.currUser.getWalletBalance());
+        Float bal = Float.parseFloat(balance);
+        topUpBalance.setText("$ " + df.format(bal));
 
         topUpValue.addTextChangedListener(new TextWatcher() {
             @Override
@@ -128,20 +133,24 @@ public class TopUpPage extends AppCompatActivity {
                 String firstline = "You have $";
                 String secondline = "\n\nTop up amount: $";
                 String thirdline = "\n\nAfter top up: $";
-                reff.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String balance = snapshot.child("walletBalance").getValue().toString();
-                        Float bal = Float.parseFloat(balance);
-                        Float topUp = Float.parseFloat(topUpValue.getText().toString().trim());
-                        double total = topUp+bal;
-                        changeInBalance.setText(firstline + df.format(bal) + secondline + s + thirdline + df.format(total));
-                    }
+                Float topUp = Float.parseFloat(topUpValue.getText().toString().trim());
+                double total = topUp + bal;
+                changeInBalance.setText(firstline + df.format(bal) + secondline + s + thirdline + df.format(total));
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                    }
-                });
+//                reff.addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                        String balance = snapshot.child("walletBalance").getValue().toString();
+//                        Float bal = Float.parseFloat(balance);
+//                        Float topUp = Float.parseFloat(topUpValue.getText().toString().trim());
+//                        double total = topUp+bal;
+//                        changeInBalance.setText(firstline + df.format(bal) + secondline + s + thirdline + df.format(total));
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//                    }
+//                });
 
             }
 
@@ -167,22 +176,28 @@ public class TopUpPage extends AppCompatActivity {
                         } else if (Float.parseFloat(Amount) <= 0.009) {
                             topUpValue.setError("Please enter a valid value");
                         } else {
-                            reff.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    Float balance = Float.parseFloat(snapshot.child("walletBalance").getValue().toString());
-                                    Float amount = Float.parseFloat(Amount);
-                                    reff.child("walletBalance").setValue((amount + balance));
-                                    Float total = amount + balance;
-                                    topUpBalance.setText("$ " + total.toString());
-                                    Toast.makeText(TopUpPage.this, "Top Up Success!", Toast.LENGTH_SHORT).show();
-                                }
+                            Float amount = Float.parseFloat(Amount);
+                            Float total = amount + bal;
+                            uc.updateUserWalletBalance(total);
+                            topUpBalance.setText("$ " + total.toString());
+                            Toast.makeText(TopUpPage.this, "Top Up Success!", Toast.LENGTH_SHORT).show();
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-                                }
-
-                            });
+//                            reff.addListenerForSingleValueEvent(new ValueEventListener() {
+//                                @Override
+//                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                    Float balance = Float.parseFloat(snapshot.child("walletBalance").getValue().toString());
+//                                    Float amount = Float.parseFloat(Amount);
+//                                    reff.child("walletBalance").setValue((amount + balance));
+//                                    Float total = amount + balance;
+//                                    topUpBalance.setText("$ " + total.toString());
+//                                    Toast.makeText(TopUpPage.this, "Top Up Success!", Toast.LENGTH_SHORT).show();
+//                                }
+//
+//                                @Override
+//                                public void onCancelled(@NonNull DatabaseError error) {
+//                                }
+//
+//                            });
                         }
                     }
                 });

@@ -11,7 +11,7 @@ import android.widget.TextView;
 public class BookingInfo extends AppCompatActivity {
 
     //BookingController bc = new BookingController();
-    UserController uc = new UserController(Login.currUser);
+    UserController uc = new UserController();
     private Button payBtn;
     private TextView textLocation,textDateDuration,textTimeDuration,textBookingHour,textRate,textSize,textLockerid,textTotalPay;
     String locationstr;

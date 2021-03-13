@@ -19,7 +19,7 @@ public class BookingController {
     DatabaseController dc = new DatabaseController();
 
 
-    public void makeBooking(DatabaseController dc, String mobile, long structureID,
+    public void makeBooking(String mobile, long structureID,
                                long lockerID, LocalDate startDate, LocalTime startTime,
                                LocalDate endDate, LocalTime endTime){
 

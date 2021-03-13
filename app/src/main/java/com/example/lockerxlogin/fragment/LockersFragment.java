@@ -142,7 +142,7 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
 
             for (int i = 0; i < 10000; i++) {
                 DatabaseController dc = new DatabaseController();
-                UserController uc = new UserController(user);
+                UserController uc = new UserController();
                 //bookingHistoryArr = uc.getUserLockers("90000001");
                 bookingHistoryArr = uc.getUserLockers(currUserMobile);
                 userBookingCount = dc.retrieveUserBookingCount(currUserMobile);

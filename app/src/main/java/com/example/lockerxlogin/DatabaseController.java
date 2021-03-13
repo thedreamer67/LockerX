@@ -371,6 +371,14 @@ public class DatabaseController {
         reff.child(mobile).updateChildren(walletUpdate);   //update walletBalance of user with mobile
     }
 
+    //method to update lateFees
+    public void updateLateFees(String mobile, float newLateFees) {
+        DatabaseReference reff = FirebaseDatabase.getInstance().getReference().child("User");
+        Map<String, Object> lateFeesUpdate = new HashMap<>();
+        lateFeesUpdate.put("lateFees", newLateFees);
+        reff.child(mobile).updateChildren(lateFeesUpdate);
+    }
+
     // TODO edit profile methods
     public void setNewEmail(String mobile, String newEmail) {
         DatabaseReference reff = FirebaseDatabase.getInstance().getReference().child("User");

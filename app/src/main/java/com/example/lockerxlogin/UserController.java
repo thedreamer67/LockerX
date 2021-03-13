@@ -18,18 +18,11 @@ import java.util.Comparator;
 
 public class UserController {
 
-
-    private User currentUser;
-
     DatabaseController dc = new DatabaseController();
     BookingController bc = new BookingController();
 
-    public UserController(User user){
-        this.currentUser = user;
-    }
-//    public boolean lockOrUnlock(LockerController lc, DatabaseController dc){
-//        return lc.lockOrUnlock(dc);
-//    }
+    public UserController() {}
+
 
     //method to create booking using the booking controller
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -38,15 +31,15 @@ public class UserController {
                             LocalDate endDate, LocalTime endTime, char size){
 
         //deduct late fees first when making a booking
-        if(currentUser.getLateFees()>0){
-            if(makePayment(currentUser.getLateFees())==false){
+        if(Login.currUser.getLateFees()>0){
+            if(makePayment(Login.currUser.getLateFees())==false){
                 return false;
             }
         }
 
         float rentalFees = bc.calculateRentalFees(structureID, lockerID, startDate, startTime,endDate,endTime,size);
         if(makePayment(rentalFees)==true){
-            bc.makeBooking(dc,currentUser.getEmail(),structureID,lockerID,startDate,startTime,endDate,endTime);
+            bc.makeBooking(Login.currUser.getEmail(),structureID,lockerID,startDate,startTime,endDate,endTime);
             //creates a new booking object and stores it in database using database controller
             return true;
         }
@@ -56,10 +49,10 @@ public class UserController {
 
 
     public boolean makePayment(float paymentAmount){
-        float walletBalance = this.currentUser.getWalletBalance();
+        float walletBalance = Login.currUser.getWalletBalance();
         if(walletBalance-paymentAmount>=0){
-            this.currentUser.setWalletBalance(walletBalance-paymentAmount);
-            dc.updateWalletBalance(this.currentUser.getEmail(),this.currentUser.getWalletBalance());
+            Login.currUser.setWalletBalance(walletBalance-paymentAmount);
+            dc.updateWalletBalance(Login.currUser.getEmail(), Login.currUser.getWalletBalance());
             return true;
         }
         else
@@ -76,15 +69,15 @@ public class UserController {
         int status = bc.checkExpiredBooking(startDate,startTime,endDate,endTime);
         if(status==1){
             float lateFees = calculateLateFees(endDate,endTime);
-            this.currentUser.setLateFees(this.currentUser.getLateFees()+lateFees);
+            Login.currUser.setLateFees(Login.currUser.getLateFees()+lateFees);
 
             //set booking status to 'R', returned
-            dc.setBookingStatus(this.currentUser.getEmail(), structureID, lockerID, startDate,
+            dc.setBookingStatus(Login.currUser.getEmail(), structureID, lockerID, startDate,
                     startTime, endDate, endTime, 'R');
             return true;
         }
         else if(status==2){
-            dc.setBookingStatus(this.currentUser.getEmail(), structureID, lockerID, startDate,
+            dc.setBookingStatus(Login.currUser.getEmail(), structureID, lockerID, startDate,
                     startTime, endDate, endTime, 'R');
             return true;
         }
@@ -180,6 +173,16 @@ public class UserController {
         dc.setNewMobile(Login.currUser.getMobile(), Login.currUser.getName(), Login.currUser.getEmail(), newMobile,
                 Login.currUser.getWalletBalance(), Login.currUser.getLateFees());
         Login.currUser.setMobile(newMobile);
+    }
+
+    public void updateUserWalletBalance (float newBalance) {
+        dc.updateWalletBalance(Login.currUser.getMobile(), newBalance);
+        Login.currUser.setWalletBalance(newBalance);
+    }
+
+    public void updateUserLateFees (float newLateFees) {
+        dc.updateLateFees(Login.currUser.getMobile(), newLateFees);
+        Login.currUser.setLateFees(newLateFees);
     }
 
 }
