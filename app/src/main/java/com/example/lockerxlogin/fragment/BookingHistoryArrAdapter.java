@@ -15,6 +15,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.lockerxlogin.Booking;
 import com.example.lockerxlogin.BookingActivity;
 import com.example.lockerxlogin.BookingController;
 import com.example.lockerxlogin.BookingHistoryArr;
@@ -32,16 +33,16 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class BookingHistoryArrAdapter extends RecyclerView.Adapter<BookingHistoryRecyclerViewHolder> {
-    private ArrayList<BookingHistoryArr> bookingHistoryArr;
+    private final ArrayList<Booking> bookingHistoryArr;
     private BookingHistoryArr bha;
     private String bookid;
-    private String endDate;
-    private String endTime;
-    private String lockerid;
-    private String startDate;
-    private String startTime;
-    private String status;
-    private String structureid;
+    private LocalDate endDate;
+    private LocalTime endTime;
+    private long lockerid;
+    private LocalDate startDate;
+    private LocalTime startTime;
+    private char status;
+    private long structureid;
     private String mobile;
     private String location;
     private String size;
@@ -51,7 +52,7 @@ public class BookingHistoryArrAdapter extends RecyclerView.Adapter<BookingHistor
     BookingController bc = new BookingController();
 
 
-    public BookingHistoryArrAdapter(ArrayList<BookingHistoryArr> bookingHistoryArr1) {
+    public BookingHistoryArrAdapter(ArrayList<Booking> bookingHistoryArr1) {
 
         this.bookingHistoryArr = bookingHistoryArr1;
     }
@@ -72,8 +73,8 @@ public class BookingHistoryArrAdapter extends RecyclerView.Adapter<BookingHistor
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull BookingHistoryRecyclerViewHolder holder, int position) {
-        BookingHistoryArr bha = bookingHistoryArr.get(position);
-        holder.getBookingID().setText("Booking id: " + bha.getBookingId());
+        Booking bha = bookingHistoryArr.get(position);
+        //holder.getBookingID().setText("Booking id: " + bha.getBookingId());
         holder.getLockerID().setText("Locker id: " + bha.getLockerID());
         holder.getEndDate().setText("End date: " + bha.getEndDate());
         holder.getEndTime().setText("End time: " + bha.getEndTime());
@@ -83,7 +84,7 @@ public class BookingHistoryArrAdapter extends RecyclerView.Adapter<BookingHistor
         holder.getStatus().setText("Status: " + bha.getStatus());
         holder.getStructure().setText("Structure ID: " + bha.getStructureID());
 
-        bookid = bha.getBookingId();
+        //bookid = bha.getBookingId();
         endDate = bha.getEndDate();
         endTime = bha.getEndTime();
         lockerid = bha.getLockerID();
@@ -92,10 +93,10 @@ public class BookingHistoryArrAdapter extends RecyclerView.Adapter<BookingHistor
         status = bha.getStatus();
         structureid = bha.getStructureID();
         mobile = bha.getMobile();
-      //  location = dc.retrieveLocationName(Long.parseLong(structureid));
-       // size = Character.toString(dc.retrieveLockerSize(Long.parseLong(structureid),Long.parseLong(lockerid)));
-      ///  totalPay = Float.toString(bc.calculateRentalFees(Long.parseLong(structureid),Long.parseLong(lockerid), LocalDate.parse(startDate),
-                //LocalTime.parse(startTime), LocalDate.parse(endDate), LocalTime.parse(endTime)));
+        location = dc.retrieveLocationName(Long.parseLong(String.valueOf(structureid)));
+        size = Character.toString(dc.retrieveLockerSize(Long.parseLong(String.valueOf(structureid)),Long.parseLong(String.valueOf(lockerid))));
+//        totalPay = Float.toString(bc.calculateRentalFees(Long.parseLong(structureid),Long.parseLong(lockerid), LocalDate.parse(startDate),
+//                LocalTime.parse(startTime), LocalDate.parse(endDate), LocalTime.parse(endTime)));
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -105,46 +106,22 @@ public class BookingHistoryArrAdapter extends RecyclerView.Adapter<BookingHistor
                 final Intent intent;
                 //intent =  new Intent(mContext, Register.class);
                 //TODO put if else statement to compare time here
-                if(bha.getStatus().equals("R")){//Returned locker
+                if(bha.getStatus() == 'R'){//Returned locker
                     holder.getStatus().setTextColor(Color.parseColor("#e63946"));
-                } else if (bha.getStatus().equals("B")){// future
+                } else if (bha.getStatus() == 'B'){// future
                     holder.getStatus().setTextColor(Color.parseColor("#2a9d8f"));
-                    //showDialogForFuture(v);
-                    //Context mContext = view.getContext();
-                    //final Intent intent;
-                    intent =  new Intent(mContext, CancelBooking.class);
-                    //TODO - go to cancelled locker booking activity class.
+                    showDialogForFuture(v);
 
-                    intent.putExtra("bookid",bookid);
-                    intent.putExtra("endDate",endDate);
-                    intent.putExtra("endTime",endTime);
-                    intent.putExtra("lockerid",lockerid);
-                    intent.putExtra("startDate",startDate);
-                    intent.putExtra("startTime",startTime);
-                    intent.putExtra("status",status);
-                    intent.putExtra("structureid",structureid);
-                    intent.putExtra("mobile",mobile);
-                    intent.putExtra("location",location);
-                    intent.putExtra("size",size);
-                    intent.putExtra("totalPay",totalPay);
-
-
-                /* Mayb transfer variable
-                intent.putExtra("title", marker.getTitle());
-                intent.putExtra("postal",post);*/
-
-                    mContext.startActivity(intent);
-
-                } else if (bha.getStatus().equals("O")) {
+                } else if (bha.getStatus() == '0') {
                     holder.getStatus().setTextColor(Color.parseColor("#2a9d8f"));
                     showDialogPresent(v);
-                }else if (bha.getStatus().equals("C")) {
+                }else if (bha.getStatus() == 'C') {
                     holder.getStatus().setTextColor(Color.parseColor("#2a9d8f"));
                 }
                //
 
 
-                Log.d("TAG","The booking id before passed is " + bha.getBookingId());
+                Log.d("TAG","The booking id before passed is " + bha.getMobile());
                 //intent.putExtra("variableToPass", bha.getBookingId());
               //  mContext.startActivity(intent);
             }
@@ -163,6 +140,7 @@ public class BookingHistoryArrAdapter extends RecyclerView.Adapter<BookingHistor
         continueBookingDialog.setTitle("What option would you like to do?");
         // resendVerificationMailDialog.setView(resendVerificationEditText);
         continueBookingDialog.setPositiveButton("Cancel Booking", new DialogInterface.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //Automatically close the dialog
@@ -210,6 +188,7 @@ public class BookingHistoryArrAdapter extends RecyclerView.Adapter<BookingHistor
         continueBookingDialog.setTitle("What would you like to do?");
         // resendVerificationMailDialog.setView(resendVerificationEditText);
         continueBookingDialog.setPositiveButton("Return Locker", new DialogInterface.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //Automatically close the dialog

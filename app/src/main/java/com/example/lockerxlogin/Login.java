@@ -201,7 +201,7 @@ public class Login extends AppCompatActivity {
                 Log.d("TAG", "Currently in the thread");
                 Log.d("TAG", "start thread");
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

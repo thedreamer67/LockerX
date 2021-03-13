@@ -1,10 +1,12 @@
 package com.example.lockerxlogin.fragment;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,13 +18,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.lockerxlogin.Booking;
+import com.example.lockerxlogin.BookingController;
 import com.example.lockerxlogin.BookingHistoryArr;
 import com.example.lockerxlogin.DatabaseController;
 import com.example.lockerxlogin.Login;
 import com.example.lockerxlogin.MainActivity;
 import com.example.lockerxlogin.MainFunc;
 import com.example.lockerxlogin.R;
-import com.example.lockerxlogin.Viewholder_Booking;
+import com.example.lockerxlogin.User;
+import com.example.lockerxlogin.UserController;
 import com.example.lockerxlogin.ui.lockers.LockersViewModel;
 
 import java.util.ArrayList;
@@ -37,6 +42,10 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
     private RecyclerView.LayoutManager mLayoutManager;
     private Handler mainHandler = new Handler();
     private volatile boolean stopThread = false;
+    ArrayList<Booking> bookingHistoryArr = new ArrayList<Booking>();
+    private User user;
+    private String currUserMobile;
+    private long userBookingCount;
 
 
 
@@ -46,6 +55,7 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
         return new LockersFragment();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -53,16 +63,17 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
         View myView = inflater.inflate(R.layout.fragment_lockers, container, false);
         //Start multi thread here.
         LockersFragment.RetrieveBookingThread runnable = new LockersFragment.RetrieveBookingThread();
+        user = Login.currUser;
+        currUserMobile = user.getMobile();
         new Thread(runnable).start();
-        ArrayList<Viewholder_Booking> exampleList = new ArrayList<>();
-        exampleList.add(new Viewholder_Booking( "Line 1", "Line 2"));
-        exampleList.add(new Viewholder_Booking( "Line 3", "Line 4"));
-        exampleList.add(new Viewholder_Booking( "Line 5", "Line 6"));
 
-        ArrayList<BookingHistoryArr> bookingHistoryArr = new ArrayList<BookingHistoryArr>();
+
+
+
+        /*ArrayList<BookingHistoryArr> bookingHistoryArr = new ArrayList<BookingHistoryArr>();
         bookingHistoryArr.add(new BookingHistoryArr("1","2021-02-17",
                 "16:00:00","3","91237777", "2021-02-17",
-                "13:00:00","O", "1"));
+                "13:00:00","R", "1"));
         bookingHistoryArr.add(new BookingHistoryArr("2","2021-03-02",
                 "16:00:00","2","91237777", "2021-03-02",
                 "14:00:00","R", "2"));
@@ -71,13 +82,12 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
                 "12:00:00","R", "1"));
         bookingHistoryArr.add(new BookingHistoryArr("4","2021-04-21",
                 "19:00:00","3","90059608", "2021-04-21",
-                "13:00:00","B", "2"));
+                "13:00:00","B", "2"));*/
 
-        ArrayList <String> lockerArray = new ArrayList<String>();
+
         mRecyclerView = myView.findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(myView.getContext()));
-        mRecyclerView.setAdapter(new BookingHistoryArrAdapter(bookingHistoryArr));
       //  mRecyclerView.setHasFixedSize(true);
 
        // mAdapter = new ExampleAdapter(exampleList);
@@ -121,35 +131,54 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
             //
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void run() {
             Log.d("TAG", "Adding progress bar");
+
             //textViewForProgressBar.setVisibility(View.VISIBLE);
 
 
 
             for (int i = 0; i < 10000; i++) {
-
+                DatabaseController dc = new DatabaseController();
+                UserController uc = new UserController(user);
+                //bookingHistoryArr = uc.getUserLockers("90000001");
+                bookingHistoryArr = uc.getUserLockers(currUserMobile);
+                userBookingCount = dc.retrieveUserBookingCount(currUserMobile);
 //
 
                 try {
-                    Thread.sleep(10);
+                    Thread.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
 
+                if(bookingHistoryArr.size() == userBookingCount){
+                    stopThread = true;
+                    if (stopThread){
+                        //dbProgressBar.setVisibility(View.GONE);
+                        Log.d("TAG", "Stopping thread");
+                       // Log.d("TAG", bookingHistoryArr.get(0).getMobile());
 
+                        getActivity().runOnUiThread(new Runnable(){
 
+                            @Override
+                            public void run() {
+                                Log.d("TAG", "Setting the adapater now");
+
+                                mRecyclerView.setAdapter(new BookingHistoryArrAdapter(bookingHistoryArr));
+                            }
+                        });
+                        return;}
+                }
+                Log.d("TAG", "i value is " +i );
 
 
 
                 }
-            stopThread = true;
-            if (stopThread){
-                //dbProgressBar.setVisibility(View.GONE);
-                Log.d("TAG", "Stopping thread");
 
-                return;}
+
 
             }
 

@@ -563,6 +563,7 @@ public class DatabaseController {
                         booking.setStructureID((Long) dataSnapshot.child("structureID").getValue());
                         booking.setLockerID((Long) dataSnapshot.child("lockerID").getValue());
                         booking.setStatus(dataSnapshot.child("status").getValue().toString().charAt(0));
+                        Log.d(TAG, "onDataChange: " +booking);
                         if (booking.getMobile().equals(ds.getMobile())) {
                             ds.getUserRBookingList().add(booking);
                         }

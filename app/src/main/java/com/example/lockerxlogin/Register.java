@@ -50,8 +50,8 @@ public class Register extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        String variableToReceive = getIntent().getStringExtra("variableToPass");
-        Log.d("TAG", " THE STGRINZG PASSSED IS " +variableToReceive);
+        //String variableToReceive = getIntent().getStringExtra("variableToPass");
+        //Log.d("TAG", " THE STGRINZG PASSSED IS " +variableToReceive);
 
         mName = findViewById(R.id.RName);
         mEmail = findViewById(R.id.REamil);

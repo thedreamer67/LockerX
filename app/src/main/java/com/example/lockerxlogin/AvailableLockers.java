@@ -28,10 +28,7 @@ public class AvailableLockers extends AppCompatActivity {
         AvailableLockers.BookingMultiThread dbThread = new AvailableLockers.BookingMultiThread();
         new Thread(dbThread).start();
         setContentView(R.layout.activity_available_lockers);
-        ArrayList<Viewholder_Booking> exampleList = new ArrayList<>();
-        exampleList.add(new Viewholder_Booking( "Line 1", "Line 2"));
-        exampleList.add(new Viewholder_Booking( "Line 3", "Line 4"));
-        exampleList.add(new Viewholder_Booking( "Line 5", "Line 6"));
+//
 
         ArrayList<BookingHistoryArr> bookingHistoryArr = new ArrayList<BookingHistoryArr>();
         bookingHistoryArr.add(new BookingHistoryArr("1","2021-02-17",
@@ -51,7 +48,7 @@ public class AvailableLockers extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setAdapter(new BookingHistoryArrAdapter(bookingHistoryArr));
+        //mRecyclerView.setAdapter(new BookingHistoryArrAdapter(bookingHistoryArr));
         //  mRecyclerView.setHasFixedSize(true);
 
         // mAdapter = new ExampleAdapter(exampleList);

@@ -14,7 +14,7 @@ public class BookingHistoryArr {
         this.status = status;
         this.structureID = structureID;
     }
-
+    
     public String getBookingId() {
         return bookingId;
     }
