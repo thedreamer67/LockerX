@@ -22,6 +22,7 @@ public class EditProfile extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseUser user;
     private User currUser;
+    //123
 
 
     @SuppressLint("WrongViewCast")
