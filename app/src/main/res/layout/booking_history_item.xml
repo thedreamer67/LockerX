@@ -22,8 +22,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="#4eede8">
+                android:orientation="vertical">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -83,7 +82,8 @@
                         android:id="@+id/status_item_tv"
                         android:hint="status"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="10dp"/>
+                        android:layout_marginRight="10dp"
+                        android:textColor="#fc0f03"/>
                 </RelativeLayout>
 
             </LinearLayout>
