@@ -56,7 +56,7 @@ public class AccountsFragment extends Fragment  {
         currentUserMobile = user.getMobile();
         TextView textViewEditProfileID = (TextView) myView.findViewById(R.id.textViewEditProfileID);
         TextView textViewEmailID = (TextView) myView.findViewById(R.id.textViewEmailID);
-        TextView textViewSettingsID = (TextView) myView.findViewById(R.id.textViewSettingsID);
+        TextView textViewLateFees = (TextView) myView.findViewById(R.id.textViewLateFees);
         TextView textViewMobileNumID = (TextView) myView.findViewById(R.id.textViewMobileNumID);
         TextView textViewNameID = (TextView) myView.findViewById(R.id.textViewNameID);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -67,6 +67,7 @@ public class AccountsFragment extends Fragment  {
         Log.d("TAG" , "The current user mobile is "  + currentUserMobile);
         textViewMobileNumID.setText("Mobile Number : " + currentUserMobile);
         textViewEditProfileID.setVisibility(View.VISIBLE);
+        textViewLateFees.setText("Late fees: " + Login.currUser.getLateFees());
 
         textViewEditProfileID.setOnClickListener(new View.OnClickListener() {
             @Override
