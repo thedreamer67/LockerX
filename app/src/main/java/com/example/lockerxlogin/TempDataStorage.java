@@ -15,6 +15,9 @@ public class TempDataStorage {
     private ArrayList<Locker> lockerList = new ArrayList<Locker>();
     private char lockerSize;
     private long structureID;
+    private long lockerID;
+    private Booking booking;
+    private String locationName;
     private ArrayList<Booking> bBookingList = new ArrayList<Booking>();
     private ArrayList<Booking> userOBookingList = new ArrayList<Booking>();
     private ArrayList<Booking> userBBookingList = new ArrayList<Booking>();
@@ -147,5 +150,29 @@ public class TempDataStorage {
 
     public void setUserCBookingList(ArrayList<Booking> userCBookingList) {
         this.userCBookingList = userCBookingList;
+    }
+
+    public Booking getBooking() {
+        return booking;
+    }
+
+    public void setBooking(Booking booking) {
+        this.booking = booking;
+    }
+
+    public long getLockerID() {
+        return lockerID;
+    }
+
+    public void setLockerID(long lockerID) {
+        this.lockerID = lockerID;
+    }
+
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
     }
 }

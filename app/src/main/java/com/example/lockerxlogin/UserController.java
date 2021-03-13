@@ -43,8 +43,7 @@ public class UserController {
             }
         }
 
-        float rentalFees = bc.calculateRentalFees(dc,structureID, lockerID, startDate,
-                startTime,endDate,endTime);
+        float rentalFees = bc.calculateRentalFees(structureID, lockerID, startDate, startTime,endDate,endTime);
         if(makePayment(dc, rentalFees)==true){
             bc.makeBooking(dc,currentUser.getEmail(),structureID,lockerID,startDate,startTime,endDate,endTime);
             //creates a new booking object and stores it in database using database controller

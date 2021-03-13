@@ -1,6 +1,7 @@
 package com.example.lockerxlogin;
 
 import android.os.Build;
+import android.renderscript.Sampler;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -255,15 +256,43 @@ public class DatabaseController {
 
     // TODO all these methods below
 
-    public void setBookingStatus(String email, long structureID, long lockerID, LocalDate startDate,
+    public void setBookingStatus(String mobile, long structureID, long lockerID, LocalDate startDate,
                                  LocalTime startTime, LocalDate endDate, LocalTime endTime, char status){
-        //query to set booking status
+        Booking booking = new Booking(startDate, startTime, endDate, endTime, mobile, structureID, lockerID, status);
+        ds.setBooking(booking);
+
+        Query query = FirebaseDatabase.getInstance().getReference().child("Booking").orderByChild("mobile").equalTo(mobile);
+        query.addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    if (LocalDate.parse(dataSnapshot.child("startDate").getValue().toString()).compareTo(ds.getBooking().getStartDate())==0) {
+                        if (LocalDate.parse(dataSnapshot.child("endDate").getValue().toString()).compareTo(ds.getBooking().getEndDate())==0) {
+                            if (LocalTime.parse(dataSnapshot.child("startTime").getValue().toString()).compareTo(ds.getBooking().getStartTime()) == 0) {
+                                if (LocalTime.parse(dataSnapshot.child("endTime").getValue().toString()).compareTo(ds.getBooking().getEndTime()) == 0) {
+                                    if (Long.parseLong(dataSnapshot.child("structureID").getValue().toString())==ds.getBooking().getStructureID()) {
+                                        if (Long.parseLong(dataSnapshot.child("structureID").getValue().toString())==ds.getBooking().getStructureID()) {
+
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
-    public char retrieveLockerSize(long structureID, long lockerID){
-        //database query to retrieve locker size
-        return 'S'; //dummy value
-    }
 
     public void setLockerStatus(long lockerID,long structureID){
         //insert codes here to store new status of locker
@@ -285,6 +314,63 @@ public class DatabaseController {
     }
 
     // TODO edit profile methods
+
+    // get size (in character) using structureID+lockerID
+    public char retrieveLockerSize(long structureID, long lockerID) {
+        ds.setLockerID(lockerID);
+        ds.setLockerSize(' ');
+        Query query = FirebaseDatabase.getInstance().getReference().child("LockerStructure").orderByChild("structureID").equalTo(structureID);
+        query.addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        ArrayList<HashMap<String, Object>> lockerList = (ArrayList<HashMap<String, Object>>) dataSnapshot.child("Locker").getValue();
+                        if (lockerList.get(0) == null) {
+                            lockerList.remove(0);
+                        }
+//                        Log.d(TAG, "onDataChange: hashmap: " +lockerList.get(1).get("lockerID"));
+                        for (HashMap<String, Object> locker : lockerList) {
+                            if (Long.parseLong(locker.get("lockerID").toString())==ds.getLockerID()) {
+                                ds.setLockerSize(locker.get("size").toString().charAt(0));
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        return ds.getLockerSize();
+    }
+
+    // get locationName using structureID
+    public String retrieveLocationName(long structureID) {
+        Query query = FirebaseDatabase.getInstance().getReference().child("LockerStructure").orderByChild("structureID").equalTo(structureID);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            ds.setLocationName(dataSnapshot.child("locationName").getValue().toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        return ds.getLocationName();
+    }
 
 
 
@@ -345,7 +431,7 @@ public class DatabaseController {
                 if (snapshot.exists()) {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         long structureID = (long) dataSnapshot.child("structureID").getValue();
-                        ds.setStructureID(structureID);
+//                        ds.setStructureID(structureID);
 //                        Log.d(TAG, "onDataChange: End of first query");
 //                        Log.d(TAG, "onDataChange: structureID = " +structureID+"");
 //                        Log.d(TAG, "onDataChange: Locker structure: "+dataSnapshot.child("Locker").getValue());
