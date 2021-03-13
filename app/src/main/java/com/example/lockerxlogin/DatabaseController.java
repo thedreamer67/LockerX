@@ -376,7 +376,7 @@ public class DatabaseController {
     // get size (in character) using structureID+lockerID
     public char retrieveLockerSize(long structureID, long lockerID) {
         ds.setLockerID(lockerID);
-        ds.setLockerSize(' ');
+        ds.setLockerSize('a');
         Query query = FirebaseDatabase.getInstance().getReference().child("LockerStructure").orderByChild("structureID").equalTo(structureID);
         query.addValueEventListener(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)

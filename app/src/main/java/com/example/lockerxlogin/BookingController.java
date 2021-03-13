@@ -58,7 +58,7 @@ public class BookingController {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public float calculateRentalFees(long structureID, long lockerID, LocalDate startDate,
-                                     LocalTime startTime, LocalDate endDate, LocalTime endTime) {
+                                     LocalTime startTime, LocalDate endDate, LocalTime endTime, char lockerSize) {
 
         HashMap<Character, Float> priceMap = new HashMap<Character, Float>();
         priceMap.put('S', (float) 1);
@@ -66,10 +66,12 @@ public class BookingController {
         priceMap.put('L', (float) 3);
         //priceMap = {'S'=1, 'M'=2, 'L'=3}
 
-        char lockerSize = dc.retrieveLockerSize(structureID,lockerID);
+
 
         //finding rental rate based on locker size
+
         float rentalRate = priceMap.get(lockerSize);
+
 
         //merging date and time to datetime format
         LocalDateTime startDateTime = LocalDateTime.of(startDate,startTime);
@@ -80,4 +82,5 @@ public class BookingController {
 
         return (rentalRate/60)*differenceInMinutes;
     }
+
 }

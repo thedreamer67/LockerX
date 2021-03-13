@@ -48,9 +48,6 @@ public class Login extends AppCompatActivity {
 
 
 
-
-
-
         setContentView(R.layout.activity_login);
         Toast.makeText(Login.this, "Hello", Toast.LENGTH_LONG).show();
 

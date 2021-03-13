@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,7 @@ public class AccountsFragment extends Fragment  {
     String userEmail;
     String mobileNum;
 
+
     public static AccountsFragment newInstance() {
         return new AccountsFragment();
     }
@@ -33,6 +36,7 @@ public class AccountsFragment extends Fragment  {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
         View myView = inflater.inflate(R.layout.fragment_accounts, container, false);
         TextView textViewEditProfileID = (TextView) myView.findViewById(R.id.textViewNameID);
         TextView textViewEmailID = (TextView) myView.findViewById(R.id.textViewEmailID);
@@ -62,6 +66,7 @@ public class AccountsFragment extends Fragment  {
         mViewModel = new ViewModelProvider(this).get(AccountsViewModel.class);
         // TODO: Use the ViewModel
     }
+
 
 
 }

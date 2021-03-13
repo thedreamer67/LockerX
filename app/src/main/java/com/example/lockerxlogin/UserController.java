@@ -34,7 +34,7 @@ public class UserController {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public boolean makeBooking(DatabaseController dc, BookingController bc, long structureID,
                                long lockerID, LocalDate startDate, LocalTime startTime,
-                            LocalDate endDate, LocalTime endTime){
+                            LocalDate endDate, LocalTime endTime, char size){
 
         //deduct late fees first when making a booking
         if(currentUser.getLateFees()>0){
@@ -43,7 +43,7 @@ public class UserController {
             }
         }
 
-        float rentalFees = bc.calculateRentalFees(structureID, lockerID, startDate, startTime,endDate,endTime);
+        float rentalFees = bc.calculateRentalFees(structureID, lockerID, startDate, startTime,endDate,endTime,size);
         if(makePayment(dc, rentalFees)==true){
             bc.makeBooking(dc,currentUser.getEmail(),structureID,lockerID,startDate,startTime,endDate,endTime);
             //creates a new booking object and stores it in database using database controller

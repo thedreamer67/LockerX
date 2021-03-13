@@ -92,10 +92,10 @@ public class BookingHistoryArrAdapter extends RecyclerView.Adapter<BookingHistor
         status = bha.getStatus();
         structureid = bha.getStructureID();
         mobile = bha.getMobile();
-        location = dc.retrieveLocationName(Long.parseLong(structureid));
-        size = Character.toString(dc.retrieveLockerSize(Long.parseLong(structureid),Long.parseLong(lockerid)));
-//        totalPay = Float.toString(bc.calculateRentalFees(Long.parseLong(structureid),Long.parseLong(lockerid), LocalDate.parse(startDate),
-//                LocalTime.parse(startTime), LocalDate.parse(endDate), LocalTime.parse(endTime)));
+      //  location = dc.retrieveLocationName(Long.parseLong(structureid));
+       // size = Character.toString(dc.retrieveLockerSize(Long.parseLong(structureid),Long.parseLong(lockerid)));
+      ///  totalPay = Float.toString(bc.calculateRentalFees(Long.parseLong(structureid),Long.parseLong(lockerid), LocalDate.parse(startDate),
+                //LocalTime.parse(startTime), LocalDate.parse(endDate), LocalTime.parse(endTime)));
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -109,7 +109,31 @@ public class BookingHistoryArrAdapter extends RecyclerView.Adapter<BookingHistor
                     holder.getStatus().setTextColor(Color.parseColor("#e63946"));
                 } else if (bha.getStatus().equals("B")){// future
                     holder.getStatus().setTextColor(Color.parseColor("#2a9d8f"));
-                    showDialogForFuture(v);
+                    //showDialogForFuture(v);
+                    //Context mContext = view.getContext();
+                    //final Intent intent;
+                    intent =  new Intent(mContext, CancelBooking.class);
+                    //TODO - go to cancelled locker booking activity class.
+
+                    intent.putExtra("bookid",bookid);
+                    intent.putExtra("endDate",endDate);
+                    intent.putExtra("endTime",endTime);
+                    intent.putExtra("lockerid",lockerid);
+                    intent.putExtra("startDate",startDate);
+                    intent.putExtra("startTime",startTime);
+                    intent.putExtra("status",status);
+                    intent.putExtra("structureid",structureid);
+                    intent.putExtra("mobile",mobile);
+                    intent.putExtra("location",location);
+                    intent.putExtra("size",size);
+                    intent.putExtra("totalPay",totalPay);
+
+
+                /* Mayb transfer variable
+                intent.putExtra("title", marker.getTitle());
+                intent.putExtra("postal",post);*/
+
+                    mContext.startActivity(intent);
 
                 } else if (bha.getStatus().equals("O")) {
                     holder.getStatus().setTextColor(Color.parseColor("#2a9d8f"));

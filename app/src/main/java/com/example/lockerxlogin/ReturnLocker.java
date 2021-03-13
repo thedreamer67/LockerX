@@ -2,15 +2,28 @@ package com.example.lockerxlogin;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import com.example.lockerxlogin.fragment.LockersFragment;
 
 
 public class ReturnLocker extends AppCompatActivity {
@@ -25,13 +38,19 @@ public class ReturnLocker extends AppCompatActivity {
     private String structureid;
     private String mobile;
     private String location;
-    private String size;
+    private char size;
+    private String sizeTemp;
     private String totalPay;
     private String duration;
+    private Handler mainHandler = new Handler();
+    private volatile boolean stopThread = false;
+    DatabaseController dc = new DatabaseController();
+    BookingController bc = new BookingController();
 
-    TextView rLocation, rbookedDate, rbookedTime ,rbookedDuration, rtextSize, rtextLockerStructureid,
+    public TextView rLocation, rbookedDate, rbookedTime ,rbookedDuration, rtextSize, rtextLockerStructureid,
             rtextLockerid, rtextTotalPay;
     Button returnBtn;
+    ProgressBar RprogressBar;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -39,6 +58,9 @@ public class ReturnLocker extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_return_locker);
+        size='a';
+        ReturnLocker.RetrieveLockerDetailsThread runnable = new ReturnLocker.RetrieveLockerDetailsThread();
+        new Thread(runnable).start();
 
         rLocation = findViewById(R.id.rLocation);
         rbookedDate = findViewById(R.id.rbookedDate);
@@ -49,6 +71,8 @@ public class ReturnLocker extends AppCompatActivity {
         rtextLockerStructureid = findViewById(R.id.rtextLockerStructureid);
         returnBtn = findViewById(R.id.returnBtn);
         rbookedDuration = findViewById(R.id.rbookedDuration);
+        RprogressBar = findViewById(R.id.RprogressBar);
+
 
 
         bookid = this.getIntent().getStringExtra("bookid");
@@ -61,15 +85,16 @@ public class ReturnLocker extends AppCompatActivity {
         structureid = this.getIntent().getStringExtra("structureid");
         mobile = this.getIntent().getStringExtra("mobile");
         location = this.getIntent().getStringExtra("location");
-        size = this.getIntent().getStringExtra("size");
-        //totalPay = this.getIntent().getStringExtra("totalPay");
+        //sizeTemp = this.getIntent().getStringExtra("size");
+
+        totalPay = this.getIntent().getStringExtra("totalPay");
 
 
-        rLocation.setText(location);
+        //rLocation.setText(location);
         rbookedDate.setText(startDate+" - "+endDate);
         rbookedTime.setText(startTime+" - "+endTime);
-        rtextSize.setText(size);
-        //textTotalPay.setText(totalPay);
+       // rtextSize.setText(size);
+       // rtextTotalPay.setText(totalPay);
         rtextLockerid.setText(lockerid);
         rtextLockerStructureid.setText(structureid);
 
@@ -84,5 +109,123 @@ public class ReturnLocker extends AppCompatActivity {
         int min = (int)minutes % 60;
         duration = hoursd+" hours "+min+" minutes";
         rbookedDuration.setText(duration);
+        returnBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog();
+            }
+        });
+    }
+
+    private void alertDialog() {
+        AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+        dialog.setMessage("Are you sure to return this booking?");
+        dialog.setTitle("Return Locker");
+        dialog.setPositiveButton("YES",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+
+                        //TODO delete lockers from user!!!!!
+                        Toast.makeText(getApplicationContext(),"Yes is clicked",Toast.LENGTH_LONG).show();
+                        FragmentManager fm =getSupportFragmentManager();
+                        FragmentTransaction ft = fm.beginTransaction();
+                        LockersFragment lf = new LockersFragment();
+                        ft.replace(R.id.lockersFragment,lf);
+                        ft.commit();
+                    }
+                });
+        dialog.setNegativeButton("cancel",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(),"cancel is clicked",Toast.LENGTH_LONG).show();
+            }
+        });
+        AlertDialog alertDialog=dialog.create();
+        alertDialog.show();
+    }
+
+
+    class RetrieveLockerDetailsThread implements Runnable{
+        RetrieveLockerDetailsThread(){
+            //
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        @Override
+        public void run() {
+            //TODO place code here to run for this thread
+
+
+            for (int i = 0; i < 100000; i++) {
+                Log.d("TAG", "HIHIHI" + i);
+                size = dc.retrieveLockerSize(Long.parseLong(structureid),Long.parseLong(lockerid));
+                location = dc.retrieveLocationName(Long.parseLong(structureid));
+
+
+
+                Log.d("TAG", totalPay + " Here is the total pay");
+                Log.d("TAG", location + " Here is the location");
+
+
+//                rLocation.setText(location);
+
+
+               // rtextTotalPay.setText(totalPay);
+
+
+
+
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+
+                if (size!='a') {
+                    Log.d("HERE" , "Locker size is " + size);
+                    Log.d("HERE" , "Location is is " + location);
+                    totalPay = Float.toString(bc.calculateRentalFees(Long.parseLong(structureid),Long.parseLong(lockerid), LocalDate.parse(startDate),
+                            LocalTime.parse(startTime), LocalDate.parse(endDate), LocalTime.parse(endTime), size));
+                    if(totalPay!=null) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                RprogressBar.setVisibility(View.GONE);
+                                rtextSize.setText(Character.toString(size));
+                                rLocation.setText(location);
+                                rtextTotalPay.setText(totalPay);
+
+                            }
+                        });
+
+                        stopThread = true;
+                    }
+                    if (stopThread) {
+                        //dbProgressBar.setVisibility(View.GONE);
+
+
+
+                        return;
+                    }
+                }
+
+            }
+
+        }
+
+    }
+
+
+    public void startThread(View view){
+        stopThread = false;
+        ReturnLocker.RetrieveLockerDetailsThread runnable = new ReturnLocker.RetrieveLockerDetailsThread();
+        new Thread(runnable).start();
+
+    }
+    public void stopThread(View view){
+        stopThread = true;
     }
 }
