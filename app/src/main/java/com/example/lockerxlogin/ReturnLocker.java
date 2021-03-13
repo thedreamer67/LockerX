@@ -24,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.lockerxlogin.fragment.LockersFragment;
+import com.example.lockerxlogin.fragment.WalletFragment;
 
 
 public class ReturnLocker extends AppCompatActivity {
@@ -46,6 +47,7 @@ public class ReturnLocker extends AppCompatActivity {
     private volatile boolean stopThread = false;
     DatabaseController dc = new DatabaseController();
     BookingController bc = new BookingController();
+    UserController uc = new UserController(Login.currUser);
 
     public TextView rLocation, rbookedDate, rbookedTime ,rbookedDuration, rtextSize, rtextLockerStructureid,
             rtextLockerid, rtextTotalPay;
@@ -123,16 +125,30 @@ public class ReturnLocker extends AppCompatActivity {
         dialog.setTitle("Return Locker");
         dialog.setPositiveButton("YES",
                 new DialogInterface.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     public void onClick(DialogInterface dialog,
                                         int which) {
 
-                        //TODO delete lockers from user!!!!!
-                        Toast.makeText(getApplicationContext(),"Yes is clicked",Toast.LENGTH_LONG).show();
-                        FragmentManager fm =getSupportFragmentManager();
-                        FragmentTransaction ft = fm.beginTransaction();
-                        LockersFragment lf = new LockersFragment();
-                        ft.replace(R.id.lockersFragment,lf);
-                        ft.commit();
+                       if( uc.calculateLateFees(LocalDate.parse(endDate),LocalTime.parse(endTime))!=0){
+                           FragmentManager fm =getSupportFragmentManager();
+                           FragmentTransaction ft = fm.beginTransaction();
+                           WalletFragment lf = new WalletFragment();
+                           ft.replace(R.id.walletFragment,lf);
+                           ft.commit();
+                       }
+                       else {
+                           //TODO change status
+
+                           Toast.makeText(getApplicationContext(), "Yes is clicked", Toast.LENGTH_LONG).show();
+                           dc.setBookingStatus(mobile,Long.parseLong(structureid),Long.parseLong(lockerid),
+                                   LocalDate.parse(startDate),LocalTime.parse(startTime),
+                                   LocalDate.parse(endDate),LocalTime.parse(endTime),'R');
+                           FragmentManager fm = getSupportFragmentManager();
+                           FragmentTransaction ft = fm.beginTransaction();
+                           LockersFragment lf = new LockersFragment();
+                           ft.replace(R.id.lockersFragment, lf);
+                           ft.commit();
+                       }
                     }
                 });
         dialog.setNegativeButton("cancel",new DialogInterface.OnClickListener() {
@@ -186,8 +202,10 @@ public class ReturnLocker extends AppCompatActivity {
                 if (size!='a') {
                     Log.d("HERE" , "Locker size is " + size);
                     Log.d("HERE" , "Location is is " + location);
-                    totalPay = Float.toString(bc.calculateRentalFees(Long.parseLong(structureid),Long.parseLong(lockerid), LocalDate.parse(startDate),
-                            LocalTime.parse(startTime), LocalDate.parse(endDate), LocalTime.parse(endTime), size));
+                    float d = bc.calculateRentalFees(Long.parseLong(structureid),Long.parseLong(lockerid), LocalDate.parse(startDate),
+                            LocalTime.parse(startTime), LocalDate.parse(endDate), LocalTime.parse(endTime), size);
+
+                    totalPay = String.format("%.2f", d);
                     if(totalPay!=null) {
                         runOnUiThread(new Runnable() {
                             @Override

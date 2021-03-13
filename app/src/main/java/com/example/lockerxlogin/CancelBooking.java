@@ -205,8 +205,11 @@ public class CancelBooking extends AppCompatActivity {
                     Log.d("HERE" , "Locker size is " + size);
                     Log.d("HERE" , "Location is is " + location);
 
-                    totalPay = Float.toString(bc.calculateRentalFees(Long.parseLong(structureid),Long.parseLong(lockerid), LocalDate.parse(startDate),
-                            LocalTime.parse(startTime), LocalDate.parse(endDate), LocalTime.parse(endTime), size));
+                    float d = bc.calculateRentalFees(Long.parseLong(structureid),Long.parseLong(lockerid), LocalDate.parse(startDate),
+                            LocalTime.parse(startTime), LocalDate.parse(endDate), LocalTime.parse(endTime), size);
+
+                    totalPay = String.format("%.2f", d);
+
                     if(totalPay!=null) {
                         runOnUiThread(new Runnable() {
                             @Override
