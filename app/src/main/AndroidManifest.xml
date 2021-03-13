@@ -20,7 +20,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LockerXLogin">
-        <activity android:name=".BookingInfo"></activity>
+        <activity android:name=".CancelBooking"></activity>
+        <activity android:name=".BookingInfo" />
         <activity android:name=".AvailableLockers" />
         <activity android:name=".BookingActivity" />
 

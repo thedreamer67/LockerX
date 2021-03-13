@@ -83,7 +83,7 @@
                         android:hint="status"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="10dp"
-                        android:textColor="#fc0f03"/>
+                        android:textColor="#e63946"/>
                 </RelativeLayout>
 
             </LinearLayout>
