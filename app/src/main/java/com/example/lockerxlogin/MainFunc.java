@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.*;
 import android.widget.Toast;
 
@@ -26,10 +27,15 @@ public class MainFunc extends AppCompatActivity {
 
     FirebaseAuth fAuth;
     FirebaseUser FBuser;
+    private User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
+
+        user = Login.currUser;
+//        Log.d("TAG", "name is on home fragment" + user.toString());
 
         BottomNavigationView bottomNav = findViewById(R.id.navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
