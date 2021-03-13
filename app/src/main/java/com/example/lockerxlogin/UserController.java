@@ -160,4 +160,20 @@ public class UserController {
 
     }
 
+    public void updateUserName (String newName) {
+        dc.setNewName(Login.currUser.getMobile(), newName);
+        Login.currUser.setName(newName);
+    }
+
+    public void updateUserEmail (String newEmail) {
+        dc.setNewEmail(Login.currUser.getMobile(), newEmail);
+        Login.currUser.setEmail(newEmail);
+    }
+
+    public void updateUserMobile (String newMobile) {
+        dc.setNewMobile(Login.currUser.getMobile(), Login.currUser.getName(), Login.currUser.getEmail(), newMobile,
+                Login.currUser.getWalletBalance(), Login.currUser.getLateFees());
+        Login.currUser.setMobile(newMobile);
+    }
+
 }

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class User implements Account {
     private String name;
     private String email;
-    private String password;
     private String mobile;
     private float walletBalance;
     private float lateFees;
@@ -13,17 +12,6 @@ public class User implements Account {
 
     public User(){} //empty constructor
 
-    public User(String name, String email, String password, String mobile, float walletBalance, float lateFees){
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.mobile = mobile;
-        this.walletBalance = walletBalance;
-        this.lateFees = lateFees;
-        //this.booking = new ArrayList<Booking>();
-    }
-
-    //with info stored in db
     public User(String name, String email, String mobile, float walletBalance, float lateFees){
         this.name = name;
         this.email = email;
@@ -32,6 +20,7 @@ public class User implements Account {
         this.lateFees = lateFees;
         //this.booking = new ArrayList<Booking>();
     }
+
 
     @Override
     public void setName(String name) {
@@ -51,16 +40,6 @@ public class User implements Account {
     @Override
     public String getEmail() {
         return this.email;
-    }
-
-    @Override
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @Override
-    public String getPassword() {
-        return this.password;
     }
 
     public void setMobile(String mobile) {this.mobile=mobile;}

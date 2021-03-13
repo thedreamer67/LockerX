@@ -372,6 +372,31 @@ public class DatabaseController {
     }
 
     // TODO edit profile methods
+    public void setNewEmail(String mobile, String newEmail) {
+        DatabaseReference reff = FirebaseDatabase.getInstance().getReference().child("User");
+        Map<String, Object> emailUpdate = new HashMap<>();
+        emailUpdate.put("email", newEmail);
+        reff.child(mobile).updateChildren(emailUpdate);
+    }
+
+    public void setNewName(String mobile, String name) {
+        DatabaseReference reff = FirebaseDatabase.getInstance().getReference().child("User");
+        Map<String, Object> nameUpdate = new HashMap<>();
+        nameUpdate.put("name", name);
+        reff.child(mobile).updateChildren(nameUpdate);
+    }
+
+    public void setNewMobile(String oldMobile, String name, String email, String newMobile, float walletBalance, float lateFees) {
+        DatabaseReference reff = FirebaseDatabase.getInstance().getReference().child("User");
+        reff.child(oldMobile).removeValue();
+        Map<String, Object> recreateUser = new HashMap<>();
+        recreateUser.put("name", name);
+        recreateUser.put("email", email);
+        recreateUser.put("mobile", newMobile);
+        recreateUser.put("walletBalance", walletBalance);
+        recreateUser.put("lateFees", lateFees);
+        reff.child(newMobile).updateChildren(recreateUser);
+    }
 
     // get size (in character) using structureID+lockerID
     public char retrieveLockerSize(long structureID, long lockerID) {
