@@ -34,9 +34,6 @@ public class WalletFragment extends Fragment implements View.OnClickListener{
     TextView walletBalance;
     Button topUpButton;
     private WalletViewModel mViewModel;
-    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference databaseReference = firebaseDatabase.getReference();
-    DatabaseReference reff;
 
     public static WalletFragment newInstance() {
         return new WalletFragment();

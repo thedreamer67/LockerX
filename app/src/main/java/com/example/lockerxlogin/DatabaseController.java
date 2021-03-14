@@ -26,6 +26,8 @@ public class DatabaseController {
 
     public DatabaseController(){}
 
+    //TODO remove event listeners for all the methods and see if the app still crashes randomly, if it does then just dont remove?
+
     //method to store new user to db
     public void storeNewUser(String name, String email, String mobile) {
         DatabaseReference reff = FirebaseDatabase.getInstance().getReference().child("User"); //reference to the "User" table of the db

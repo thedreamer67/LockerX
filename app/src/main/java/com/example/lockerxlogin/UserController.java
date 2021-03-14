@@ -16,13 +16,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+//TODO DOUBLE CHECK THE METHODS IN THIS CLASS
 public class UserController {
 
     DatabaseController dc = new DatabaseController();
     BookingController bc = new BookingController();
 
     public UserController() {}
-
 
     //method to create booking using the booking controller
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -35,11 +35,15 @@ public class UserController {
             if(makePayment(Login.currUser.getLateFees())==false){
                 return false;
             }
+            else {
+                updateUserLateFees(0);
+            }
         }
+
 
         float rentalFees = bc.calculateRentalFees(structureID, lockerID, startDate, startTime,endDate,endTime,size);
         if(makePayment(rentalFees)==true){
-            bc.makeBooking(Login.currUser.getEmail(),structureID,lockerID,startDate,startTime,endDate,endTime);
+            bc.makeBooking(Login.currUser.getMobile(),structureID,lockerID,startDate,startTime,endDate,endTime);
             //creates a new booking object and stores it in database using database controller
             return true;
         }
@@ -51,8 +55,7 @@ public class UserController {
     public boolean makePayment(float paymentAmount){
         float walletBalance = Login.currUser.getWalletBalance();
         if(walletBalance-paymentAmount>=0){
-            Login.currUser.setWalletBalance(walletBalance-paymentAmount);
-            dc.updateWalletBalance(Login.currUser.getEmail(), Login.currUser.getWalletBalance());
+            updateUserWalletBalance(Login.currUser.getWalletBalance()-paymentAmount);
             return true;
         }
         else
@@ -61,28 +64,21 @@ public class UserController {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public boolean returnLocker(LocalDate startDate,
+    public void returnLocker(LocalDate startDate,
                                 LocalTime startTime, LocalDate endDate, LocalTime endTime,
                                 long structureID, long lockerID){
 
-        //retrieve status of booking, 1=booking expired, 2=booking in-progress, 3=reservation
-        int status = bc.checkExpiredBooking(startDate,startTime,endDate,endTime);
-        if(status==1){
+        //retrieve status of booking, 1=booking expired, 2=booking in-progress
+        boolean isExpired = bc.checkExpiredBooking(startDate,startTime,endDate,endTime);
+        if(isExpired==true){
             float lateFees = calculateLateFees(endDate,endTime);
-            Login.currUser.setLateFees(Login.currUser.getLateFees()+lateFees);
+            float newLateFees = Login.currUser.getLateFees()+lateFees;
+            updateUserLateFees(newLateFees);
+        }
 
-            //set booking status to 'R', returned
-            dc.setBookingStatus(Login.currUser.getEmail(), structureID, lockerID, startDate,
-                    startTime, endDate, endTime, 'R');
-            return true;
-        }
-        else if(status==2){
-            dc.setBookingStatus(Login.currUser.getEmail(), structureID, lockerID, startDate,
-                    startTime, endDate, endTime, 'R');
-            return true;
-        }
-        else
-            return false;
+        //set booking status to 'R', returned
+        dc.setBookingStatus(Login.currUser.getMobile(), structureID, lockerID, startDate,
+                startTime, endDate, endTime, 'R');
     }
 
 
