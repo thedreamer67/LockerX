@@ -60,6 +60,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="10sp"
+                            android:textStyle="bold"
                             android:id="@+id/locker_id_item_tv"
                             android:hint="Locker Id"
                             android:layout_alignParentLeft="true"/>
@@ -68,6 +69,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="10sp"
+                            android:textStyle="bold"
                             android:id="@+id/structure_id_item_tv"
                             android:hint="structure"
                             android:layout_marginLeft="10dp"/>
@@ -79,6 +81,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="10sp"
+                        android:textStyle="bold"
                         android:id="@+id/status_item_tv"
                         android:hint="status"
                         android:layout_alignParentRight="true"
