@@ -149,13 +149,13 @@ public class BookingHistoryArrAdapter extends RecyclerView.Adapter<BookingHistor
                 intent =  new Intent(mContext, CancelBooking.class);
 
                 intent.putExtra("bookid",bookid);
-                intent.putExtra("endDate",endDate);
-                intent.putExtra("endTime",endTime);
-                intent.putExtra("lockerid",lockerid);
-                intent.putExtra("startDate",startDate);
-                intent.putExtra("startTime",startTime);
-                intent.putExtra("status",status);
-                intent.putExtra("structureid",structureid);
+                intent.putExtra("endDate",endDate.toString());
+                intent.putExtra("endTime",endTime.toString());
+                intent.putExtra("lockerid",lockerid+"");
+                intent.putExtra("startDate",startDate.toString());
+                intent.putExtra("startTime",startTime.toString());
+                intent.putExtra("status",Character.toString(status));
+                intent.putExtra("structureid",structureid+"");
                 intent.putExtra("mobile",mobile);
                 intent.putExtra("location",location);
                 intent.putExtra("size",size);

@@ -45,7 +45,7 @@ public class CancelBooking extends AppCompatActivity {
     private String structureid;
     private String mobile;
     private String location;
-    private char size;
+    private char size = 'a';
     private String totalPay;
     private String duration;
     private Handler mainHandler = new Handler();
@@ -107,7 +107,7 @@ public class CancelBooking extends AppCompatActivity {
 
         String strs = startDate +" "+ startTime;//2021-04-21 13:00:00
         String stre = endDate +" "+ endTime;//2021-04-21 13:00:00
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime sdateTime = LocalDateTime.parse(strs, formatter);
         LocalDateTime edateTime = LocalDateTime.parse(stre, formatter);
         Duration d = Duration.between(sdateTime,edateTime);

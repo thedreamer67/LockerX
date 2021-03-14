@@ -140,7 +140,7 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
 
 
 
-            for (int i = 0; i < 10000; i++) {
+            for (int i = 0; i < 100000000; i++) {
                 DatabaseController dc = new DatabaseController();
                 UserController uc = new UserController();
                 //bookingHistoryArr = uc.getUserLockers("90000001");
@@ -154,7 +154,7 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
                     e.printStackTrace();
                 }
 
-                if(bookingHistoryArr.size() == userBookingCount){
+                if(bookingHistoryArr.size() == 2){
                     stopThread = true;
                     if (stopThread){
                         //dbProgressBar.setVisibility(View.GONE);
