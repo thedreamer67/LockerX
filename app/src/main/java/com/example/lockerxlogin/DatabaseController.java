@@ -555,7 +555,6 @@ public class DatabaseController {
 
             }
         });
-
         return ds.getLockerList();
     }
 
