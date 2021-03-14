@@ -17,9 +17,12 @@ import androidx.fragment.app.FragmentActivity;
 import android.os.Handler;
 import android.se.omapi.SEService;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lockerxlogin.Account;
@@ -48,11 +51,16 @@ public class HomeFragment extends Fragment  {
     private Handler mHandler = new Handler();
     private HomeViewModel mViewModel;
     private GoogleMap mMap;
+    private String post;
     private FusedLocationProviderClient client;
     public final LatLng defaultLocation = new LatLng(1.3521, 103.8198);
     public final LatLng Woodlands = new LatLng(1.439874, 103.779376);
     public final LatLng Jurong = new LatLng(1.339874,103.706464);
     public final LatLng USS = new LatLng(1.256752, 103.820331);
+    public TextView textViewForProgressBar;
+    public ProgressBar DBprogressBar;
+
+
 
     // System.out.println(latLng.latitude);
 
@@ -68,10 +76,12 @@ public class HomeFragment extends Fragment  {
 
 
 
+
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         SupportMapFragment mMapFragment;
 
         SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
+
 
         supportMapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
@@ -79,12 +89,16 @@ public class HomeFragment extends Fragment  {
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                         defaultLocation, 10
                 ));
+                //Toast.
+                Toast.makeText(getActivity(), "Click on a marker to make a booking", Toast.LENGTH_LONG).show();
                 MarkerOptions woodlandsMarker = new MarkerOptions();
                 MarkerOptions jurongMarker = new MarkerOptions();
                 MarkerOptions ussMarker = new MarkerOptions();
+
                 woodlandsMarker.position(Woodlands);
                 jurongMarker.position(Jurong);
                 ussMarker.position(USS);
+
                 googleMap.addMarker(woodlandsMarker
                         .title("Woodlands")
                         .snippet("Postal Code: 738600"));
@@ -94,10 +108,12 @@ public class HomeFragment extends Fragment  {
                 googleMap.addMarker(ussMarker
                         .title("USS")
                         .snippet("Postal Code: 098269"));
+
                 googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
                         if(marker != null && marker.getTitle().equals("Woodlands")){
+                            post = "738600";
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                                     marker.getPosition(), 15
                             ));
@@ -115,6 +131,7 @@ public class HomeFragment extends Fragment  {
 
                                             Intent intent = new Intent(getActivity(), BookingActivity.class);
                                             intent.putExtra("title", marker.getTitle());
+                                            intent.putExtra("postal",post);
                                             Toast.makeText(getActivity(),marker.getTitle() +" is selected.",Toast.LENGTH_SHORT)
                                                     .show();
                                             getActivity().startActivity(intent);
@@ -147,6 +164,7 @@ public class HomeFragment extends Fragment  {
 
                         }
                         else if(marker != null && marker.getTitle().equals("Jurong")){
+                            post = "648886";
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                                     marker.getPosition(), 15
                             ));
@@ -173,6 +191,8 @@ public class HomeFragment extends Fragment  {
 //                                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, af).commit();
                                             Intent intent = new Intent(getActivity(), BookingActivity.class);
                                             intent.putExtra("title", marker.getTitle());
+                                            intent.putExtra("postal",post);
+
                                             Toast.makeText(getActivity(),marker.getTitle() +" is selected.",Toast.LENGTH_SHORT)
                                                     .show();
                                             getActivity().startActivity(intent);
@@ -195,6 +215,7 @@ public class HomeFragment extends Fragment  {
                             },  1600);
                         }
                         else if(marker != null && marker.getTitle().equals("USS")){
+                            post = "098269";
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                                     marker.getPosition(), 15
                             ));
@@ -222,6 +243,7 @@ public class HomeFragment extends Fragment  {
 //                                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, af).commit();
                                             Intent intent = new Intent(getActivity(), BookingActivity.class);
                                             intent.putExtra("title", marker.getTitle());
+                                            intent.putExtra("postal",post);
                                             Toast.makeText(getActivity(),marker.getTitle() +" is selected.",Toast.LENGTH_SHORT)
                                                     .show();
                                             getActivity().startActivity(intent);
@@ -281,15 +303,31 @@ public class HomeFragment extends Fragment  {
 
                     }
                 });
+
+
             }
+
+
+
         });
+
+
+
+
 
         return view;
     }
-
-    public void dialogCaller(Marker marker){
-
+  /*  public void progressBarSetVisible(){
+        textViewForProgressBar.setVisibility(View.VISIBLE);
+        DBprogressBar.setVisibility(View.VISIBLE);
     }
+
+    public void progressBarSetGone(){
+        textViewForProgressBar.setVisibility(View.GONE);
+        DBprogressBar.setVisibility(View.GONE);
+
+    }*/
+
 
 
 

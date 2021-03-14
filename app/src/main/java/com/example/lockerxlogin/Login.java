@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.lockerxlogin.fragment.HomeFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -23,21 +25,35 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import android.os.Handler;
+import android.os.Looper;
 
 public class Login extends AppCompatActivity {
     EditText LEmail, LPassword;
     TextView LLoginPage, LRegisterBtn, LForgetPw;
-    ProgressBar LProgressBar;
+    ProgressBar LProgressBar, dbProgressBar;
     Button LLoginBtn;
     FirebaseAuth fAuth;
     FirebaseUser FBuser;
 
+    public HomeFragment HF = new HomeFragment();
+    private Handler mainHandler = new Handler();
+    private volatile boolean stopThread = false;
+    public static User currUser;
+
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
+
+
+
         setContentView(R.layout.activity_login);
         Toast.makeText(Login.this, "Hello", Toast.LENGTH_LONG).show();
+
 
         LEmail = findViewById(R.id.LEmail);
         LPassword = findViewById(R.id.LPassword);
@@ -47,6 +63,10 @@ public class Login extends AppCompatActivity {
         LLoginBtn= findViewById(R.id.LLoginBtn);
         LRegisterBtn = findViewById(R.id.LRegister);
         fAuth = FirebaseAuth.getInstance();
+        dbProgressBar = findViewById(R.id.dbProgressBar);
+        //Added supress warning here
+
+
 
         LLoginBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -81,6 +101,7 @@ public class Login extends AppCompatActivity {
                         // add else here
                         if (task.isSuccessful()) {
                             FBuser = fAuth.getCurrentUser();
+                            dbProgressBar.setVisibility(View.VISIBLE);
 
                             if(!FBuser.isEmailVerified()){
                                 LProgressBar.setVisibility(View.VISIBLE);
@@ -120,8 +141,19 @@ public class Login extends AppCompatActivity {
 
                             }
                             else {
-                                Toast.makeText(Login.this, "Logged in successfully.", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(getApplicationContext(), MainFunc.class));
+                                Toast.makeText(Login.this, "Logged in successfully.", Toast.LENGTH_LONG).show();
+                                DatabaseController dc = new DatabaseController();
+                                User user;
+
+                                //user = dc.retrieveUserByEmail("junjiexavier91@gmail.com");
+                                Log.d("TAG", "hi1");
+
+                                ExampleRunnable runnable = new ExampleRunnable();
+                                new Thread(runnable).start();
+                                if(currUser!=null)
+                                    Log.d("TAG", "USER IS " + currUser.getEmail());
+
+
                             }
                         } else {
                             Toast.makeText(Login.this, "Error !" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -148,4 +180,65 @@ public class Login extends AppCompatActivity {
             }
         });
     }
+
+
+
+
+    class ExampleRunnable implements Runnable{
+        ExampleRunnable(){
+            //
+        }
+
+        @Override
+        public void run() {
+            Log.d("TAG", "Adding progress bar");
+            //textViewForProgressBar.setVisibility(View.VISIBLE);
+
+
+
+            for (int i = 0; i < 10000; i++) {
+                DatabaseController dc = new DatabaseController();
+//                User user;
+
+                currUser = dc.retrieveUserByEmail(FBuser.getEmail());
+                Log.d("TAG", "Currently in the thread");
+                Log.d("TAG", "start thread");
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (currUser != null) {
+                    Log.d("TAG", "The user email is " + currUser.getEmail());
+                    Log.d("TAG", "The user email is " + currUser.getMobile());
+                    Log.d("TAG", "Removing progress bar");
+                    // textViewForProgressBar.setVisibility(View.GONE);
+                    //  DBprogressBar.setVisibility(View.GONE);
+                    //   HF.progressBarSetGone();
+
+
+
+                    stopThread = true;
+                    if (stopThread){
+                        //dbProgressBar.setVisibility(View.GONE);
+                        startActivity(new Intent(getApplicationContext(), MainFunc.class));
+                        return;}
+                }
+                Log.d("TAG", "i value is " +i );
+            }
+
+        }
+    }
+
+    public void startThread(View view){
+        stopThread = false;
+        ExampleRunnable runnable = new ExampleRunnable();
+        new Thread(runnable).start();
+
+    }
+    public void stopThread(View view){
+        stopThread = true;
+    }
+
+
 }

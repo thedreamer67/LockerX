@@ -1,42 +1,52 @@
 package com.example.lockerxlogin.fragment;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 
-import com.example.lockerxlogin.BookingModel;
+import com.example.lockerxlogin.Booking;
+import com.example.lockerxlogin.BookingController;
+import com.example.lockerxlogin.BookingHistoryArr;
+import com.example.lockerxlogin.DatabaseController;
+import com.example.lockerxlogin.Login;
 import com.example.lockerxlogin.MainActivity;
+import com.example.lockerxlogin.MainFunc;
 import com.example.lockerxlogin.R;
-import com.example.lockerxlogin.Viewholder_Booking;
+import com.example.lockerxlogin.User;
+import com.example.lockerxlogin.UserController;
 import com.example.lockerxlogin.ui.lockers.LockersViewModel;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
 public class LockersFragment extends Fragment implements View.OnClickListener {
 
     Button LockerModeBtn;
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference databaseReference;
-    RecyclerView recyclerView;
+
+
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private Handler mainHandler = new Handler();
+    private volatile boolean stopThread = false;
+    ArrayList<Booking> bookingHistoryArr = new ArrayList<Booking>();
+    private User user;
+    private String currUserMobile;
+    private long userBookingCount;
+
 
 
     private LockersViewModel mViewModel;
@@ -45,16 +55,60 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
         return new LockersFragment();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
         View myView = inflater.inflate(R.layout.fragment_lockers, container, false);
-        LockerModeBtn = myView.findViewById(R.id.LLockerMode);
-        LockerModeBtn.setOnClickListener(this);
+        //Start multi thread here.
+        LockersFragment.RetrieveBookingThread runnable = new LockersFragment.RetrieveBookingThread();
+        user = Login.currUser;
+        currUserMobile = user.getMobile();
+        new Thread(runnable).start();
+
+
+
+
+        /*ArrayList<BookingHistoryArr> bookingHistoryArr = new ArrayList<BookingHistoryArr>();
+        bookingHistoryArr.add(new BookingHistoryArr("1","2021-02-17",
+                "16:00:00","3","91237777", "2021-02-17",
+                "13:00:00","R", "1"));
+        bookingHistoryArr.add(new BookingHistoryArr("2","2021-03-02",
+                "16:00:00","2","91237777", "2021-03-02",
+                "14:00:00","R", "2"));
+        bookingHistoryArr.add(new BookingHistoryArr("3","2021-02-19",
+                "13:00:00","1","90059608", "2021-02-19",
+                "12:00:00","R", "1"));
+        bookingHistoryArr.add(new BookingHistoryArr("4","2021-04-21",
+                "19:00:00","3","90059608", "2021-04-21",
+                "13:00:00","B", "2"));*/
+
+
+        mRecyclerView = myView.findViewById(R.id.recyclerView);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(myView.getContext()));
+      //  mRecyclerView.setHasFixedSize(true);
+
+       // mAdapter = new ExampleAdapter(exampleList);
+       // mRecyclerView.setLayoutManager(mLayoutManager);
+       // mRecyclerView.setAdapter(mAdapter);
+
+        //mRecyclerView.setLayoutManager(new LinearLayoutManager(myView.getContext()));
+        //mRecyclerView.setAdapter(mAdapter);
+//        mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.rvBooking);
+//        LockerModeBtn = myView.findViewById(R.id.LLockerMode);
+//        LockerModeBtn.setOnClickListener(this);
+//        lockerArray.add("testLockerID");
+
+//        mLayoutManager = new LinearLayoutManager(getActivity());
+      //  mAdapter = new MainAdapter(lockerArray);
+      //  mRecyclerView.setLayoutManager(mLayoutManager);
+     //   mRecyclerView.setAdapter(mAdapter);
 
         return myView;
     }
-//
+    //
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -69,41 +123,79 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        recyclerView = getActivity().findViewById(R.id.rvBooking);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        databaseReference = database.getReference().child("Booking");
-
-        FirebaseRecyclerOptions<BookingModel> options = new FirebaseRecyclerOptions.Builder<BookingModel>().setQuery(databaseReference, BookingModel.class).build();
-        FirebaseRecyclerAdapter<BookingModel, Viewholder_Booking> firebaseRecyclerAdapter =
-                new FirebaseRecyclerAdapter<BookingModel, Viewholder_Booking>(options) {
-                    @Override
-                    protected void onBindViewHolder(@NonNull Viewholder_Booking holder, int position, @NonNull BookingModel model) {
-                        holder.setitem(getActivity(), model.getBookingId(), model.getStartTime(), model.getStartDate(), model.getEndDate(),model.getEndTime(), model.getLockerId(),model.getStatus(),model.getStructure());
-
-                        final String bookingId = getItem(position).getBookingId();
-                        final String startTime = getItem(position).getStartTime();
-                        final String startDate = getItem(position).getStartDate();
-                        final String endDate = getItem(position).getEndDate();
-                        final String endTime = getItem(position).getEndTime();
-                        final String lockerId = getItem(position).getLockerId();
-                        final String status = getItem(position).getStatus();
-                        final String structure = getItem(position).getStructure();
-
-
-                    }
-
-                    @NonNull
-                    @Override
-                    public Viewholder_Booking onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.booking_item,parent,false);
-                        return new Viewholder_Booking(view);
-                    }
-                };
-        firebaseRecyclerAdapter.startListening();
-        recyclerView.setAdapter(firebaseRecyclerAdapter);
-
 
     }
 
+    class RetrieveBookingThread implements Runnable{
+        RetrieveBookingThread(){
+            //
+        }
 
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        @Override
+        public void run() {
+            Log.d("TAG", "Adding progress bar");
+
+            //textViewForProgressBar.setVisibility(View.VISIBLE);
+
+
+
+            for (int i = 0; i < 100000000; i++) {
+                DatabaseController dc = new DatabaseController();
+                UserController uc = new UserController();
+                //bookingHistoryArr = uc.getUserLockers("90000001");
+                bookingHistoryArr = uc.getUserLockers(currUserMobile);
+                userBookingCount = dc.retrieveUserBookingCount(currUserMobile);
+//
+
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                if(bookingHistoryArr.size() == 2){
+                    stopThread = true;
+                    if (stopThread){
+                        //dbProgressBar.setVisibility(View.GONE);
+                        Log.d("TAG", "Stopping thread");
+                       // Log.d("TAG", bookingHistoryArr.get(0).getMobile());
+
+                        getActivity().runOnUiThread(new Runnable(){
+
+                            @Override
+                            public void run() {
+                                Log.d("TAG", "Setting the adapater now");
+
+                                mRecyclerView.setAdapter(new BookingHistoryArrAdapter(bookingHistoryArr));
+                            }
+                        });
+                        return;}
+                }
+                Log.d("TAG", "i value is " +i );
+
+
+
+                }
+
+
+
+            }
+
+        }
+
+
+    public void startThread(View view){
+        stopThread = false;
+        LockersFragment.RetrieveBookingThread runnable = new LockersFragment.RetrieveBookingThread();
+        new Thread(runnable).start();
+
+    }
+    public void stopThread(View view){
+        stopThread = true;
+    }
 }
+
+
+
+

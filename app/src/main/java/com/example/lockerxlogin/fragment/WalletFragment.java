@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.lockerxlogin.Login;
 import com.example.lockerxlogin.MainActivity;
 import com.example.lockerxlogin.R;
 import com.example.lockerxlogin.TopUpPage;
@@ -33,9 +34,6 @@ public class WalletFragment extends Fragment implements View.OnClickListener{
     TextView walletBalance;
     Button topUpButton;
     private WalletViewModel mViewModel;
-    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference databaseReference = firebaseDatabase.getReference();
-    DatabaseReference reff;
 
     public static WalletFragment newInstance() {
         return new WalletFragment();
@@ -49,22 +47,27 @@ public class WalletFragment extends Fragment implements View.OnClickListener{
         topUpButton = myView.findViewById(R.id.topUpButton);
         topUpButton.setOnClickListener(this);
 
-        reff = FirebaseDatabase.getInstance().getReference().child("User").child("90059608");
-        reff.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String balance = snapshot.child("walletBalance").getValue().toString();
-                Float bal = Float.parseFloat(balance);
-                DecimalFormat df = new DecimalFormat("0.00");
-                df.setMaximumFractionDigits(2);
-                walletBalance.setText("$" + df.format(bal).toString());
-            }
+        Float bal = Login.currUser.getWalletBalance();
+        DecimalFormat df = new DecimalFormat("0.00");
+        df.setMaximumFractionDigits(2);
+        walletBalance.setText("$" + df.format(bal).toString());
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+//        reff = FirebaseDatabase.getInstance().getReference().child("User").child("90059608");
+//        reff.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                String balance = snapshot.child("walletBalance").getValue().toString();
+//                Float bal = Float.parseFloat(balance);
+//                DecimalFormat df = new DecimalFormat("0.00");
+//                df.setMaximumFractionDigits(2);
+//                walletBalance.setText("$" + df.format(bal).toString());
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
 
 
 
