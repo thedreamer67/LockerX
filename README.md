@@ -1,2 +1,2 @@
-# LockerX4
+# LockerX
 Our Advanced Software Engineering module project. We developed an Android application with Android Studio (Java) and using Firebase Realtime Database, which digitalises the locker renting process. Users can rent lockers for future or immediate use and pay for the locker using the application. Moreover, the locking and unlocking of lockers are also done through the application via Bluetooth. To simulate a locker in our prototype, we used an Arduino Uno with the HC-05 Bluetooth module and several LEDs.
